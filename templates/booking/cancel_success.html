@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Agendamento Cancelado · Espaço Delas{% endblock %}
+
+{% block content %}
+<section class="py-16 bg-rose-gradient min-h-[80vh] flex items-center justify-center">
+    <div class="max-w-md w-full mx-auto px-4 text-center space-y-6">
+        
+        <div class="w-20 h-20 bg-error/10 text-error rounded-full flex items-center justify-center mx-auto text-3xl">
+            ✓
+        </div>
+
+        <div class="space-y-2">
+            <h1 class="font-serif text-2xl text-neutral-dark font-light">Cancelamento Confirmado</h1>
+            <div class="w-16 h-0.5 bg-error/30 mx-auto mt-4"></div>
+            <p class="font-sans text-neutral-mid text-sm leading-relaxed">
+                Seu agendamento para <strong>{{ appointment.service.name }}</strong> no dia <strong>{{ appointment.appointment_date|date:"d/m/Y" }}</strong> foi cancelado.
+            </p>
+            <p class="font-sans text-neutral-mid text-xs leading-relaxed pt-2">
+                O horário foi liberado. Caso queira marcar em outro momento, clique no botão abaixo.
+            </p>
+        </div>
+
+        <div class="pt-4 flex flex-col gap-2">
+            <a href="{% url 'booking:start' %}" class="w-full bg-primary hover:bg-primary-dark text-white font-sans font-medium px-8 py-3.5 rounded-full transition-all duration-200 shadow-sm text-sm">
+                Agendar Novo Horário
+            </a>
+            <a href="/" class="w-full bg-white hover:bg-neutral-light text-neutral-mid border border-gray-200 font-sans font-medium px-8 py-3.5 rounded-full transition-all duration-200 text-sm">
+                Voltar para a Home
+            </a>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

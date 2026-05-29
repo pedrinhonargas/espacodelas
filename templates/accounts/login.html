@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Entrar · Espaço Delas{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-rose-gradient min-h-[80vh] flex items-center justify-center relative overflow-hidden">
+    <!-- background pattern -->
+    <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: url('{% static "img/pattern.png" %}'); background-size: 150px; background-repeat: repeat;"></div>
+    
+    <div class="max-w-md w-full mx-auto px-4 relative z-10">
+        
+        <!-- CARD -->
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-lg p-8 space-y-6">
+            
+            <div class="text-center space-y-2">
+                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto text-primary text-2xl font-serif">
+                    ED
+                </div>
+                <h2 class="font-serif text-2xl text-neutral-dark font-light">Área do Studio</h2>
+                <p class="font-sans text-neutral-mid text-xs">Identifique-se para acessar seu painel.</p>
+            </div>
+
+            <!-- Messages/Errors -->
+            {% if messages %}
+                <div class="space-y-2">
+                    {% for message in messages %}
+                        <div class="bg-red-50 border border-red-200 text-error rounded-xl px-4 py-3 font-sans text-xs flex items-center gap-2">
+                            <span>⚠</span>
+                            <span>{{ message }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- FORM -->
+            <form method="post" class="space-y-4">
+                {% csrf_token %}
+                
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-neutral-dark font-sans" for="id_username">Nome de Usuário</label>
+                    <input type="text" name="username" id="id_username" required
+                           class="w-full border border-gray-200 rounded-xl px-4 py-3 text-neutral-dark placeholder-gray-300 font-sans text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white transition-all duration-150"
+                           placeholder="Digite seu usuário">
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-neutral-dark font-sans" for="id_password">Senha</label>
+                    <input type="password" name="password" id="id_password" required
+                           class="w-full border border-gray-200 rounded-xl px-4 py-3 text-neutral-dark placeholder-gray-300 font-sans text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white transition-all duration-150"
+                           placeholder="Digite sua senha">
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full bg-primary hover:bg-primary-dark text-white font-sans font-medium px-6 py-3.5 rounded-full transition-all duration-200 text-sm shadow-sm hover:shadow-md active:scale-95">
+                        Entrar no Painel
+                    </button>
+                </div>
+            </form>
+            
+            <div class="text-center pt-2">
+                <a href="/" class="text-xs text-primary hover:underline font-sans">
+                    Voltar para o site institucional
+                </a>
+            </div>
+            
+        </div>
+    </div>
+</section>
+{% endblock %}

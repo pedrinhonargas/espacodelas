@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Espaço Delas · Beleza & Estética{% endblock %}</title>
+    
+    <!-- Meta Tags SEO -->
+    <meta name="description" content="{% block description %}Espaço Delas é um studio de beleza premium especializado em manicure e design de sobrancelhas. Agende seu horário com nossas profissionais de forma rápida e online.{% endblock %}">
+    <meta name="keywords" content="manicure, design de sobrancelhas, salão de beleza, agendamento online, estética, unhas em gel, Espaço Delas">
+    
+    <!-- Open Graph (Facebook/Instagram/WhatsApp) -->
+    <meta property="og:title" content="{% block og_title %}Espaço Delas · Beleza & Estética{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Espaço Delas é um studio de beleza premium especializado em manicure e design de sobrancelhas. Agende seu horário com nossas profissionais.{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{% block og_image %}{% static 'img/sublogo.png' %}{% endblock %}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{% static 'img/icon.png' %}">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (output compiled file) -->
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-neutral-light text-neutral-dark font-sans min-h-screen flex flex-col antialiased">
+
+    <!-- Navbar -->
+    {% include 'partials/navbar.html' %}
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    {% include 'partials/footer.html' %}
+
+    <!-- Global Toast / Feedback System -->
+    {% if messages %}
+        <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
+            {% for message in messages %}
+                <div class="px-6 py-4 rounded-2xl shadow-lg flex items-center gap-3 font-sans text-sm text-white transition-all transform duration-300 {% if message.tags == 'success' %}bg-success{% elif message.tags == 'error' %}bg-error{% else %}bg-primary{% endif %} alert-toast">
+                    <span>
+                        {% if message.tags == 'success' %}✓
+                        {% elif message.tags == 'error' %}⚠
+                        {% else %}ℹ
+                        {% endif %}
+                    </span>
+                    <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        </div>
+        <script>
+            setTimeout(() => {
+                document.querySelectorAll('.alert-toast').forEach(toast => {
+                    toast.style.opacity = '0';
+                    setTimeout(() => toast.remove(), 300);
+                });
+            }, 5000);
+        </script>
+    {% endif %}
+
+    <!-- Scripts -->
+    <script src="{% static 'js/menu.js' %}"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

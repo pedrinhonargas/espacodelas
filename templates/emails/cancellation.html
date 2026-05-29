@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Agendamento Cancelado</title>
+</head>
+<body style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #F5F5F5; margin: 0; padding: 0; color: #333333;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #F5F5F5; padding: 20px 0;">
+        <tr>
+            <td align="center">
+                <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #FFFFFF; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                    <!-- Header -->
+                    <tr>
+                        <td align="center" style="background-color: #FDF2F2; padding: 30px; border-bottom: 1px solid #FDE8E8;">
+                            <div style="font-family: 'Georgia', serif; font-size: 24px; color: #C0392B; margin-bottom: 5px;">Agendamento Cancelado</div>
+                            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #C0392B; font-weight: 600;">Espaço Delas Studio</div>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 40px 30px;">
+                            <h2 style="font-family: 'Georgia', serif; font-size: 20px; color: #333333; margin-top: 0; margin-bottom: 15px; font-weight: normal; text-align: center;">Olá, {{ appointment.client_name }}</h2>
+                            <p style="font-size: 14px; line-height: 1.6; color: #666666; margin-bottom: 25px; text-align: center;">
+                                Confirmamos que o seu agendamento foi cancelado e o horário foi liberado em nossa agenda. Veja as informações do agendamento que foi removido:
+                            </p>
+                            
+                            <!-- Box Details -->
+                            <table width="100%" border="0" cellspacing="0" cellpadding="12" style="background-color: #F9F9F9; border-radius: 12px; margin-bottom: 30px;">
+                                <tr>
+                                    <td width="30%" style="font-size: 12px; color: #666666; font-weight: bold;">Código:</td>
+                                    <td style="font-size: 13px; color: #333333; font-family: monospace;">#{{ appointment.id|stringformat:"04d" }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 12px; color: #666666; font-weight: bold;">Serviço:</td>
+                                    <td style="font-size: 13px; color: #333333; font-weight: 500;">{{ appointment.service.name }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 12px; color: #666666; font-weight: bold;">Profissional:</td>
+                                    <td style="font-size: 13px; color: #333333;">{{ appointment.professional.name }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 12px; color: #666666; font-weight: bold;">Data/Hora:</td>
+                                    <td style="font-size: 13px; color: #333333;">{{ appointment.appointment_date|date:"d/m/Y" }} às {{ appointment.appointment_time|time:"H:i" }}</td>
+                                </tr>
+                            </table>
+                            
+                            <p style="font-size: 13px; line-height: 1.6; color: #666666; text-align: center; margin-bottom: 30px;">
+                                Caso tenha sido um engano ou queira escolher outro dia, clique no botão abaixo para agendar novamente online:
+                            </p>
+                            
+                            <!-- Reschedule Button -->
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td align="center">
+                                        <a href="http://localhost:8000/agendar/" style="display: inline-block; background-color: #C97B8A; color: #FFFFFF; text-decoration: none; font-size: 13px; font-weight: 500; padding: 12px 25px; border-radius: 20px;">
+                                            Agendar Novo Horário
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td align="center" style="background-color: #F9F9F9; padding: 20px; border-top: 1px solid #EEEEEE; font-size: 11px; color: #999999;">
+                            © 2026 Espaço Delas. Todos os direitos reservados.
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

@@ -1,0 +1,143 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Detalhes do Agendamento · Espaço Delas{% endblock %}
+{% block breadcrumb %}
+<a href="{% url 'dashboard:agenda' %}" class="hover:text-primary transition-colors">Agenda</a> / Detalhes #{{ appointment.id|stringformat:"04d" }}
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="max-w-2xl mx-auto space-y-6">
+    
+    <!-- CARD BOX -->
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        
+        <!-- Header Status -->
+        <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between {% if appointment.status == 'cancelled' %}bg-red-50/50{% else %}bg-primary/5{% endif %}">
+            <div>
+                <h3 class="font-serif text-lg text-neutral-dark">Agendamento #{{ appointment.id|stringformat:"04d" }}</h3>
+                <span class="text-[10px] text-neutral-mid block mt-0.5">Criado em {{ appointment.created_at|date:"d/m/Y H:i" }}</span>
+            </div>
+            <div>
+                {% if appointment.status == 'confirmed' %}
+                    <span class="bg-green-50 text-success border border-green-200 px-3 py-1 rounded-full font-sans text-xs font-semibold">Confirmado</span>
+                {% elif appointment.status == 'cancelled' %}
+                    <span class="bg-red-50 text-error border border-red-200 px-3 py-1 rounded-full font-sans text-xs font-semibold">Cancelado</span>
+                {% else %}
+                    <span class="bg-yellow-50 text-yellow-700 border border-yellow-200 px-3 py-1 rounded-full font-sans text-xs font-semibold">Pendente</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Details Info -->
+        <div class="p-6 space-y-6">
+            
+            <!-- Service details -->
+            <div class="space-y-3">
+                <h4 class="font-serif text-xs font-bold text-neutral-mid uppercase tracking-widest">Informações de Atendimento</h4>
+                <div class="grid grid-cols-2 gap-4 text-xs pt-1">
+                    <div>
+                        <span class="text-neutral-mid block">Serviço:</span>
+                        <span class="font-semibold text-neutral-dark text-sm">{{ appointment.service.name }}</span>
+                    </div>
+                    <div>
+                        <span class="text-neutral-mid block">Profissional:</span>
+                        <span class="font-semibold text-neutral-dark text-sm">{{ appointment.professional.name }}</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-4 text-xs pt-2 border-t border-gray-50">
+                    <div>
+                        <span class="text-neutral-mid block">Data:</span>
+                        <span class="font-medium text-neutral-dark">{{ appointment.appointment_date|date:"d \d\e F \d\e Y" }}</span>
+                    </div>
+                    <div>
+                        <span class="text-neutral-mid block">Horário:</span>
+                        <span class="font-medium text-neutral-dark">{{ appointment.appointment_time|time:"H:i" }}</span>
+                    </div>
+                    <div>
+                        <span class="text-neutral-mid block">Duração:</span>
+                        <span class="font-medium text-neutral-dark">{{ appointment.service.duration_minutes }} minutos</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Client details -->
+            <div class="space-y-3 pt-4 border-t border-gray-100">
+                <h4 class="font-serif text-xs font-bold text-neutral-mid uppercase tracking-widest">Dados da Cliente</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs pt-1">
+                    <div>
+                        <span class="text-neutral-mid block">Nome Completo:</span>
+                        <span class="font-semibold text-neutral-dark">{{ appointment.client_name }}</span>
+                    </div>
+                    <div>
+                        <span class="text-neutral-mid block">E-mail:</span>
+                        <span class="font-semibold text-neutral-dark">{{ appointment.client_email }}</span>
+                    </div>
+                    <div>
+                        <span class="text-neutral-mid block">WhatsApp:</span>
+                        <span class="font-semibold text-neutral-dark">{{ appointment.client_phone }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Invoice value -->
+            <div class="pt-6 border-t border-gray-100 flex justify-between items-center">
+                <span class="font-sans text-xs text-neutral-dark font-medium">Valor Total do Atendimento:</span>
+                <span class="font-semibold text-xl text-primary">R$ {{ appointment.service.price }}</span>
+            </div>
+
+        </div>
+
+        <!-- ACTIONS BAR -->
+        <div class="bg-neutral-light px-6 py-4 border-t border-gray-100 flex justify-between gap-4">
+            <a href="{% url 'dashboard:agenda' %}?data={{ appointment.appointment_date|date:'Y-m-d' }}" class="text-center border border-gray-200 text-neutral-mid hover:bg-white font-sans font-medium px-5 py-2.5 rounded-full transition-all duration-200 text-xs bg-white shadow-xs">
+                Voltar para Agenda
+            </a>
+            
+            {% if appointment.status != 'cancelled' %}
+                <!-- Cancel button triggers modal -->
+                <button type="button" onclick="toggleModal('cancel-modal', true);" class="bg-error hover:bg-red-700 text-white font-sans font-medium px-5 py-2.5 rounded-full transition-all duration-200 text-xs shadow-sm hover:shadow-md">
+                    Cancelar Horário
+                </button>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- CANCELLATION CONFIRMATION MODAL -->
+<div id="cancel-modal" class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full border border-gray-100 shadow-xl overflow-hidden animate-scale-up">
+        
+        <div class="p-5 text-center space-y-4">
+            <div class="w-12 h-12 rounded-full bg-red-50 text-error flex items-center justify-center mx-auto text-lg border border-red-100">
+                ⚠️
+            </div>
+            <h4 class="font-serif text-base text-neutral-dark">Deseja realmente cancelar?</h4>
+            <p class="font-sans text-xs text-neutral-mid leading-relaxed">
+                Esta ação cancelará o agendamento da cliente <strong>{{ appointment.client_name }}</strong>. 
+                Ela receberá uma notificação automática por e-mail informando o cancelamento.
+            </p>
+        </div>
+
+        <form method="post" action="{% url 'dashboard:cancel_appointment' appointment.id %}" class="bg-neutral-light p-4 border-t border-gray-100 flex gap-3 justify-end">
+            {% csrf_token %}
+            <button type="button" onclick="toggleModal('cancel-modal', false);" class="border border-gray-200 text-neutral-mid bg-white font-sans font-medium px-4 py-2 rounded-full transition-colors text-xs hover:bg-neutral-light">
+                Manter Agendamento
+            </button>
+            <button type="submit" class="bg-error hover:bg-red-700 text-white font-sans font-medium px-5 py-2 rounded-full transition-all text-xs shadow-sm">
+                Confirmar Cancelamento
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggleModal(id, show) {
+        const modal = document.getElementById(id);
+        if (show) {
+            modal.classList.remove('hidden');
+        } else {
+            modal.classList.add('hidden');
+        }
+    }
+</script>
+{% endblock %}

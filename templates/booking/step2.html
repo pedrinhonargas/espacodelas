@@ -1,0 +1,328 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Agendar Horário - Etapa 2 · Espaço Delas{% endblock %}
+
+{% block extra_head %}
+<style>
+    .calendar-day.disabled {
+        color: #d1d5db;
+        cursor: not-allowed;
+        background-color: transparent !important;
+        text-decoration: line-through;
+    }
+    .calendar-day.available {
+        color: #333333;
+        font-weight: 500;
+        cursor: pointer;
+    }
+    .calendar-day.available:hover {
+        background-color: #E8A4B2;
+        color: white;
+    }
+    .calendar-day.selected {
+        background-color: #C97B8A !important;
+        color: white !important;
+        box-shadow: 0 4px 6px -1px rgba(201, 123, 138, 0.4);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="py-12 bg-rose-gradient min-h-[80vh]">
+    <div class="max-w-4xl mx-auto px-4">
+        
+        <!-- Stepper -->
+        <div class="max-w-xl mx-auto mb-10">
+            <div class="flex items-center justify-between relative">
+                <div class="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-0.5 bg-gray-200 -z-10"></div>
+                <div class="absolute left-0 top-1/2 -translate-y-1/2 h-0.5 bg-primary -z-10" style="width: 33%;"></div>
+                
+                <div class="flex flex-col items-center">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold bg-primary text-white transition-all duration-300">1</div>
+                    <span class="text-[10px] sm:text-xs mt-2 font-medium text-primary">Serviço</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold bg-primary text-white ring-4 ring-primary-light transition-all duration-300">2</div>
+                    <span class="text-[10px] sm:text-xs mt-2 font-medium text-primary">Data/Hora</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold bg-white text-gray-400 border-2 border-gray-200 transition-all duration-300">3</div>
+                    <span class="text-[10px] sm:text-xs mt-2 font-medium text-gray-400">Identificação</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold bg-white text-gray-400 border-2 border-gray-200 transition-all duration-300">4</div>
+                    <span class="text-[10px] sm:text-xs mt-2 font-medium text-gray-400">Confirmação</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- LEFT COLUMN: CALENDAR -->
+            <div class="lg:col-span-7 bg-white rounded-2xl p-6 border border-gray-100 shadow-sm space-y-6">
+                <div class="flex justify-between items-center pb-4 border-b border-gray-100">
+                    <button type="button" id="prev-month" class="p-2 hover:bg-neutral-light rounded-full text-neutral-mid hover:text-primary transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>
+                    <h3 class="font-serif text-lg text-neutral-dark" id="current-month-year">Novembro 2026</h3>
+                    <button type="button" id="next-month" class="p-2 hover:bg-neutral-light rounded-full text-neutral-mid hover:text-primary transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+
+                <!-- Calendar grid -->
+                <div>
+                    <!-- Weekdays -->
+                    <div class="grid grid-cols-7 gap-2 text-center text-xs font-medium text-neutral-mid mb-2">
+                        <div>Dom</div>
+                        <div>Seg</div>
+                        <div>Ter</div>
+                        <div>Qua</div>
+                        <div>Qui</div>
+                        <div>Sex</div>
+                        <div>Sáb</div>
+                    </div>
+                    <!-- Days container -->
+                    <div class="grid grid-cols-7 gap-2 text-center text-sm" id="calendar-days">
+                        <!-- injected by javascript -->
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4 text-xs text-neutral-mid pt-2">
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-3 h-3 rounded-full border border-gray-300"></div>
+                        <span>Indisponível</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-3 h-3 rounded-full bg-primary/10 border border-primary/20"></div>
+                        <span>Disponível</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-3 h-3 rounded-full bg-primary"></div>
+                        <span>Selecionado</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: TIME SLOTS -->
+            <div class="lg:col-span-5 flex flex-col gap-6">
+                <!-- Service Summary -->
+                <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-3">
+                    <span class="text-[10px] font-bold text-primary tracking-widest uppercase">Resumo da Seleção</span>
+                    <h4 class="font-serif text-lg text-neutral-dark">{{ service.name }}</h4>
+                    <div class="flex justify-between items-center text-xs text-neutral-mid pt-2 border-t border-gray-100">
+                        <span>Profissional:</span>
+                        <span class="font-medium text-neutral-dark">
+                            {% if professional %}
+                                {{ professional.name }}
+                            {% else %}
+                                Qualquer Profissional
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs text-neutral-mid">
+                        <span>Duração:</span>
+                        <span class="font-medium text-neutral-dark">{{ service.duration_minutes }} minutos</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs text-neutral-mid">
+                        <span>Preço:</span>
+                        <span class="font-semibold text-primary">R$ {{ service.price }}</span>
+                    </div>
+                </div>
+
+                <!-- Time slot list -->
+                <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex-grow min-h-[250px] flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <h4 class="font-serif text-base text-neutral-dark flex items-center gap-2">
+                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Horários para <span id="selected-date-label">selecione um dia</span>
+                        </h4>
+                        
+                        <!-- Empty slots fallback -->
+                        <div id="slots-empty-state" class="text-center py-10 text-neutral-mid text-xs space-y-2">
+                            <p>Nenhum dia selecionado.</p>
+                            <p class="text-[10px]">Por favor, clique em um dia destacado no calendário para carregar os horários disponíveis.</p>
+                        </div>
+                        
+                        <!-- Slots grid -->
+                        <div id="slots-grid" class="grid grid-cols-3 gap-2 max-h-[220px] overflow-y-auto hidden">
+                            <!-- injected by AJAX -->
+                        </div>
+                    </div>
+
+                    <!-- Main form for submission -->
+                    <form method="post" id="step2-form" class="pt-6 border-t border-gray-100 space-y-4">
+                        {% csrf_token %}
+                        <input type="hidden" name="date" id="selected-date-input">
+                        <input type="hidden" name="time" id="selected-time-input">
+                        
+                        <div class="flex gap-3">
+                            <a href="{% url 'booking:start' %}" class="w-1/3 text-center border border-gray-200 text-neutral-mid hover:bg-neutral-light font-sans font-medium px-4 py-3 rounded-full transition-all duration-200 text-sm">
+                                Voltar
+                            </a>
+                            <button type="submit" id="continue-btn" class="w-2/3 bg-primary hover:bg-primary-dark text-white font-sans font-medium px-6 py-3 rounded-full transition-all duration-200 text-sm disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                Confirmar Horário
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<script>
+    const availableDates = {{ available_dates_json|safe }};
+    const ajaxUrl = "{% url 'booking:slots_ajax' %}";
+
+    let currentDate = new Date(); // Starts at today
+    let selectedDateStr = null;
+    let selectedTimeStr = null;
+
+    const calendarDays = document.getElementById("calendar-days");
+    const currentMonthYear = document.getElementById("current-month-year");
+    const selectedDateLabel = document.getElementById("selected-date-label");
+    const selectedDateInput = document.getElementById("selected-date-input");
+    const selectedTimeInput = document.getElementById("selected-time-input");
+    const slotsGrid = document.getElementById("slots-grid");
+    const slotsEmptyState = document.getElementById("slots-empty-state");
+    const continueBtn = document.getElementById("continue-btn");
+
+    const months = [
+        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ];
+
+    function renderCalendar() {
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+
+        // Set Month/Year label
+        currentMonthYear.textContent = `${months[month]} ${year}`;
+
+        // Get first day of month (0 = Sun, 6 = Sat)
+        const firstDay = new Date(year, month, 1).getDay();
+        // Get total days in month
+        const totalDays = new Date(year, month + 1, 0).getDate();
+
+        calendarDays.innerHTML = "";
+
+        // Empty cells for alignment before first day
+        for (let i = 0; i < firstDay; i++) {
+            const emptyCell = document.createElement("div");
+            calendarDays.appendChild(emptyCell);
+        }
+
+        // Fill days of the month
+        for (let day = 1; day <= totalDays; day++) {
+            const dayCell = document.createElement("div");
+            dayCell.textContent = day;
+            dayCell.className = "calendar-day w-8 h-8 rounded-full flex items-center justify-center text-xs transition-colors";
+            
+            // Format date string YYYY-MM-DD
+            const monthStr = String(month + 1).padStart(2, '0');
+            const dayStr = String(day).padStart(2, '0');
+            const dateStr = `${year}-${monthStr}-${dayStr}`;
+
+            if (availableDates.includes(dateStr)) {
+                dayCell.classList.add("available");
+                
+                // Keep selected day visually selected when redrawing/navigating
+                if (dateStr === selectedDateStr) {
+                    dayCell.classList.add("selected");
+                }
+                
+                dayCell.addEventListener("click", () => {
+                    // Remove selection style
+                    document.querySelectorAll(".calendar-day.selected").forEach(c => c.classList.remove("selected"));
+                    // Add selection to clicked
+                    dayCell.classList.add("selected");
+                    
+                    selectDate(dateStr);
+                });
+            } else {
+                dayCell.classList.add("disabled");
+            }
+
+            calendarDays.appendChild(dayCell);
+        }
+    }
+
+    function selectDate(dateStr) {
+        selectedDateStr = dateStr;
+        selectedDateInput.value = dateStr;
+        
+        // Format Portuguese date readable
+        const dateObj = new Date(dateStr + "T00:00:00");
+        const options = { day: 'numeric', month: 'long' };
+        selectedDateLabel.textContent = dateObj.toLocaleDateString('pt-BR', options);
+        
+        // Reset slots and selection
+        slotsGrid.innerHTML = "";
+        slotsGrid.classList.add("hidden");
+        slotsEmptyState.classList.remove("hidden");
+        slotsEmptyState.innerHTML = '<div class="flex items-center justify-center py-4"><svg class="animate-spin h-5 w-5 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></div>';
+        
+        selectedTimeStr = null;
+        selectedTimeInput.value = "";
+        continueBtn.disabled = true;
+
+        // Fetch available slots from backend via AJAX
+        fetch(`${ajaxUrl}?data=${dateStr}`)
+            .then(res => res.json())
+            .then(data => {
+                slotsGrid.innerHTML = "";
+                
+                if (data.slots && data.slots.length > 0) {
+                    slotsEmptyState.classList.add("hidden");
+                    slotsGrid.classList.remove("hidden");
+                    
+                    data.slots.forEach(time => {
+                        const timeBtn = document.createElement("button");
+                        timeBtn.type = "button";
+                        timeBtn.textContent = time;
+                        timeBtn.className = "border border-gray-200 text-neutral-dark rounded-xl py-2 px-3 hover:border-primary hover:bg-primary-light/15 font-sans font-medium text-xs transition-all duration-150";
+                        
+                        timeBtn.addEventListener("click", () => {
+                            // Reset active buttons
+                            slotsGrid.querySelectorAll("button").forEach(b => b.className = "border border-gray-200 text-neutral-dark rounded-xl py-2 px-3 hover:border-primary hover:bg-primary-light/15 font-sans font-medium text-xs transition-all duration-150");
+                            
+                            // Style active
+                            timeBtn.className = "bg-primary text-white border-primary rounded-xl py-2 px-3 font-sans font-semibold text-xs transition-all duration-150 shadow-sm";
+                            
+                            selectedTimeStr = time;
+                            selectedTimeInput.value = time;
+                            continueBtn.disabled = false;
+                        });
+                        
+                        slotsGrid.appendChild(timeBtn);
+                    });
+                } else {
+                    slotsEmptyState.classList.remove("hidden");
+                    slotsEmptyState.innerHTML = '<p class="text-error font-medium">Ops, sem horários livres.</p><p class="text-[10px]">Todos os horários foram preenchidos para esta data. Escolha outro dia.</p>';
+                }
+            })
+            .catch(err => {
+                slotsEmptyState.classList.remove("hidden");
+                slotsEmptyState.innerHTML = '<p class="text-error">Erro ao carregar horários. Tente novamente.</p>';
+            });
+    }
+
+    // Prev Month navigation
+    document.getElementById("prev-month").addEventListener("click", () => {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        renderCalendar();
+    });
+
+    // Next Month navigation
+    document.getElementById("next-month").addEventListener("click", () => {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        renderCalendar();
+    });
+
+    // Render calendar initially
+    renderCalendar();
+</script>
+{% endblock %}

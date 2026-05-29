@@ -1,0 +1,176 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Bloquear Horários · Espaço Delas{% endblock %}
+{% block breadcrumb %}🔒 Bloquear Horários{% endblock %}
+
+{% block dashboard_content %}
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    
+    <!-- LEFT COLUMN: BLOCK SLOT FORM -->
+    <div class="lg:col-span-5 bg-white rounded-2xl p-6 border border-gray-100 shadow-sm space-y-6">
+        <div class="border-b border-gray-100 pb-3">
+            <h3 class="font-serif text-lg text-neutral-dark">Bloquear Novo Horário</h3>
+            <p class="font-sans text-xs text-neutral-mid mt-0.5">Defina um dia e intervalo no qual você estará indisponível.</p>
+        </div>
+
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            
+            {% if is_owner %}
+                <!-- Warn which professional is being configured -->
+                <div class="bg-primary/5 rounded-xl p-3 border border-primary/20 text-xs text-primary font-medium flex justify-between items-center">
+                    <span>Configurando para: <strong>{{ professional.name }}</strong></span>
+                    <a href="{% url 'dashboard:professionals_list' %}" class="underline text-[10px]">Alterar</a>
+                </div>
+            {% endif %}
+
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-medium text-neutral-dark font-sans" for="{{ form.block_date.id_for_label }}">Data do Bloqueio</label>
+                {{ form.block_date }}
+                {% if form.block_date.errors %}
+                    {% for error in form.block_date.errors %}
+                        <span class="text-[10px] text-error font-medium">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-neutral-dark font-sans" for="{{ form.start_time.id_for_label }}">Horário de Início</label>
+                    {{ form.start_time }}
+                    {% if form.start_time.errors %}
+                        {% for error in form.start_time.errors %}
+                            <span class="text-[10px] text-error font-medium">{{ error }}</span>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-neutral-dark font-sans" for="{{ form.end_time.id_for_label }}">Horário de Fim</label>
+                    {{ form.end_time }}
+                    {% if form.end_time.errors %}
+                        {% for error in form.end_time.errors %}
+                            <span class="text-[10px] text-error font-medium">{{ error }}</span>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-medium text-neutral-dark font-sans" for="{{ form.reason.id_for_label }}">Motivo (opcional)</label>
+                {{ form.reason }}
+                {% if form.reason.errors %}
+                    {% for error in form.reason.errors %}
+                        <span class="text-[10px] text-error font-medium">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <!-- Global form validation errors -->
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                    <div class="bg-red-50 border border-red-200 text-error rounded-xl px-4 py-3 font-sans text-xs">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="pt-4 border-t border-gray-50 flex justify-end">
+                <button type="submit" class="bg-primary hover:bg-primary-dark text-white font-sans font-medium px-6 py-2.5 rounded-full transition-all duration-200 text-xs shadow-sm hover:shadow-md">
+                    Criar Bloqueio
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- RIGHT COLUMN: FUTURE BLOCKED SLOTS LIST -->
+    <div class="lg:col-span-7 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col justify-between min-h-[300px]">
+        
+        <div class="space-y-4">
+            <div class="px-6 py-4 border-b border-gray-100">
+                <h3 class="font-serif text-base font-semibold text-neutral-dark">Bloqueios Futuros</h3>
+            </div>
+
+            {% if blocked_slots %}
+                <div class="overflow-x-auto px-6">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-gray-100 text-[10px] font-bold text-neutral-mid uppercase tracking-wider py-2">
+                                <th class="py-2">Data</th>
+                                <th class="py-2">Intervalo</th>
+                                <th class="py-2">Motivo</th>
+                                <th class="py-2 text-right">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50 text-xs">
+                            {% for block in blocked_slots %}
+                                <tr class="hover:bg-neutral-light/20 transition-colors">
+                                    <td class="py-3 font-medium text-neutral-dark">{{ block.block_date|date:"d/m/Y" }}</td>
+                                    <td class="py-3 font-mono text-neutral-dark">{{ block.start_time|time:"H:i" }} às {{ block.end_time|time:"H:i" }}</td>
+                                    <td class="py-3 text-neutral-mid italic">{% if block.reason %}{{ block.reason }}{% else %}-{% endif %}</td>
+                                    <td class="py-3 text-right">
+                                        <button type="button" onclick="confirmDelete('{{ block.id }}');" class="text-error hover:text-red-700 font-semibold underline">
+                                            Remover
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <!-- Empty state -->
+                <div class="text-center py-16 space-y-2">
+                    <div class="text-2xl text-neutral-mid">🔒</div>
+                    <h4 class="font-serif text-sm font-medium text-neutral-dark">Nenhum horário bloqueado</h4>
+                    <p class="font-sans text-[10px] text-neutral-mid max-w-xs mx-auto leading-relaxed">
+                        Você não possui nenhum bloqueio de horário futuro cadastrado no momento.
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- REMOVE BLOCK CONFIRMATION MODAL -->
+<div id="delete-modal" class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full border border-gray-100 shadow-xl overflow-hidden">
+        
+        <div class="p-5 text-center space-y-4">
+            <h4 class="font-serif text-base text-neutral-dark">Deseja remover o bloqueio?</h4>
+            <p class="font-sans text-xs text-neutral-mid leading-relaxed">
+                Ao remover este bloqueio, o horário correspondente ficará imediatamente disponível para agendamento online das clientes.
+            </p>
+        </div>
+
+        <form id="delete-form" method="post" class="bg-neutral-light p-4 border-t border-gray-100 flex gap-3 justify-end">
+            {% csrf_token %}
+            <button type="button" onclick="closeModal();" class="border border-gray-200 text-neutral-mid bg-white font-sans font-medium px-4 py-2 rounded-full transition-colors text-xs hover:bg-neutral-light">
+                Cancelar
+            </button>
+            <button type="submit" class="bg-error hover:bg-red-700 text-white font-sans font-medium px-5 py-2 rounded-full transition-all text-xs shadow-sm">
+                Confirmar Remoção
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    let activeBlockId = null;
+
+    function confirmDelete(id) {
+        activeBlockId = id;
+        const modal = document.getElementById("delete-modal");
+        const form = document.getElementById("delete-form");
+        
+        // Build correct deletion URL dynamically
+        form.action = `/studio/bloquear/${id}/remover/`;
+        
+        modal.classList.remove("hidden");
+    }
+
+    function closeModal() {
+        const modal = document.getElementById("delete-modal");
+        modal.classList.add("hidden");
+    }
+</script>
+{% endblock %}

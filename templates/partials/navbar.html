@@ -1,0 +1,60 @@
+{% load static %}
+<nav class="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50 transition-all duration-300" id="navbar">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
+            <!-- Logo -->
+            <a href="/" class="flex items-center gap-3 group">
+                <div class="relative w-16 h-16 flex items-center justify-center overflow-hidden rounded-full bg-primary/10 transition-transform duration-300 group-hover:scale-105">
+                    <!-- Fallback character or icon if image not available -->
+                    <img src="{% static 'img/icon.png' %}" class="w-12 h-12 object-contain transition-opacity" alt="Espaço Delas Icon" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                    <span class="hidden text-primary font-serif font-bold text-lg">ED</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-serif text-xl font-semibold tracking-wide text-neutral-dark leading-none">
+                        Espaço <span class="text-primary font-script text-2xl lowercase italic ml-0.5">Delas</span>
+                    </span>
+                    <span class="text-[9px] font-sans tracking-[0.2em] text-neutral-mid uppercase mt-1">Estética & Bem-Estar</span>
+                </div>
+            </a>
+
+            <!-- Links Desktop -->
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#servicos" class="font-sans text-sm font-medium text-neutral-mid hover:text-primary transition-colors">Serviços</a>
+                <a href="#profissionais" class="font-sans text-sm font-medium text-neutral-mid hover:text-primary transition-colors">Profissionais</a>
+                <a href="#sobre" class="font-sans text-sm font-medium text-neutral-mid hover:text-primary transition-colors">Sobre</a>
+                <a href="#depoimentos" class="font-sans text-sm font-medium text-neutral-mid hover:text-primary transition-colors">Depoimentos</a>
+                <a href="#contato" class="font-sans text-sm font-medium text-neutral-mid hover:text-primary transition-colors">Contato</a>
+                
+                <a href="/agendar/" 
+                   class="bg-primary hover:bg-primary-dark text-white font-sans text-sm font-medium px-6 py-2.5 rounded-full transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95">
+                    Agendar Horário
+                </a>
+            </div>
+
+            <!-- Hamburger Button Mobile -->
+            <button class="md:hidden p-2 rounded-xl hover:bg-neutral-light transition-colors text-neutral-dark focus:outline-none" id="menu-toggle" aria-label="Menu Principal">
+                <svg class="w-6 h-6 transition-transform duration-300" id="hamburger-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Menu Mobile (Drawer) -->
+    <div class="hidden md:hidden bg-white/95 border-b border-gray-100 overflow-hidden transition-all duration-300 max-h-0" id="mobile-menu">
+        <div class="px-4 pt-2 pb-6 space-y-3 flex flex-col">
+            <a href="#servicos" class="font-sans text-base font-medium text-neutral-mid hover:text-primary px-3 py-2 rounded-lg hover:bg-neutral-light transition-colors mobile-link">Serviços</a>
+            <a href="#profissionais" class="font-sans text-base font-medium text-neutral-mid hover:text-primary px-3 py-2 rounded-lg hover:bg-neutral-light transition-colors mobile-link">Profissionais</a>
+            <a href="#sobre" class="font-sans text-base font-medium text-neutral-mid hover:text-primary px-3 py-2 rounded-lg hover:bg-neutral-light transition-colors mobile-link">Sobre</a>
+            <a href="#depoimentos" class="font-sans text-base font-medium text-neutral-mid hover:text-primary px-3 py-2 rounded-lg hover:bg-neutral-light transition-colors mobile-link">Depoimentos</a>
+            <a href="#contato" class="font-sans text-base font-medium text-neutral-mid hover:text-primary px-3 py-2 rounded-lg hover:bg-neutral-light transition-colors mobile-link">Contato</a>
+            
+            <div class="pt-2 border-t border-gray-100 mt-2">
+                <a href="/agendar/" 
+                   class="block text-center bg-primary hover:bg-primary-dark text-white font-sans font-medium py-3 rounded-xl transition-all duration-200 shadow-sm">
+                    Agendar Horário
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>

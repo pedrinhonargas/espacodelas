@@ -1,0 +1,95 @@
+{% load static %}
+<footer class="bg-[#2A2A2A] text-[#E0E0E0] pt-16 pb-8 border-t border-neutral-mid/10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+            <!-- Coluna 1: Branding -->
+            <div class="md:col-span-1">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 flex items-center justify-center rounded-full bg-primary/20">
+                        <img src="{% static 'img/icon.png' %}" class="w-7 h-7 object-contain" alt="Espaço Delas" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                        <span class="hidden text-primary font-serif font-bold text-sm">ED</span>
+                    </div>
+                    <span class="font-serif text-xl font-semibold tracking-wide text-white leading-none">
+                        Espaço <span class="text-primary font-script text-2xl lowercase italic ml-0.5">Delas</span>
+                    </span>
+                </div>
+                <p class="font-sans text-sm text-[#B3B3B3] leading-relaxed mb-6">
+                    Um refúgio de beleza e autocuidado feito especialmente para você. Especialistas em manicure e design de sobrancelhas.
+                </p>
+                <div class="flex gap-4">
+                    <!-- Redes sociais - Instagram -->
+                    <a href="https://instagram.com/espacodelas" target="_blank" rel="noopener" class="w-9 h-9 flex items-center justify-center rounded-full bg-white/5 hover:bg-primary/20 text-[#E0E0E0] hover:text-primary transition-all duration-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                    <!-- Redes sociais - WhatsApp -->
+                    <a href="https://wa.me/5511999999999" target="_blank" rel="noopener" class="w-9 h-9 flex items-center justify-center rounded-full bg-white/5 hover:bg-primary/20 text-[#E0E0E0] hover:text-primary transition-all duration-200">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.517 2.266 2.27 3.51 5.279 3.51 8.486 0 6.657-5.338 11.997-11.949 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.665.989 3.3 1.488 5.415 1.489 5.33 0 9.67-4.333 9.67-9.67 0-2.584-1.008-5.012-2.839-6.845-1.83-1.832-4.258-2.84-6.845-2.84-5.332 0-9.673 4.333-9.673 9.67 0 2.232.583 4.413 1.69 6.289l-.999 3.647 3.73-.977-.158-.284z"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Coluna 2: Atalhos -->
+            <div>
+                <h4 class="font-serif text-base font-medium text-white mb-5 uppercase tracking-wider">Acesso Rápido</h4>
+                <ul class="space-y-3 font-sans text-sm">
+                    <li><a href="#servicos" class="hover:text-primary transition-colors text-[#B3B3B3]">Nossos Serviços</a></li>
+                    <li><a href="#profissionais" class="hover:text-primary transition-colors text-[#B3B3B3]">Nossas Profissionais</a></li>
+                    <li><a href="#sobre" class="hover:text-primary transition-colors text-[#B3B3B3]">Sobre o Studio</a></li>
+                    <li><a href="#depoimentos" class="hover:text-primary transition-colors text-[#B3B3B3]">Depoimentos</a></li>
+                    <li><a href="/agendar/" class="hover:text-primary transition-colors text-primary font-medium">Agendar Horário</a></li>
+                </ul>
+            </div>
+
+            <!-- Coluna 3: Horários -->
+            <div>
+                <h4 class="font-serif text-base font-medium text-white mb-5 uppercase tracking-wider">Funcionamento</h4>
+                <ul class="space-y-3 font-sans text-sm text-[#B3B3B3]">
+                    <li class="flex justify-between border-b border-white/5 pb-1">
+                        <span>Segunda a Sexta</span>
+                        <span class="text-white font-medium">09:00 - 19:00</span>
+                    </li>
+                    <li class="flex justify-between border-b border-white/5 pb-1">
+                        <span>Sábado</span>
+                        <span class="text-white font-medium">09:00 - 17:00</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span>Domingo</span>
+                        <span class="text-primary font-medium">Fechado</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Coluna 4: Contato -->
+            <div>
+                <h4 class="font-serif text-base font-medium text-white mb-5 uppercase tracking-wider">Localização</h4>
+                <address class="not-italic font-sans text-sm text-[#B3B3B3] space-y-3">
+                    <p class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-primary shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <span>Rua das Flores, 123 · Centro<br>São Paulo - SP, 01000-000</span>
+                    </p>
+                    <p class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-primary shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                        </svg>
+                        <a href="tel:+5511999999999" class="hover:text-primary transition-colors text-white font-medium">(11) 99999-9999</a>
+                    </p>
+                </address>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="border-t border-white/5 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-[#808080]">
+            <p>&copy; 2026 Espaço Delas. Todos os direitos reservados.</p>
+            <p>Desenvolvido com carinho para o TCC de PH.</p>
+        </div>
+    </div>
+</footer>

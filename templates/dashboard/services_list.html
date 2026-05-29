@@ -1,0 +1,79 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Gerenciar Serviços · Espaço Delas{% endblock %}
+{% block breadcrumb %}Serviços{% endblock %}
+
+{% block dashboard_content %}
+<div class="space-y-6">
+    
+    <!-- HEADER BAR -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h2 class="font-serif text-xl text-neutral-dark">Catálogo de Serviços</h2>
+            <p class="font-sans text-xs text-neutral-mid mt-0.5">Cadastre ou edite serviços prestados no studio.</p>
+        </div>
+        <a href="{% url 'dashboard:service_create' %}" class="bg-primary hover:bg-primary-dark text-white font-sans font-medium px-5 py-2.5 rounded-full transition-all duration-200 text-xs shadow-sm hover:shadow-md flex items-center gap-1.5">
+            ➕ Novo Serviço
+        </a>
+    </div>
+
+    <!-- SERVICES LIST GRID -->
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-100">
+            <h3 class="font-serif text-base font-semibold text-neutral-dark">Todos os Serviços</h3>
+        </div>
+
+        {% if services %}
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-neutral-light/50 border-b border-gray-100 text-[10px] font-bold text-neutral-mid uppercase tracking-wider">
+                            <th class="py-3 px-6">Nome do Serviço</th>
+                            <th class="py-3 px-6">Descrição</th>
+                            <th class="py-3 px-6">Duração</th>
+                            <th class="py-3 px-6 text-right">Preço</th>
+                            <th class="py-3 px-6">Status</th>
+                            <th class="py-3 px-6 text-right">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 text-xs">
+                        {% for svc in services %}
+                            <tr class="hover:bg-neutral-light/30 transition-colors {% if not svc.is_active %}opacity-60 bg-gray-50/50{% endif %}">
+                                <td class="py-4 px-6 font-semibold text-neutral-dark">{{ svc.name }}</td>
+                                <td class="py-4 px-6 text-neutral-mid leading-relaxed max-w-xs truncate">{{ svc.description }}</td>
+                                <td class="py-4 px-6 font-medium text-neutral-dark">{{ svc.duration_minutes }} minutos</td>
+                                <td class="py-4 px-6 text-right font-semibold text-primary">R$ {{ svc.price }}</td>
+                                <td class="py-4 px-6">
+                                    {% if svc.is_active %}
+                                        <span class="inline-block bg-green-50 text-success border border-green-200 px-2.5 py-0.5 rounded-full font-medium">Ativo</span>
+                                    {% else %}
+                                        <span class="inline-block bg-gray-50 text-neutral-mid border border-gray-200 px-2.5 py-0.5 rounded-full font-medium">Inativo</span>
+                                    {% endif %}
+                                </td>
+                                <td class="py-4 px-6 text-right space-x-2">
+                                    <a href="{% url 'dashboard:service_update' svc.id %}" class="text-primary hover:text-primary-dark font-medium underline">
+                                        Editar
+                                    </a>
+                                    <a href="{% url 'dashboard:service_toggle' svc.id %}" 
+                                       class="font-medium {% if svc.is_active %}text-error hover:text-red-700{% else %}text-success hover:text-green-700{% endif %} underline">
+                                        {% if svc.is_active %}Desativar{% else %}Ativar{% endif %}
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <!-- Empty state -->
+            <div class="text-center py-16 space-y-2">
+                <div class="text-3xl text-neutral-mid">💅</div>
+                <h4 class="font-serif text-sm font-medium text-neutral-dark">Nenhum serviço cadastrado</h4>
+                <p class="font-sans text-[10px] text-neutral-mid max-w-xs mx-auto leading-relaxed">
+                    Você ainda não cadastrou nenhum serviço no catálogo do studio.
+                </p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

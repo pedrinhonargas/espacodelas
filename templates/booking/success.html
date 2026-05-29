@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Agendamento Confirmado! · Espaço Delas{% endblock %}
+
+{% block content %}
+<section class="py-16 bg-rose-gradient min-h-[85vh] flex items-center justify-center">
+    <div class="max-w-md w-full mx-auto px-4 text-center space-y-8">
+        
+        <!-- SUCCESS ANIMATION / ICON -->
+        <div class="relative w-24 h-24 mx-auto">
+            <div class="absolute inset-0 bg-success/10 rounded-full animate-ping opacity-75"></div>
+            <div class="relative w-24 h-24 bg-success/20 rounded-full flex items-center justify-center text-success border-2 border-success/30">
+                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+        </div>
+
+        <!-- CONGRATS CONTENT -->
+        <div class="space-y-3">
+            <span class="text-success font-sans text-xs font-semibold tracking-widest uppercase">Tudo certo!</span>
+            <h1 class="font-serif text-3xl text-neutral-dark font-light">Horário Confirmado</h1>
+            <div class="w-16 h-0.5 bg-success/30 mx-auto mt-4"></div>
+            <p class="font-sans text-neutral-mid text-sm leading-relaxed">
+                Seu agendamento foi salvo com sucesso! Enviamos os detalhes de confirmação para o seu e-mail: <br>
+                <strong class="text-neutral-dark">{{ appointment.client_email }}</strong>
+            </p>
+        </div>
+
+        <!-- DETAILED SLIP -->
+        <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm text-left space-y-3.5">
+            <div class="flex justify-between items-center text-xs text-neutral-mid">
+                <span>Código do Agendamento:</span>
+                <span class="font-mono text-neutral-dark font-semibold">#{{ appointment.id|stringformat:"04d" }}</span>
+            </div>
+            
+            <div class="border-t border-gray-100 pt-3">
+                <span class="text-[10px] text-neutral-mid block">Serviço</span>
+                <span class="font-serif text-base text-neutral-dark font-medium">{{ appointment.service.name }}</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 border-t border-gray-100 pt-3">
+                <div>
+                    <span class="text-[10px] text-neutral-mid block">Profissional</span>
+                    <span class="font-sans text-xs text-neutral-dark font-medium">{{ appointment.professional.name }}</span>
+                </div>
+                <div>
+                    <span class="text-[10px] text-neutral-mid block">Duração</span>
+                    <span class="font-sans text-xs text-neutral-dark font-medium">{{ appointment.service.duration_minutes }} minutos</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 border-t border-gray-100 pt-3">
+                <div>
+                    <span class="text-[10px] text-neutral-mid block">Data</span>
+                    <span class="font-sans text-xs text-neutral-dark font-medium">{{ appointment.appointment_date|date:"d \d\e F \d\e Y" }}</span>
+                </div>
+                <div>
+                    <span class="text-[10px] text-neutral-mid block">Horário</span>
+                    <span class="font-sans text-xs text-neutral-dark font-medium">{{ appointment.appointment_time|time:"H:i" }}</span>
+                </div>
+            </div>
+            
+            <div class="flex justify-between items-center border-t border-gray-100 pt-3.5">
+                <span class="text-xs text-neutral-dark font-medium">Valor:</span>
+                <span class="font-semibold text-primary">R$ {{ appointment.service.price }}</span>
+            </div>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="pt-4 flex flex-col gap-3">
+            <a href="{{ gcal_url }}" target="_blank" class="w-full bg-white hover:bg-neutral-light text-neutral-dark border border-gray-200 font-sans font-medium px-8 py-3.5 rounded-full transition-all duration-200 flex items-center justify-center gap-2 shadow-sm">
+                <svg class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+                </svg>
+                <span>Adicionar ao Google Agenda</span>
+            </a>
+            
+            <a href="/" class="w-full bg-primary hover:bg-primary-dark text-white font-sans font-medium px-8 py-3.5 rounded-full transition-all duration-200 shadow-sm hover:shadow-md active:scale-95 text-sm">
+                Voltar para a Página Inicial
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

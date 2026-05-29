@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Perfil Profissional · Espaço Delas{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-rose-gradient min-h-[60vh] flex items-center justify-center relative overflow-hidden">
+    <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: url('{% static "img/pattern.png" %}'); background-size: 150px; background-repeat: repeat;"></div>
+    
+    <div class="max-w-md w-full mx-auto px-4 relative z-10 text-center space-y-8">
+        <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto text-primary text-3xl font-serif">
+            ED
+        </div>
+        <div class="space-y-3">
+            <span class="text-primary font-sans text-xs font-semibold tracking-widest uppercase">Em breve</span>
+            <h1 class="font-serif text-4xl text-neutral-dark font-light">Perfil Profissional</h1>
+            <div class="w-16 h-0.5 bg-primary/30 mx-auto mt-4"></div>
+            <p class="font-sans text-neutral-mid text-sm leading-relaxed">
+                Área reservada para a profissional editar seus dados cadastrais, biografia e foto de perfil.
+            </p>
+        </div>
+        <div class="pt-4">
+            <a href="/" class="inline-block border border-primary/40 text-primary hover:border-primary hover:bg-primary/5 font-sans font-medium px-8 py-3.5 rounded-full transition-all duration-200">
+                Voltar para a Home
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

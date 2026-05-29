@@ -1,0 +1,154 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Relatório de Agendamentos · Espaço Delas{% endblock %}
+{% block breadcrumb %}Relatórios{% endblock %}
+
+{% block dashboard_content %}
+<div class="space-y-6">
+    
+    <!-- HEADER BAR -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h2 class="font-serif text-xl text-neutral-dark">Relatório de Agendamentos</h2>
+            <p class="font-sans text-xs text-neutral-mid mt-0.5">Filtre e exporte o histórico de agendamentos realizados.</p>
+        </div>
+        
+        <!-- EXPORT CSV LINK WITH GET PARAMS -->
+        <a href="{% url 'dashboard:export_csv' %}?profissional_id={{ filter_prof_id }}&start_date={{ start_date }}&end_date={{ end_date }}&status={{ filter_status }}" 
+           class="border border-primary text-primary hover:bg-primary/5 font-sans font-medium px-5 py-2.5 rounded-full transition-all duration-200 text-xs shadow-xs flex items-center gap-1.5 bg-white">
+            📥 Exportar para CSV
+        </a>
+    </div>
+
+    <!-- FILTER CARD -->
+    <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
+        <form method="get" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 items-end">
+            <!-- Filter 1: Professional -->
+            <div class="flex flex-col gap-1.5 text-xs text-neutral-mid">
+                <span>Profissional</span>
+                <select name="profissional_id" 
+                        class="border border-gray-200 rounded-xl px-3 py-2 text-neutral-dark font-sans bg-white cursor-pointer w-full">
+                    <option value="all" {% if filter_prof_id == 'all' %}selected{% endif %}>Todos</option>
+                    {% for prof in professionals %}
+                        <option value="{{ prof.id }}" {% if filter_prof_id|add:"0" == prof.id %}selected{% endif %}>{{ prof.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- Filter 2: Start Date -->
+            <div class="flex flex-col gap-1.5 text-xs text-neutral-mid">
+                <span>Data Início</span>
+                <input type="date" name="start_date" value="{{ start_date }}"
+                       class="border border-gray-200 rounded-xl px-3 py-2 text-neutral-dark font-sans bg-white cursor-pointer w-full">
+            </div>
+
+            <!-- Filter 3: End Date -->
+            <div class="flex flex-col gap-1.5 text-xs text-neutral-mid">
+                <span>Data Fim</span>
+                <input type="date" name="end_date" value="{{ end_date }}"
+                       class="border border-gray-200 rounded-xl px-3 py-2 text-neutral-dark font-sans bg-white cursor-pointer w-full">
+            </div>
+
+            <!-- Filter 4: Status -->
+            <div class="flex flex-col gap-1.5 text-xs text-neutral-mid">
+                <span>Status</span>
+                <select name="status" 
+                        class="border border-gray-200 rounded-xl px-3 py-2 text-neutral-dark font-sans bg-white cursor-pointer w-full">
+                    <option value="all" {% if filter_status == 'all' %}selected{% endif %}>Todos</option>
+                    <option value="confirmed" {% if filter_status == 'confirmed' %}selected{% endif %}>Confirmado</option>
+                    <option value="cancelled" {% if filter_status == 'cancelled' %}selected{% endif %}>Cancelado</option>
+                    <option value="pending" {% if filter_status == 'pending' %}selected{% endif %}>Pendente</option>
+                </select>
+            </div>
+
+            <!-- Submit Filter Button -->
+            <div>
+                <button type="submit" class="w-full bg-neutral-dark hover:bg-neutral-dark/90 text-white font-sans font-medium py-2 rounded-xl transition-all text-xs">
+                    Filtrar Resultados
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- METRIC SUMMARY -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+            <span class="text-[10px] font-bold text-neutral-mid uppercase tracking-wider block">Registros Encontrados</span>
+            <span class="text-xl font-semibold text-neutral-dark block mt-1">{{ total_count }}</span>
+        </div>
+        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+            <span class="text-[10px] font-bold text-success uppercase tracking-wider block">Confirmados</span>
+            <span class="text-xl font-semibold text-success block mt-1">{{ confirmed_count }}</span>
+        </div>
+        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+            <span class="text-[10px] font-bold text-primary uppercase tracking-wider block">Faturamento Consolidado</span>
+            <span class="text-xl font-semibold text-primary block mt-1">R$ {{ revenue }}</span>
+        </div>
+    </div>
+
+    <!-- DATA TABLE -->
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-100">
+            <h3 class="font-serif text-base font-semibold text-neutral-dark">Lista de Históricos</h3>
+        </div>
+
+        {% if appointments %}
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-neutral-light/50 border-b border-gray-100 text-[10px] font-bold text-neutral-mid uppercase tracking-wider">
+                            <th class="py-3 px-6">ID</th>
+                            <th class="py-3 px-6">Data/Hora</th>
+                            <th class="py-3 px-6">Cliente</th>
+                            <th class="py-3 px-6">Serviço</th>
+                            <th class="py-3 px-6">Profissional</th>
+                            <th class="py-3 px-6">Status</th>
+                            <th class="py-3 px-6 text-right">Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 text-xs">
+                        {% for app in appointments %}
+                            <tr class="hover:bg-neutral-light/30 transition-colors {% if app.status == 'cancelled' %}opacity-60{% endif %}">
+                                <td class="py-4 px-6 font-mono text-neutral-mid">#{{ app.id|stringformat:"04d" }}</td>
+                                <td class="py-4 px-6">
+                                    <div class="font-semibold text-neutral-dark">{{ app.appointment_date|date:"d/m/Y" }}</div>
+                                    <div class="text-[10px] text-neutral-mid mt-0.5">{{ app.appointment_time|time:"H:i" }}</div>
+                                </td>
+                                <td class="py-4 px-6">
+                                    <div class="font-semibold text-neutral-dark">{{ app.client_name }}</div>
+                                    <div class="text-[10px] text-neutral-mid mt-0.5">{{ app.client_phone }}</div>
+                                </td>
+                                <td class="py-4 px-6 font-medium text-neutral-dark">{{ app.service.name }}</td>
+                                <td class="py-4 px-6 text-neutral-mid font-medium">{{ app.professional.name }}</td>
+                                <td class="py-4 px-6">
+                                    {% if app.status == 'confirmed' %}
+                                        <span class="inline-block bg-green-50 text-success border border-green-200 px-2.5 py-0.5 rounded-full font-medium">Confirmado</span>
+                                    {% elif app.status == 'cancelled' %}
+                                        <span class="inline-block bg-red-50 text-error border border-red-200 px-2.5 py-0.5 rounded-full font-medium">Cancelado</span>
+                                    {% else %}
+                                        <span class="inline-block bg-yellow-50 text-yellow-700 border border-yellow-200 px-2.5 py-0.5 rounded-full font-medium">Pendente</span>
+                                    {% endif %}
+                                </td>
+                                <td class="py-4 px-6 text-right font-semibold text-primary">R$ {{ app.service.price }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="px-6 py-3 bg-neutral-light/30 border-t border-gray-100 text-[10px] text-neutral-mid">
+                * Tabela limitada aos últimos 100 agendamentos na visualização online. Use o botão <strong>Exportar para CSV</strong> no topo para baixar o relatório completo.
+            </div>
+        {% else %}
+            <!-- Empty state -->
+            <div class="text-center py-16 space-y-2">
+                <div class="text-3xl text-neutral-mid">📈</div>
+                <h4 class="font-serif text-sm font-medium text-neutral-dark">Nenhum resultado encontrado</h4>
+                <p class="font-sans text-[10px] text-neutral-mid max-w-xs mx-auto leading-relaxed">
+                    Nenhum agendamento corresponde aos filtros definidos. Refine sua busca.
+                </p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}{{ title }} · Espaço Delas{% endblock %}
+{% block breadcrumb %}
+<a href="{% url 'dashboard:professionals_list' %}" class="hover:text-primary transition-colors">Profissionais</a> / Form
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="max-w-xl mx-auto">
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        
+        <div class="px-6 py-5 border-b border-gray-100">
+            <h3 class="font-serif text-lg text-neutral-dark">{{ title }}</h3>
+            <p class="font-sans text-xs text-neutral-mid mt-0.5">Preencha as informações do perfil da profissional.</p>
+        </div>
+
+        {% if professional %}
+            <!-- EDIT FORM -->
+            <form method="post" enctype="multipart/form-data" class="p-6 space-y-4">
+                {% csrf_token %}
+                
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-neutral-dark font-sans" for="{{ form.name.id_for_label }}">Nome da Profissional</label>
+                    {{ form.name }}
+                    {% if form.name.errors %}
+                        {% for error in form.name.errors %}
+                            <span class="text-[10px] text-error font-medium">{{ error }}</span>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-neutral-dark font-sans" for="id_role">Especialidade (Cargo)</label>
+                    <input type="text" name="role" id="id_role" value="{{ professional.role }}"
+                           class="w-full border border-gray-200 rounded-xl px-4 py-3 text-neutral-dark font-sans text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white transition-all duration-150">
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-neutral-dark font-sans" for="{{ form.bio.id_for_label }}">Biografia</label>
+                    {{ form.bio }}
+                    {% if form.bio.errors %}
+                        {% for error in form.bio.errors %}
+                            <span class="text-[10px] text-error font-medium">{{ error }}</span>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-neutral-dark font-sans" for="{{ form.photo.id_for_label }}">Foto</label>
+                    {{ form.photo }}
+                    {% if form.photo.errors %}
+                        {% for error in form.photo.errors %}
+                            <span class="text-[10px] text-error font-medium block">{{ error }}</span>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="pt-6 border-t border-gray-150 flex justify-end gap-3">
+                    <a href="{% url 'dashboard:professionals_list' %}" class="border border-gray-200 text-neutral-mid hover:bg-neutral-light font-sans font-medium px-5 py-2 rounded-full transition-colors text-xs bg-white">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="bg-primary hover:bg-primary-dark text-white font-sans font-medium px-6 py-2.5 rounded-full transition-all duration-200 text-xs shadow-sm hover:shadow-md">
+                        Salvar Alterações
+                    </button>
+                </div>
+            </form>
+        {% else %}
+            <!-- CREATE FORM (includes User Creation) -->
+            <form method="post" enctype="multipart/form-data" class="p-6 space-y-4">
+                {% csrf_token %}
+                
+                <h4 class="font-serif text-sm font-semibold text-neutral-dark border-b border-gray-50 pb-2">Informações da Profissional</h4>
+                
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-neutral-dark font-sans" for="id_name">Nome Completo *</label>
+                    <input type="text" name="name" id="id_name" required placeholder="Ex: Ana Silva"
+                           class="w-full border border-gray-200 rounded-xl px-4 py-3 text-neutral-dark font-sans text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white transition-all duration-150">
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-neutral-dark font-sans" for="id_role">Especialidade (Cargo) *</label>
+                    <input type="text" name="role" id="id_role" required placeholder="Ex: Manicure, Cabeleireira"
+                           class="w-full border border-gray-200 rounded-xl px-4 py-3 text-neutral-dark font-sans text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white transition-all duration-150">
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-neutral-dark font-sans" for="id_bio">Biografia</label>
+                    <textarea name="bio" id="id_bio" rows="3" placeholder="Conte um pouco sobre as qualificações..."
+                              class="w-full border border-gray-200 rounded-xl px-4 py-3 text-neutral-dark font-sans text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white transition-all duration-150"></textarea>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-neutral-dark font-sans" for="id_photo">Foto</label>
+                    <input type="file" name="photo" id="id_photo"
+                           class="w-full text-sm text-neutral-mid file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer">
+                </div>
+
+                <h4 class="font-serif text-sm font-semibold text-neutral-dark border-b border-gray-50 pb-2 pt-4">Conta de Acesso ao Painel</h4>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-medium text-neutral-dark font-sans" for="id_username">Nome de Usuário *</label>
+                        <input type="text" name="username" id="id_username" required placeholder="Ex: anasilva"
+                               class="w-full border border-gray-200 rounded-xl px-4 py-3 text-neutral-dark font-sans text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white transition-all duration-150">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-medium text-neutral-dark font-sans" for="id_email">E-mail *</label>
+                        <input type="email" name="email" id="id_email" required placeholder="Ex: ana@exemplo.com"
+                               class="w-full border border-gray-200 rounded-xl px-4 py-3 text-neutral-dark font-sans text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white transition-all duration-150">
+                    </div>
+                </div>
+                
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-[10px] text-amber-800 leading-relaxed">
+                    💡 <strong>Nota de Senha:</strong> Ao criar a profissional, a senha da conta de acesso será definida automaticamente como <strong class="underline">senha123</strong>. Ela poderá alterar a senha depois se desejar.
+                </div>
+
+                <div class="pt-6 border-t border-gray-150 flex justify-end gap-3">
+                    <a href="{% url 'dashboard:professionals_list' %}" class="border border-gray-200 text-neutral-mid hover:bg-neutral-light font-sans font-medium px-5 py-2 rounded-full transition-colors text-xs bg-white">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="bg-primary hover:bg-primary-dark text-white font-sans font-medium px-6 py-2.5 rounded-full transition-all duration-200 text-xs shadow-sm hover:shadow-md">
+                        Cadastrar Profissional
+                    </button>
+                </div>
+            </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

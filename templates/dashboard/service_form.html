@@ -1,0 +1,82 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}{{ title }} · Espaço Delas{% endblock %}
+{% block breadcrumb %}
+<a href="{% url 'dashboard:services_list' %}" class="hover:text-primary transition-colors">Serviços</a> / Form
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="max-w-xl mx-auto">
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        
+        <div class="px-6 py-5 border-b border-gray-100">
+            <h3 class="font-serif text-lg text-neutral-dark">{{ title }}</h3>
+            <p class="font-sans text-xs text-neutral-mid mt-0.5">Informe os detalhes do serviço a ser prestado.</p>
+        </div>
+
+        <form method="post" class="p-6 space-y-4">
+            {% csrf_token %}
+            
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-medium text-neutral-dark font-sans" for="{{ form.name.id_for_label }}">Nome do Serviço</label>
+                {{ form.name }}
+                {% if form.name.errors %}
+                    {% for error in form.name.errors %}
+                        <span class="text-[10px] text-error font-medium">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-medium text-neutral-dark font-sans" for="{{ form.description.id_for_label }}">Descrição do Serviço</label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    {% for error in form.description.errors %}
+                        <span class="text-[10px] text-error font-medium">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-neutral-dark font-sans" for="{{ form.duration_minutes.id_for_label }}">Duração (Minutos)</label>
+                    {{ form.duration_minutes }}
+                    {% if form.duration_minutes.errors %}
+                        {% for error in form.duration_minutes.errors %}
+                            <span class="text-[10px] text-error font-medium">{{ error }}</span>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-neutral-dark font-sans" for="{{ form.price.id_for_label }}">Preço (R$)</label>
+                    {{ form.price }}
+                    {% if form.price.errors %}
+                        {% for error in form.price.errors %}
+                            <span class="text-[10px] text-error font-medium">{{ error }}</span>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 pt-2">
+                {{ form.is_active }}
+                <label class="text-xs font-medium text-neutral-dark font-sans" for="{{ form.is_active.id_for_label }}">Serviço ativo para agendamento online</label>
+                {% if form.is_active.errors %}
+                    {% for error in form.is_active.errors %}
+                        <span class="text-[10px] text-error font-medium block">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="pt-6 border-t border-gray-150 flex justify-end gap-3">
+                <a href="{% url 'dashboard:services_list' %}" class="border border-gray-200 text-neutral-mid hover:bg-neutral-light font-sans font-medium px-5 py-2 rounded-full transition-colors text-xs bg-white">
+                    Cancelar
+                </a>
+                <button type="submit" class="bg-primary hover:bg-primary-dark text-white font-sans font-medium px-6 py-2.5 rounded-full transition-all duration-200 text-xs shadow-sm hover:shadow-md">
+                    Salvar Serviço
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

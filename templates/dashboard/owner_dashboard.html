@@ -1,0 +1,91 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Visão Geral Admin · Espaço Delas{% endblock %}
+{% block breadcrumb %}Visão Geral{% endblock %}
+
+{% block dashboard_content %}
+<div class="space-y-6">
+    
+    <!-- WELCOME / TITLE -->
+    <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center justify-between">
+        <div>
+            <h2 class="font-serif text-2xl text-neutral-dark">Painel Administrativo</h2>
+            <p class="font-sans text-xs text-neutral-mid mt-0.5">Visão consolidada de agendamentos e faturamento das profissionais.</p>
+        </div>
+        <div class="text-xs font-semibold text-neutral-dark bg-primary/5 border border-primary/20 px-4 py-2 rounded-xl mt-4 sm:mt-0">
+            Hoje: {{ today|date:"d \d\e F \d\e Y" }}
+        </div>
+    </div>
+
+    <!-- GLOBAL STATS (MONTHLY) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Card 1 -->
+        <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex items-center justify-between">
+            <div class="space-y-1">
+                <span class="text-xs font-bold text-neutral-mid uppercase tracking-wider block">Agendamentos Confirmados (Mês)</span>
+                <span class="text-3xl font-semibold text-neutral-dark block">{{ total_month_bookings }}</span>
+            </div>
+            <div class="text-3xl bg-neutral-light p-3 rounded-full">📅</div>
+        </div>
+        <!-- Card 2 -->
+        <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex items-center justify-between">
+            <div class="space-y-1">
+                <span class="text-xs font-bold text-primary uppercase tracking-wider block">Faturamento Estimado (Mês)</span>
+                <span class="text-3xl font-semibold text-primary block">R$ {{ total_month_revenue }}</span>
+            </div>
+            <div class="text-3xl bg-primary/10 p-3 rounded-full">💰</div>
+        </div>
+    </div>
+
+    <!-- PROFESSIONALS DAILY STATUS CARD GRID -->
+    <div class="space-y-3">
+        <h3 class="font-serif text-lg text-neutral-dark">Desempenho Diário das Profissionais</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {% for summary in prof_summaries %}
+                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4 hover:shadow-md transition-shadow group">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-full overflow-hidden bg-neutral-light border border-gray-150 flex items-center justify-center font-serif text-lg text-primary">
+                            {% if summary.prof.photo %}
+                                <img src="{{ summary.prof.photo.url }}" class="w-full h-full object-cover" alt="">
+                            {% else %}
+                                {{ summary.prof.name|slice:":2"|upper }}
+                            {% endif %}
+                        </div>
+                        <div>
+                            <h4 class="font-serif text-base text-neutral-dark font-medium group-hover:text-primary transition-colors">{{ summary.prof.name }}</h4>
+                            <span class="text-[10px] text-primary block font-medium">{{ summary.prof.role }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-2 text-center border-t border-b border-gray-50 py-3 text-xs">
+                        <div>
+                            <span class="text-[9px] text-neutral-mid block font-semibold">CONFIRMADOS</span>
+                            <span class="font-bold text-success block mt-1">{{ summary.confirmed }}</span>
+                        </div>
+                        <div>
+                            <span class="text-[9px] text-neutral-mid block font-semibold">CANCELADOS</span>
+                            <span class="font-bold text-error block mt-1">{{ summary.cancelled }}</span>
+                        </div>
+                        <div>
+                            <span class="text-[9px] text-neutral-mid block font-semibold">FATURAMENTO</span>
+                            <span class="font-semibold text-primary block mt-1">R$ {{ summary.revenue }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-2">
+                        <a href="{% url 'dashboard:agenda' %}?data={{ today|date:'Y-m-d' }}&profissional_id={{ summary.prof.id }}" 
+                           class="w-1/2 text-center bg-neutral-light hover:bg-neutral-light/75 text-neutral-dark font-sans font-medium py-2 rounded-xl transition-all text-xs">
+                            Ver Agenda
+                        </a>
+                        <a href="{% url 'dashboard:block_slot' %}?profissional_id={{ summary.prof.id }}" 
+                           class="w-1/2 text-center border border-gray-200 hover:bg-neutral-light text-neutral-mid font-sans font-medium py-2 rounded-xl transition-all text-xs">
+                            Bloqueios
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

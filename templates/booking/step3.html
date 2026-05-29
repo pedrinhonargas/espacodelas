@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Agendar Horário - Etapa 3 · Espaço Delas{% endblock %}
+
+{% block content %}
+<section class="py-12 bg-rose-gradient min-h-[80vh]">
+    <div class="max-w-4xl mx-auto px-4">
+        
+        <!-- Stepper -->
+        <div class="max-w-xl mx-auto mb-10">
+            <div class="flex items-center justify-between relative">
+                <div class="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-0.5 bg-gray-200 -z-10"></div>
+                <div class="absolute left-0 top-1/2 -translate-y-1/2 h-0.5 bg-primary -z-10" style="width: 66%;"></div>
+                
+                <div class="flex flex-col items-center">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold bg-primary text-white transition-all duration-300">1</div>
+                    <span class="text-[10px] sm:text-xs mt-2 font-medium text-primary">Serviço</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold bg-primary text-white transition-all duration-300">2</div>
+                    <span class="text-[10px] sm:text-xs mt-2 font-medium text-primary">Data/Hora</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold bg-primary text-white ring-4 ring-primary-light transition-all duration-300">3</div>
+                    <span class="text-[10px] sm:text-xs mt-2 font-medium text-primary">Identificação</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold bg-white text-gray-400 border-2 border-gray-200 transition-all duration-300">4</div>
+                    <span class="text-[10px] sm:text-xs mt-2 font-medium text-gray-400">Confirmação</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- LEFT COLUMN: CLIENT DETAILS FORM -->
+            <div class="lg:col-span-7 bg-white rounded-2xl p-6 border border-gray-100 shadow-sm space-y-6">
+                <h3 class="font-serif text-xl text-neutral-dark">Só mais um passo! Quem está agendando?</h3>
+                <p class="font-sans text-xs text-neutral-mid leading-relaxed">Precisamos dos seus dados para confirmar e notificar você sobre o agendamento.</p>
+
+                <form method="post" id="step3-form" class="space-y-4">
+                    {% csrf_token %}
+                    
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-medium text-neutral-dark font-sans" for="{{ form.client_name.id_for_label }}">Nome Completo</label>
+                        {{ form.client_name }}
+                        {% if form.client_name.errors %}
+                            {% for error in form.client_name.errors %}
+                                <span class="text-[10px] text-error font-medium">{{ error }}</span>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-medium text-neutral-dark font-sans" for="{{ form.client_email.id_for_label }}">E-mail</label>
+                        {{ form.client_email }}
+                        {% if form.client_email.errors %}
+                            {% for error in form.client_email.errors %}
+                                <span class="text-[10px] text-error font-medium">{{ error }}</span>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-medium text-neutral-dark font-sans" for="{{ form.client_phone.id_for_label }}">WhatsApp (com DDD)</label>
+                        {{ form.client_phone }}
+                        {% if form.client_phone.errors %}
+                            {% for error in form.client_phone.errors %}
+                                <span class="text-[10px] text-error font-medium">{{ error }}</span>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div class="flex gap-3 pt-4 border-t border-gray-100">
+                        <a href="{% url 'booking:step2' %}" class="w-1/3 text-center border border-gray-200 text-neutral-mid hover:bg-neutral-light font-sans font-medium px-4 py-3 rounded-full transition-all duration-200 text-sm">
+                            Voltar
+                        </a>
+                        <button type="submit" class="w-2/3 bg-primary hover:bg-primary-dark text-white font-sans font-medium px-6 py-3 rounded-full transition-all duration-200 text-sm shadow-sm hover:shadow-md">
+                            Ir para Confirmação
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- RIGHT COLUMN: SELECTION SUMMARY -->
+            <div class="lg:col-span-5 bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-4">
+                <span class="text-[10px] font-bold text-primary tracking-widest uppercase">Resumo do Agendamento</span>
+                
+                <div class="space-y-3 pt-2">
+                    <div>
+                        <span class="text-[10px] text-neutral-mid block">Serviço:</span>
+                        <span class="font-serif text-base text-neutral-dark block font-medium">{{ service.name }}</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 pt-2 border-t border-gray-50">
+                        <div>
+                            <span class="text-[10px] text-neutral-mid block">Profissional:</span>
+                            <span class="font-sans text-xs text-neutral-dark font-medium">
+                                {% if professional %}
+                                    {{ professional.name }}
+                                {% else %}
+                                    Qualquer Profissional
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-neutral-mid block">Duração:</span>
+                            <span class="font-sans text-xs text-neutral-dark font-medium">{{ service.duration_minutes }} minutos</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 pt-2 border-t border-gray-50">
+                        <div>
+                            <span class="text-[10px] text-neutral-mid block">Data:</span>
+                            <span class="font-sans text-xs text-neutral-dark font-medium">{{ date|date:"d \d\e F \d\e Y" }}</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-neutral-mid block">Horário:</span>
+                            <span class="font-sans text-xs text-neutral-dark font-medium">{{ time }}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-4 border-t border-gray-100">
+                        <span class="text-xs text-neutral-dark font-medium">Valor Estimado:</span>
+                        <span class="font-semibold text-lg text-primary">R$ {{ service.price }}</span>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const phoneInput = document.getElementById("phone-input");
+        if (phoneInput) {
+            phoneInput.addEventListener("input", function (e) {
+                // Apply a simple mask: (XX) XXXXX-XXXX
+                let value = e.target.value.replace(/\D/g, "");
+                
+                if (value.length > 11) {
+                    value = value.substring(0, 11);
+                }
+                
+                if (value.length > 6) {
+                    value = `(${value.substring(0, 2)}) ${value.substring(2, 7)}-${value.substring(7)}`;
+                } else if (value.length > 2) {
+                    value = `(${value.substring(0, 2)}) ${value.substring(2)}`;
+                } else if (value.length > 0) {
+                    value = `(${value}`;
+                }
+                
+                e.target.value = value;
+            });
+        }
+    });
+</script>
+{% endblock %}

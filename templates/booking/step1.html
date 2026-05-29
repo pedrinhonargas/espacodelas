@@ -1,0 +1,241 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Agendar Horário - Etapa 1 · Espaço Delas{% endblock %}
+
+{% block content %}
+<section class="py-12 bg-rose-gradient min-h-[80vh]">
+    <div class="max-w-4xl mx-auto px-4">
+        
+        <!-- Stepper -->
+        <div class="max-w-xl mx-auto mb-10">
+            <div class="flex items-center justify-between relative">
+                <div class="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-0.5 bg-gray-200 -z-10"></div>
+                <div class="absolute left-0 top-1/2 -translate-y-1/2 h-0.5 bg-primary -z-10" style="width: 0%;"></div>
+                
+                <div class="flex flex-col items-center">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold bg-primary text-white ring-4 ring-primary-light transition-all duration-300">1</div>
+                    <span class="text-[10px] sm:text-xs mt-2 font-medium text-primary">Serviço</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold bg-white text-gray-400 border-2 border-gray-200 transition-all duration-300">2</div>
+                    <span class="text-[10px] sm:text-xs mt-2 font-medium text-gray-400">Data/Hora</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold bg-white text-gray-400 border-2 border-gray-200 transition-all duration-300">3</div>
+                    <span class="text-[10px] sm:text-xs mt-2 font-medium text-gray-400">Identificação</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold bg-white text-gray-400 border-2 border-gray-200 transition-all duration-300">4</div>
+                    <span class="text-[10px] sm:text-xs mt-2 font-medium text-gray-400">Confirmação</span>
+                </div>
+            </div>
+        </div>
+
+        <form method="post" id="booking-form" class="space-y-10">
+            {% csrf_token %}
+            
+            <!-- ETAPA 1.1: SELECIONAR SERVIÇO -->
+            <div class="space-y-4">
+                <h2 class="font-serif text-2xl text-neutral-dark text-center">Qual serviço você deseja realizar?</h2>
+                <p class="font-sans text-neutral-mid text-sm text-center max-w-lg mx-auto">Selecione uma das opções abaixo para visualizar as profissionais disponíveis.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                    {% for service in services %}
+                        <label class="service-card cursor-pointer bg-white rounded-2xl p-5 border border-gray-200 hover:border-primary-light transition-all duration-200 flex flex-col justify-between shadow-sm relative overflow-hidden group {% if pre_service_id|add:"0" == service.id %}border-primary ring-2 ring-primary-light{% endif %}" data-service-id="{{ service.id }}" data-profs="[{% for p in service.professionals.all %}{{ p.id }}{% if not forloop.last %},{% endif %}{% endfor %}]">
+                            <input type="radio" name="service" value="{{ service.id }}" class="hidden" {% if pre_service_id|add:"0" == service.id %}checked{% endif %}>
+                            
+                            <div>
+                                <h3 class="font-serif text-lg text-neutral-dark group-hover:text-primary transition-colors">{{ service.name }}</h3>
+                                <p class="font-sans text-xs text-neutral-mid mt-2 leading-relaxed">{{ service.description }}</p>
+                            </div>
+                            
+                            <div class="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
+                                <span class="font-sans text-xs text-neutral-mid flex items-center gap-1.5">
+                                    <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    {{ service.duration_minutes }} min
+                                </span>
+                                <span class="font-sans text-sm font-semibold text-primary">R$ {{ service.price }}</span>
+                            </div>
+                            
+                            <!-- Selection indicator dot -->
+                            <div class="absolute top-4 right-4 w-4 h-4 rounded-full border border-gray-300 bg-white flex items-center justify-center indicator">
+                                <div class="w-2.5 h-2.5 rounded-full bg-primary hidden"></div>
+                            </div>
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- ETAPA 1.2: SELECIONAR PROFISSIONAL (Hidden initially until service is selected) -->
+            <div id="prof-section" class="space-y-4 {% if not pre_service_id %}hidden{% endif %}">
+                <h2 class="font-serif text-2xl text-neutral-dark text-center">Com quem você deseja agendar?</h2>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-6 justify-center">
+                    
+                    <!-- Sem preferência card -->
+                    <label class="prof-card cursor-pointer bg-white rounded-2xl p-5 border border-gray-200 hover:border-primary-light transition-all duration-200 flex flex-col items-center text-center shadow-sm relative overflow-hidden group {% if pre_prof_id == 'none' or not pre_prof_id %}border-primary ring-2 ring-primary-light{% endif %}" data-prof-id="none">
+                        <input type="radio" name="professional" value="none" class="hidden" {% if pre_prof_id == 'none' or not pre_prof_id %}checked{% endif %}>
+                        
+                        <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xl font-serif mb-4 ring-2 ring-primary-light/20">
+                            ⭐
+                        </div>
+                        <h3 class="font-serif text-base text-neutral-dark">Qualquer Profissional</h3>
+                        <p class="font-sans text-xs text-neutral-mid mt-1">Busca a primeira disponível</p>
+                        
+                        <!-- Selection indicator dot -->
+                        <div class="absolute top-4 right-4 w-4 h-4 rounded-full border border-gray-300 bg-white flex items-center justify-center indicator">
+                            <div class="w-2.5 h-2.5 rounded-full bg-primary {% if pre_prof_id == 'none' or not pre_prof_id %}block{% else %}hidden{% endif %}"></div>
+                        </div>
+                    </label>
+
+                    {% for prof in professionals %}
+                        <label class="prof-card cursor-pointer bg-white rounded-2xl p-5 border border-gray-200 hover:border-primary-light transition-all duration-200 flex flex-col items-center text-center shadow-sm relative overflow-hidden group {% if pre_prof_id|add:"0" == prof.id %}border-primary ring-2 ring-primary-light{% endif %}" data-prof-id="{{ prof.id }}">
+                            <input type="radio" name="professional" value="{{ prof.id }}" class="hidden" {% if pre_prof_id|add:"0" == prof.id %}checked{% endif %}>
+                            
+                            {% if prof.photo %}
+                                <img src="{{ prof.photo.url }}" class="w-16 h-16 rounded-full object-cover mb-4 ring-2 ring-primary-light/20" alt="{{ prof.name }}">
+                            {% else %}
+                                <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary text-lg font-serif mb-4 ring-2 ring-primary-light/20">
+                                    {{ prof.name|slice:":2"|upper }}
+                                </div>
+                            {% endif %}
+                            
+                            <h3 class="font-serif text-base text-neutral-dark group-hover:text-primary transition-colors">{{ prof.name }}</h3>
+                            <p class="font-sans text-xs text-primary mt-1">{{ prof.role }}</p>
+                            
+                            <!-- Selection indicator dot -->
+                            <div class="absolute top-4 right-4 w-4 h-4 rounded-full border border-gray-300 bg-white flex items-center justify-center indicator">
+                                <div class="w-2.5 h-2.5 rounded-full bg-primary {% if pre_prof_id|add:"0" == prof.id %}block{% else %}hidden{% endif %}"></div>
+                            </div>
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Submit button -->
+            <div class="flex justify-center pt-6">
+                <button type="submit" id="submit-btn" class="bg-primary hover:bg-primary-dark text-white font-sans font-medium px-10 py-3.5 rounded-full transition-all duration-200 shadow-sm hover:shadow-md active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed" {% if not pre_service_id %}disabled{% endif %}>
+                    Continuar Agendamento
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const serviceCards = document.querySelectorAll(".service-card");
+        const profCards = document.querySelectorAll(".prof-card");
+        const profSection = document.getElementById("prof-section");
+        const submitBtn = document.getElementById("submit-btn");
+        
+        let selectedServiceProfs = [];
+
+        // Handle Service selection
+        serviceCards.forEach(card => {
+            // If already preselected on load
+            if (card.querySelector("input").checked) {
+                selectedServiceProfs = JSON.parse(card.getAttribute("data-profs"));
+                updateIndicator(card);
+            }
+
+            card.addEventListener("click", function() {
+                // Remove visual selection from all other service cards
+                serviceCards.forEach(c => {
+                    c.classList.remove("border-primary", "ring-2", "ring-primary-light");
+                    c.querySelector(".indicator div").classList.add("hidden");
+                });
+                
+                // Add selection to clicked
+                card.classList.add("border-primary", "ring-2", "ring-primary-light");
+                card.querySelector(".indicator div").classList.remove("hidden");
+                
+                const input = card.querySelector("input");
+                input.checked = true;
+                
+                // Read allowed professionals
+                selectedServiceProfs = JSON.parse(card.getAttribute("data-profs"));
+                
+                // Filter professionals list
+                filterProfessionals();
+                
+                // Show professional section
+                profSection.classList.remove("hidden");
+                
+                // Enable continue button
+                submitBtn.disabled = false;
+            });
+        });
+
+        // Filter professionals based on selected service
+        function filterProfessionals() {
+            let hasSelectedProfAvailable = false;
+            let checkedProfCard = null;
+
+            profCards.forEach(card => {
+                const profIdStr = card.getAttribute("data-prof-id");
+                
+                if (profIdStr === 'none') {
+                    // "Sem preferência" is always available
+                    card.style.display = "flex";
+                    if (card.querySelector("input").checked) {
+                        hasSelectedProfAvailable = true;
+                        checkedProfCard = card;
+                    }
+                    return;
+                }
+                
+                const profId = parseInt(profIdStr);
+                if (selectedServiceProfs.includes(profId)) {
+                    card.style.display = "flex";
+                    if (card.querySelector("input").checked) {
+                        hasSelectedProfAvailable = true;
+                        checkedProfCard = card;
+                    }
+                } else {
+                    card.style.display = "none";
+                    card.querySelector("input").checked = false;
+                    card.classList.remove("border-primary", "ring-2", "ring-primary-light");
+                    card.querySelector(".indicator div").classList.add("hidden");
+                }
+            });
+
+            // If selected professional became hidden, default to "Sem preferência"
+            if (!hasSelectedProfAvailable) {
+                const noPrefCard = document.querySelector('.prof-card[data-prof-id="none"]');
+                noPrefCard.querySelector("input").checked = true;
+                noPrefCard.classList.add("border-primary", "ring-2", "ring-primary-light");
+                noPrefCard.querySelector(".indicator div").classList.remove("hidden");
+            } else if (checkedProfCard) {
+                checkedProfCard.classList.add("border-primary", "ring-2", "ring-primary-light");
+                checkedProfCard.querySelector(".indicator div").classList.remove("hidden");
+            }
+        }
+
+        // Handle Professional selection
+        profCards.forEach(card => {
+            card.addEventListener("click", function() {
+                profCards.forEach(c => {
+                    c.classList.remove("border-primary", "ring-2", "ring-primary-light");
+                    c.querySelector(".indicator div").classList.add("hidden");
+                });
+                
+                card.classList.add("border-primary", "ring-2", "ring-primary-light");
+                card.querySelector(".indicator div").classList.remove("hidden");
+                
+                card.querySelector("input").checked = true;
+            });
+        });
+
+        function updateIndicator(card) {
+            card.querySelector(".indicator div").classList.remove("hidden");
+        }
+        
+        // Initial run
+        if (document.querySelector(".service-card input:checked")) {
+            filterProfessionals();
+        }
+    });
+</script>
+{% endblock %}

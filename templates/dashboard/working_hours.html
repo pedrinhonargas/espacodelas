@@ -1,0 +1,87 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Grade de Horários · Espaço Delas{% endblock %}
+{% block breadcrumb %}
+<a href="{% url 'dashboard:professionals_list' %}" class="hover:text-primary transition-colors">Profissionais</a> / Grade de {{ professional.name }}
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="max-w-3xl mx-auto space-y-6">
+    
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        
+        <div class="px-6 py-5 border-b border-gray-100 bg-primary/5">
+            <h3 class="font-serif text-lg text-neutral-dark">Configurar Grade de Horários</h3>
+            <p class="font-sans text-xs text-neutral-mid mt-0.5">Defina os dias e horas de trabalho de <strong>{{ professional.name }}</strong>.</p>
+        </div>
+
+        <form method="post" class="p-6 space-y-6">
+            {% csrf_token %}
+            
+            <div class="space-y-4">
+                <!-- Day Configuration Rows -->
+                {% for day in working_days %}
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 border border-gray-100 rounded-xl hover:border-primary-light transition-colors">
+                        
+                        <!-- Toggle / Day Name -->
+                        <div class="flex items-center gap-3 w-48">
+                            <input type="checkbox" name="active_{{ day.weekday }}" id="day_{{ day.weekday }}" 
+                                   {% if day.is_active %}checked{% endif %}
+                                   class="day-toggle w-4.5 h-4.5 text-primary border-gray-300 rounded focus:ring-primary cursor-pointer"
+                                   data-target="inputs_{{ day.weekday }}">
+                            <label for="day_{{ day.weekday }}" class="font-sans text-sm font-semibold text-neutral-dark cursor-pointer">
+                                {{ day.name }}
+                            </label>
+                        </div>
+                        
+                        <!-- Inputs Range -->
+                        <div id="inputs_{{ day.weekday }}" class="flex items-center gap-3 {% if not day.is_active %}opacity-40 pointer-events-none{% endif %} transition-opacity">
+                            <div class="flex items-center gap-1.5 text-xs text-neutral-mid">
+                                <span>Entrada:</span>
+                                <input type="time" name="start_{{ day.weekday }}" value="{{ day.start_time }}"
+                                       class="border border-gray-200 rounded-xl px-3 py-1.5 text-neutral-dark font-sans text-xs focus:outline-none focus:ring-1 focus:ring-primary bg-white">
+                            </div>
+                            <span class="text-neutral-mid text-xs">às</span>
+                            <div class="flex items-center gap-1.5 text-xs text-neutral-mid">
+                                <span>Saída:</span>
+                                <input type="time" name="end_{{ day.weekday }}" value="{{ day.end_time }}"
+                                       class="border border-gray-200 rounded-xl px-3 py-1.5 text-neutral-dark font-sans text-xs focus:outline-none focus:ring-1 focus:ring-primary bg-white">
+                            </div>
+                        </div>
+
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- BUTTONS -->
+            <div class="pt-6 border-t border-gray-100 flex justify-end gap-3">
+                <a href="{% url 'dashboard:professionals_list' %}" class="border border-gray-200 text-neutral-mid hover:bg-neutral-light font-sans font-medium px-6 py-2.5 rounded-full transition-colors text-xs bg-white">
+                    Voltar
+                </a>
+                <button type="submit" class="bg-primary hover:bg-primary-dark text-white font-sans font-medium px-7 py-2.5 rounded-full transition-all duration-200 text-xs shadow-sm hover:shadow-md">
+                    Salvar Grade de Horários
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggles = document.querySelectorAll(".day-toggle");
+        
+        toggles.forEach(toggle => {
+            toggle.addEventListener("change", function () {
+                const targetId = this.getAttribute("data-target");
+                const inputsContainer = document.getElementById(targetId);
+                
+                if (this.checked) {
+                    inputsContainer.classList.remove("opacity-40", "pointer-events-none");
+                } else {
+                    inputsContainer.classList.add("opacity-40", "pointer-events-none");
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Confirmação de Agendamento</title>
+</head>
+<body style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #F5F5F5; margin: 0; padding: 0; color: #333333; -webkit-font-smoothing: antialiased;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #F5F5F5; padding: 20px 0;">
+        <tr>
+            <td align="center">
+                <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #FFFFFF; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                    <!-- Header -->
+                    <tr>
+                        <td align="center" style="background-color: #FAF0F2; padding: 30px; border-bottom: 1px solid #F3E2E5;">
+                            <div style="font-family: 'Georgia', serif; font-size: 24px; color: #333333; margin-bottom: 5px;">Espaço <span style="color: #C97B8A; font-style: italic;">Delas</span></div>
+                            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #C97B8A; font-weight: 600;">Beleza & Estética</div>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 40px 30px;">
+                            <h2 style="font-family: 'Georgia', serif; font-size: 20px; color: #333333; margin-top: 0; margin-bottom: 15px; font-weight: normal; text-align: center;">Olá, {{ appointment.client_name }}!</h2>
+                            <p style="font-size: 14px; line-height: 1.6; color: #666666; margin-bottom: 25px; text-align: center;">
+                                Seu agendamento foi realizado com sucesso. Estamos muito felizes em atender você! Confira abaixo as informações do seu horário:
+                            </p>
+                            
+                            <!-- Box Details -->
+                            <table width="100%" border="0" cellspacing="0" cellpadding="12" style="background-color: #F9F9F9; border-radius: 12px; margin-bottom: 30px;">
+                                <tr>
+                                    <td width="30%" style="font-size: 12px; color: #666666; font-weight: bold;">Código:</td>
+                                    <td style="font-size: 13px; color: #333333; font-family: monospace;">#{{ appointment.id|stringformat:"04d" }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 12px; color: #666666; font-weight: bold;">Serviço:</td>
+                                    <td style="font-size: 13px; color: #333333; font-weight: 500;">{{ appointment.service.name }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 12px; color: #666666; font-weight: bold;">Profissional:</td>
+                                    <td style="font-size: 13px; color: #333333;">{{ appointment.professional.name }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 12px; color: #666666; font-weight: bold;">Data:</td>
+                                    <td style="font-size: 13px; color: #333333;">{{ appointment.appointment_date|date:"d \d\e F \d\e Y" }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 12px; color: #666666; font-weight: bold;">Horário:</td>
+                                    <td style="font-size: 13px; color: #333333;">{{ appointment.appointment_time|time:"H:i" }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 12px; color: #666666; font-weight: bold;">Valor:</td>
+                                    <td style="font-size: 14px; color: #C97B8A; font-weight: bold;">R$ {{ appointment.service.price }}</td>
+                                </tr>
+                            </table>
+                            
+                            <!-- Address -->
+                            <p style="font-size: 12px; line-height: 1.6; color: #888888; text-align: center; margin-bottom: 30px;">
+                                📍 <strong>Endereço:</strong> Rua Augusta, 1234 - Cerqueira César, São Paulo<br>
+                                📞 <strong>Telefone/WhatsApp:</strong> (11) 99999-9999
+                            </p>
+                            
+                            <hr style="border: 0; border-top: 1px solid #EEEEEE; margin-bottom: 25px;">
+                            
+                            <!-- Cancellation Note -->
+                            <p style="font-size: 11px; line-height: 1.6; color: #999999; text-align: center; margin-bottom: 25px;">
+                                Se precisar cancelar ou remarcar, pedimos que o faça com pelo menos 24h de antecedência. 
+                                Para cancelar online, clique no link abaixo:
+                            </p>
+                            
+                            <!-- Cancel Button -->
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td align="center">
+                                        <a href="http://localhost:8000/agendar/cancelar/{{ appointment.cancel_token }}/" style="display: inline-block; background-color: #C97B8A; color: #FFFFFF; text-decoration: none; font-size: 13px; font-weight: 500; padding: 12px 25px; border-radius: 20px; box-shadow: 0 2px 5px rgba(201, 123, 138, 0.2);">
+                                            Cancelar Agendamento
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td align="center" style="background-color: #F9F9F9; padding: 20px; border-top: 1px solid #EEEEEE; font-size: 11px; color: #999999;">
+                            © 2026 Espaço Delas. Todos os direitos reservados.
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
