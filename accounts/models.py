@@ -7,6 +7,7 @@ class Professional(models.Model):
     role = models.CharField('Especialidade', max_length=100, help_text="Ex: Manicure, Designer de Sobrancelhas")
     bio = models.TextField('Biografia', blank=True)
     photo = models.ImageField('Foto', upload_to='professionals/', blank=True, null=True)
+    phone = models.CharField('WhatsApp/Telefone', max_length=20, blank=True, help_text="Apenas números com DDD, ex: 41988477213")
     is_active = models.BooleanField('Ativo', default=True, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -17,6 +18,17 @@ class Professional(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def first_name(self):
+        return self.name.split()[0] if self.name else ""
+
+    @property
+    def formatted_phone(self):
+        if not self.phone or len(self.phone) < 10:
+            return self.phone
+        p = self.phone
+        return f"({p[:2]}) {p[2:7]}-{p[7:]}"
 
 class WorkingHours(models.Model):
     WEEKDAYS = [

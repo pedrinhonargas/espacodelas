@@ -3,6 +3,90 @@
 
 {% block title %}Espaço Delas · Studio Premium de Beleza & Estética{% endblock %}
 
+{% block extra_head %}
+<style>
+    /* Parallax-like decorative section */
+    .parallax-section {
+        background-attachment: fixed;
+        background-size: cover;
+        background-position: center;
+    }
+    
+    /* Floating animation for decorative elements */
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        33% { transform: translateY(-8px) rotate(2deg); }
+        66% { transform: translateY(4px) rotate(-1deg); }
+    }
+    @keyframes floatReverse {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        33% { transform: translateY(6px) rotate(-2deg); }
+        66% { transform: translateY(-10px) rotate(1deg); }
+    }
+    .float-slow { animation: float 8s ease-in-out infinite; }
+    .float-reverse { animation: floatReverse 10s ease-in-out infinite; }
+    .float-delay { animation: float 9s ease-in-out 2s infinite; }
+
+    /* Shimmer effect for CTA buttons */
+    @keyframes shimmer {
+        0% { background-position: -200% center; }
+        100% { background-position: 200% center; }
+    }
+    .shimmer-btn {
+        background-size: 200% auto;
+        background-image: linear-gradient(90deg, #C97B8A 0%, #E8A4B2 25%, #C97B8A 50%, #E8A4B2 75%, #C97B8A 100%);
+        animation: shimmer 4s linear infinite;
+    }
+
+    /* Gallery lightbox */
+    .gallery-item:hover .gallery-overlay {
+        opacity: 1;
+    }
+    .gallery-item:hover img {
+        transform: scale(1.08);
+    }
+
+    /* WhatsApp card hover */
+    .whatsapp-card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .whatsapp-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 40px rgba(201, 123, 138, 0.15);
+    }
+
+    /* Fade-in on scroll */
+    .fade-up {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .fade-up.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Decorative divider */
+    .fancy-divider {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        justify-content: center;
+    }
+    .fancy-divider::before,
+    .fancy-divider::after {
+        content: '';
+        height: 1px;
+        width: 40px;
+        background: linear-gradient(90deg, transparent, #C97B8A, transparent);
+    }
+    .fancy-divider span {
+        color: #C97B8A;
+        font-size: 14px;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- Seção Hero -->
 <section class="relative bg-rose-gradient py-20 lg:py-32 overflow-hidden">
@@ -12,6 +96,11 @@
     <!-- Light glowing shapes -->
     <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-primary/10 blur-3xl pointer-events-none"></div>
     <div class="absolute -bottom-20 -left-20 w-80 h-80 rounded-full bg-primary/5 blur-3xl pointer-events-none"></div>
+
+    <!-- Floating decorative elements -->
+    <div class="absolute top-20 right-10 w-3 h-3 rounded-full bg-primary/20 float-slow hidden lg:block"></div>
+    <div class="absolute top-40 right-32 w-2 h-2 rounded-full bg-primary/30 float-reverse hidden lg:block"></div>
+    <div class="absolute bottom-32 left-16 w-4 h-4 rounded-full bg-primary/15 float-delay hidden lg:block"></div>
 
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -29,8 +118,8 @@
                 </p>
                 <div class="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                     <a href="/agendar/" 
-                       class="w-full sm:w-auto bg-primary hover:bg-primary-dark text-white font-sans font-medium px-8 py-4 rounded-full transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 text-center">
-                        Agendar Horário
+                       class="w-full sm:w-auto shimmer-btn text-white font-sans font-medium px-8 py-4 rounded-full transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 text-center">
+                        ✨ Agendar Horário
                     </a>
                     <a href="#servicos" 
                        class="w-full sm:w-auto border border-primary/40 text-primary hover:border-primary hover:bg-primary/5 font-sans font-medium px-8 py-4 rounded-full transition-all duration-200 text-center">
@@ -62,14 +151,37 @@
     </div>
 </section>
 
+<!-- Decorative Image Banner -->
+<section class="relative overflow-hidden">
+    <div class="grid grid-cols-3 h-24 sm:h-32 lg:h-40">
+        <div class="relative overflow-hidden">
+            <img src="{% static 'img/nails_hero.png' %}" class="w-full h-full object-cover" alt="Unhas decoradas">
+            <div class="absolute inset-0 bg-primary/20"></div>
+        </div>
+        <div class="relative overflow-hidden">
+            <img src="{% static 'img/eyebrow_design.png' %}" class="w-full h-full object-cover" alt="Design de sobrancelhas">
+            <div class="absolute inset-0 bg-primary/10"></div>
+        </div>
+        <div class="relative overflow-hidden">
+            <img src="{% static 'img/nail_supplies.png' %}" class="w-full h-full object-cover" alt="Materiais profissionais">
+            <div class="absolute inset-0 bg-primary/20"></div>
+        </div>
+    </div>
+</section>
+
 <!-- Seção Serviços -->
 <section id="servicos" class="py-20 lg:py-28 bg-white relative">
+    <!-- Decorative background element -->
+    <div class="absolute top-0 right-0 w-72 h-72 bg-primary/[0.02] rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
+    
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Cabeçalho Seção -->
-        <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+        <div class="text-center max-w-2xl mx-auto mb-16 space-y-3 fade-up">
             <span class="text-primary font-sans text-xs font-semibold tracking-widest uppercase">Nosso Cardápio</span>
             <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl text-neutral-dark font-light">Serviços Premium</h2>
-            <div class="w-16 h-0.5 bg-primary/30 mx-auto mt-4"></div>
+            <div class="fancy-divider mt-4">
+                <span>💅</span>
+            </div>
             <p class="font-sans text-neutral-mid text-sm sm:text-base leading-relaxed mt-4">
                 Oferecemos soluções de alta durabilidade e técnicas refinadas para garantir o seu bem-estar e sofisticação.
             </p>
@@ -78,7 +190,7 @@
         <!-- Grid de Serviços Dinâmico -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for service in services %}
-                <div class="bg-neutral-light/40 hover:bg-white rounded-3xl p-8 border border-neutral-light hover:border-primary/15 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between group">
+                <div class="bg-neutral-light/40 hover:bg-white rounded-3xl p-8 border border-neutral-light hover:border-primary/15 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between group fade-up">
                     <div>
                         <!-- Icon Placeholder (dynamic look) -->
                         <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-6 transition-all duration-300 group-hover:bg-primary group-hover:text-white">
@@ -127,36 +239,65 @@
     </div>
 </section>
 
+<!-- Seção Imagem Parallax Decorativa -->
+<section class="relative h-64 sm:h-80 lg:h-96 overflow-hidden">
+    <img src="{% static 'img/nails_hero.png' %}" class="absolute inset-0 w-full h-full object-cover" alt="Beleza e sofisticação">
+    <div class="absolute inset-0 bg-gradient-to-r from-primary/70 via-primary/50 to-primary-dark/70"></div>
+    <div class="absolute inset-0 flex items-center justify-center text-center px-4">
+        <div class="space-y-4">
+            <h3 class="font-serif text-3xl sm:text-4xl lg:text-5xl text-white font-light leading-tight">
+                Beleza que <span class="font-script italic text-4xl sm:text-5xl lg:text-6xl">transforma</span>
+            </h3>
+            <p class="font-sans text-white/80 text-sm sm:text-base max-w-lg mx-auto">
+                Cada detalhe é pensado para que você se sinta especial e confiante.
+            </p>
+            <a href="/agendar/" class="inline-block bg-white text-primary hover:bg-neutral-light font-sans font-medium px-8 py-3.5 rounded-full transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 mt-2">
+                Agende seu Momento ✨
+            </a>
+        </div>
+    </div>
+</section>
+
 <!-- Seção Sobre -->
 <section id="sobre" class="py-20 lg:py-32 bg-rose-gradient relative overflow-hidden">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <!-- Coluna Imagem / Marca Premium -->
-            <div class="relative flex justify-center">
+            <div class="relative flex justify-center fade-up">
                 <div class="relative w-80 h-96 rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
-                    <img src="{% static 'img/pattern.png' %}" class="absolute inset-0 w-full h-full object-cover opacity-10 bg-primary-light" alt="Aesthetic Background">
+                    <img src="{% static 'img/eyebrow_design.png' %}" class="absolute inset-0 w-full h-full object-cover" alt="Design de Sobrancelhas">
                     <div class="absolute inset-0 bg-gradient-to-t from-primary/50 to-transparent flex flex-col justify-end p-8 text-white">
                         <h4 class="font-serif text-3xl font-light leading-tight">Sofisticação em cada detalhe</h4>
                         <p class="font-sans text-xs tracking-wider uppercase opacity-85 mt-2">Espaço Delas</p>
                     </div>
                 </div>
                 <!-- Mini floating element -->
-                <div class="absolute -bottom-6 -right-6 md:right-10 bg-white p-5 rounded-2xl shadow-xl flex items-center gap-3">
+                <div class="absolute -bottom-6 -right-6 md:right-10 bg-white p-5 rounded-2xl shadow-xl flex items-center gap-3 float-slow">
                     <div class="w-10 h-10 bg-success/15 text-success rounded-full flex items-center justify-center font-bold text-lg">✓</div>
                     <div class="font-sans">
                         <p class="text-xs text-neutral-mid">Agendamento</p>
                         <p class="text-sm font-bold text-neutral-dark">100% Online</p>
                     </div>
                 </div>
+                <!-- Extra floating badge -->
+                <div class="absolute -top-4 -left-4 md:left-10 bg-white p-4 rounded-2xl shadow-lg float-reverse hidden sm:flex items-center gap-2">
+                    <div class="w-8 h-8 bg-primary/15 text-primary rounded-full flex items-center justify-center text-sm">💅</div>
+                    <div class="font-sans">
+                        <p class="text-xs font-bold text-neutral-dark">+5 anos</p>
+                        <p class="text-[10px] text-neutral-mid">de experiência</p>
+                    </div>
+                </div>
             </div>
 
             <!-- Coluna Texto -->
-            <div class="space-y-6">
+            <div class="space-y-6 fade-up">
                 <span class="text-primary font-sans text-xs font-semibold tracking-widest uppercase">Nossa Essência</span>
                 <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl text-neutral-dark font-light">Sobre o Studio</h2>
-                <div class="w-16 h-0.5 bg-primary/30"></div>
+                <div class="fancy-divider justify-start">
+                    <span>✿</span>
+                </div>
                 <p class="font-sans text-neutral-mid text-sm sm:text-base leading-relaxed">
-                    O **Espaço Delas** nasceu do desejo de criar um ambiente único de acolhimento e excelência estética para mulheres modernas que valorizam seu precioso tempo e buscam cuidados impecáveis.
+                    O <strong>Espaço Delas</strong> nasceu do desejo de criar um ambiente único de acolhimento e excelência estética para mulheres modernas que valorizam seu precioso tempo e buscam cuidados impecáveis.
                 </p>
                 <p class="font-sans text-neutral-mid text-sm sm:text-base leading-relaxed">
                     Nosso studio conta com profissionais qualificadas e materiais de altíssima qualidade esterilizados em autoclave, garantindo total segurança, conforto e resultados extraordinários. Criamos esta plataforma online para simplificar o seu dia a dia, permitindo que você agende seu horário favorito de forma rápida e autônoma, sem filas ou burocracia.
@@ -172,23 +313,25 @@
     </div>
 </section>
 
-<!-- Seção Profissionais -->
+<!-- Seção Profissionais com WhatsApp Individual -->
 <section id="profissionais" class="py-20 lg:py-28 bg-white">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Cabeçalho Seção -->
-        <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+        <div class="text-center max-w-2xl mx-auto mb-16 space-y-3 fade-up">
             <span class="text-primary font-sans text-xs font-semibold tracking-widest uppercase">Nossa Equipe</span>
             <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl text-neutral-dark font-light">Profissionais Especialistas</h2>
-            <div class="w-16 h-0.5 bg-primary/30 mx-auto mt-4"></div>
+            <div class="fancy-divider mt-4">
+                <span>♡</span>
+            </div>
             <p class="font-sans text-neutral-mid text-sm sm:text-base leading-relaxed mt-4">
-                Conheça as mentes e mãos dedicadas a transformar sua rotina em uma experiência de pura satisfação.
+                Conheça as mentes e mãos dedicadas a transformar sua rotina em uma experiência de pura satisfação. Fale diretamente com sua profissional favorita!
             </p>
         </div>
 
         <!-- Grid de Profissionais -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
             {% for professional in professionals %}
-                <div class="bg-neutral-light/20 rounded-3xl overflow-hidden border border-neutral-light shadow-sm hover:shadow-xl transition-all duration-300 group">
+                <div class="bg-neutral-light/20 rounded-3xl overflow-hidden border border-neutral-light shadow-sm hover:shadow-xl transition-all duration-300 group whatsapp-card fade-up">
                     <div class="aspect-square relative overflow-hidden bg-neutral-light">
                         {% if professional.photo %}
                             <img src="{{ professional.photo.url }}" 
@@ -205,9 +348,27 @@
                             {{ professional.role }}
                         </div>
                     </div>
-                    <div class="p-8 space-y-3">
+                    <div class="p-8 space-y-4">
                         <h3 class="font-serif text-2xl text-neutral-dark transition-colors group-hover:text-primary">{{ professional.name }}</h3>
                         <p class="font-sans text-neutral-mid text-sm leading-relaxed">{{ professional.bio }}</p>
+                        
+                        <!-- WhatsApp + Agendar direto com profissional -->
+                        <div class="pt-4 border-t border-neutral-light space-y-3">
+                            {% if professional.phone %}
+                            <a href="https://wa.me/55{{ professional.phone }}?text=Ol%C3%A1%20{{ professional.first_name }}!%20Vim%20pelo%20site%20Espa%C3%A7o%20Delas%20e%20gostaria%20de%20agendar%20um%20hor%C3%A1rio.%20Pode%20me%20ajudar?" 
+                               target="_blank" rel="noopener"
+                               class="flex items-center gap-3 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] px-4 py-3 rounded-xl transition-all duration-200 font-sans text-sm font-medium">
+                                <svg class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.517 2.266 2.27 3.51 5.279 3.51 8.486 0 6.657-5.338 11.997-11.949 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.665.989 3.3 1.488 5.415 1.489 5.33 0 9.67-4.333 9.67-9.67 0-2.584-1.008-5.012-2.839-6.845-1.83-1.832-4.258-2.84-6.845-2.84-5.332 0-9.673 4.333-9.673 9.67 0 2.232.583 4.413 1.69 6.289l-.999 3.647 3.73-.977-.158-.284z"></path></svg>
+                                <span>Falar com {{ professional.first_name }}</span>
+                                <span class="ml-auto text-xs opacity-70">{{ professional.formatted_phone }}</span>
+                            </a>
+                            {% endif %}
+                            <a href="/agendar/?profissional={{ professional.id }}" 
+                               class="flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-white px-4 py-3 rounded-xl transition-all duration-200 font-sans text-sm font-medium">
+                                <span>Agendar com {{ professional.first_name }}</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+                            </a>
+                        </div>
                     </div>
                 </div>
             {% empty %}
@@ -219,20 +380,134 @@
     </div>
 </section>
 
-<!-- Seção Depoimentos -->
-<section id="depoimentos" class="py-20 lg:py-28 bg-neutral-light/50 relative">
+<!-- Seção Galeria de Fotos do Espaço -->
+<section id="galeria" class="py-20 lg:py-28 bg-rose-gradient relative overflow-hidden">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Cabeçalho Seção -->
-        <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+        <div class="text-center max-w-2xl mx-auto mb-16 space-y-3 fade-up">
+            <span class="text-primary font-sans text-xs font-semibold tracking-widest uppercase">Nosso Espaço</span>
+            <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl text-neutral-dark font-light">Conheça o Studio</h2>
+            <div class="fancy-divider mt-4">
+                <span>📸</span>
+            </div>
+            <p class="font-sans text-neutral-mid text-sm sm:text-base leading-relaxed mt-4">
+                Um ambiente pensado para o seu conforto e bem-estar. Veja um pouco do nosso espaço e se encante!
+            </p>
+        </div>
+
+        <!-- Gallery Grid - Placeholder para fotos do espaço -->
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
+            <!-- Foto 1 - Unhas -->
+            <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer aspect-square group">
+                <img src="{% static 'img/nails_hero.png' %}" class="w-full h-full object-cover transition-transform duration-500" alt="Nosso espaço - unhas">
+                <div class="gallery-overlay absolute inset-0 bg-primary/40 flex items-center justify-center opacity-0 transition-opacity duration-300">
+                    <div class="text-center text-white">
+                        <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                        </svg>
+                        <span class="font-sans text-sm">Nail Art</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Foto 2 - Sobrancelha -->
+            <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer aspect-square group">
+                <img src="{% static 'img/eyebrow_design.png' %}" class="w-full h-full object-cover transition-transform duration-500" alt="Nosso espaço - sobrancelhas">
+                <div class="gallery-overlay absolute inset-0 bg-primary/40 flex items-center justify-center opacity-0 transition-opacity duration-300">
+                    <div class="text-center text-white">
+                        <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                        </svg>
+                        <span class="font-sans text-sm">Design de Sobrancelhas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Foto 3 - Materiais -->
+            <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer aspect-square group">
+                <img src="{% static 'img/nail_supplies.png' %}" class="w-full h-full object-cover transition-transform duration-500" alt="Nosso espaço - materiais">
+                <div class="gallery-overlay absolute inset-0 bg-primary/40 flex items-center justify-center opacity-0 transition-opacity duration-300">
+                    <div class="text-center text-white">
+                        <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                        </svg>
+                        <span class="font-sans text-sm">Materiais Premium</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Foto 4 - Espaço Manicure -->
+            <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer aspect-square bg-white border border-neutral-light flex flex-col justify-between p-6 shadow-sm group hover:-translate-y-1 transition-all duration-300">
+                <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary transition-colors group-hover:bg-primary group-hover:text-white mb-4">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.467 5.99 5.99 0 0 0-1.925 3.546 5.974 5.974 0 0 1-2.133-1A3.75 3.75 0 0 0 12 18Z" />
+                    </svg>
+                </div>
+                <div class="space-y-1.5">
+                    <h4 class="font-serif text-lg font-medium text-neutral-dark group-hover:text-primary transition-colors">Espaço Manicure</h4>
+                    <p class="font-sans text-xs text-neutral-mid leading-relaxed">Bancadas modernas, poltronas confortáveis e uma atmosfera relaxante para o cuidado das suas unhas.</p>
+                </div>
+                <span class="text-[10px] text-primary/60 font-medium tracking-wider uppercase">Conforto Supremo</span>
+            </div>
+
+            <!-- Foto 5 - Espaço Sobrancelhas -->
+            <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer aspect-square bg-white border border-neutral-light flex flex-col justify-between p-6 shadow-sm group hover:-translate-y-1 transition-all duration-300">
+                <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary transition-colors group-hover:bg-primary group-hover:text-white mb-4">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.43 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </div>
+                <div class="space-y-1.5">
+                    <h4 class="font-serif text-lg font-medium text-neutral-dark group-hover:text-primary transition-colors">Espaço Sobrancelhas</h4>
+                    <p class="font-sans text-xs text-neutral-mid leading-relaxed">Mapeamento facial refinado, iluminação profissional ajustada e maciez absoluta para valorizar seu olhar.</p>
+                </div>
+                <span class="text-[10px] text-primary/60 font-medium tracking-wider uppercase">Foco no Olhar</span>
+            </div>
+
+            <!-- Foto 6 - Cantinho do Café -->
+            <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer aspect-square bg-white border border-neutral-light flex flex-col justify-between p-6 shadow-sm group hover:-translate-y-1 transition-all duration-300">
+                <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary transition-colors group-hover:bg-primary group-hover:text-white mb-4">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75ZM12 17c-2.446 0-4.5-2.054-4.5-4.5S9.554 8 12 8s4.5 2.054 4.5 4.5S14.446 17 12 17Zm0 0v1.5m0-1.5c-2.446 0-4.5-2.054-4.5-4.5S9.554 8 12 8s4.5 2.054 4.5 4.5S14.446 17 12 17Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.003 9.003 0 0 0 8.354-5.646 9.003 9.003 0 0 0-16.708 0A9.003 9.003 0 0 0 12 21Z" />
+                    </svg>
+                </div>
+                <div class="space-y-1.5">
+                    <h4 class="font-serif text-lg font-medium text-neutral-dark group-hover:text-primary transition-colors">Cantinho do Café</h4>
+                    <p class="font-sans text-xs text-neutral-mid leading-relaxed">Um mimo especial enquanto espera: chás aromáticos, cappuccinos cremosos, biscoitos finos e Wi-Fi de alta velocidade.</p>
+                </div>
+                <span class="text-[10px] text-primary/60 font-medium tracking-wider uppercase">Experiência VIP</span>
+            </div>
+        </div>
+
+        <div class="text-center mt-10 fade-up">
+            <p class="font-sans text-sm text-neutral-mid italic">
+                📍 Visite-nos: <strong>Rua Araucária, 356 · Almirante Tamandaré - PR</strong>
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Seção Depoimentos -->
+<section id="depoimentos" class="py-20 lg:py-28 bg-white relative">
+    <!-- Decorative elements -->
+    <div class="absolute bottom-0 left-0 w-64 h-64 bg-primary/[0.02] rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl"></div>
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Cabeçalho Seção -->
+        <div class="text-center max-w-2xl mx-auto mb-16 space-y-3 fade-up">
             <span class="text-primary font-sans text-xs font-semibold tracking-widest uppercase">Avaliações</span>
             <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl text-neutral-dark font-light">Depoimentos de Clientes</h2>
-            <div class="w-16 h-0.5 bg-primary/30 mx-auto mt-4"></div>
+            <div class="fancy-divider mt-4">
+                <span>💬</span>
+            </div>
         </div>
 
         <!-- Grid de Testemunhos -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- Depoimento 1 -->
-            <div class="bg-white p-8 rounded-3xl border border-neutral-light shadow-sm flex flex-col justify-between">
+            <div class="bg-neutral-light/30 p-8 rounded-3xl border border-neutral-light shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow duration-300 fade-up">
                 <div>
                     <!-- Estrelas -->
                     <div class="flex gap-1 text-primary mb-6">
@@ -252,14 +527,14 @@
             </div>
 
             <!-- Depoimento 2 -->
-            <div class="bg-white p-8 rounded-3xl border border-neutral-light shadow-sm flex flex-col justify-between">
+            <div class="bg-neutral-light/30 p-8 rounded-3xl border border-neutral-light shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow duration-300 fade-up">
                 <div>
                     <!-- Estrelas -->
                     <div class="flex gap-1 text-primary mb-6">
                         <span class="text-lg">★</span><span class="text-lg">★</span><span class="text-lg">★</span><span class="text-lg">★</span><span class="text-lg">★</span>
                     </div>
                     <p class="font-sans text-neutral-mid text-sm italic leading-relaxed mb-6">
-                        "A Larissa Mendes é uma verdadeira artista das sobrancelhas! O design personalizado valorizou muito o meu olhar. E o studio é incrivelmente aconchegante e cheiroso!"
+                        "A Larissa é uma verdadeira artista das sobrancelhas! O design personalizado valorizou muito o meu olhar. E o studio é incrivelmente aconchegante e cheiroso!"
                     </p>
                 </div>
                 <div class="flex items-center gap-3 pt-4 border-t border-neutral-light">
@@ -272,7 +547,7 @@
             </div>
 
             <!-- Depoimento 3 -->
-            <div class="bg-white p-8 rounded-3xl border border-neutral-light shadow-sm flex flex-col justify-between">
+            <div class="bg-neutral-light/30 p-8 rounded-3xl border border-neutral-light shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow duration-300 fade-up">
                 <div>
                     <!-- Estrelas -->
                     <div class="flex gap-1 text-primary mb-6">
@@ -295,16 +570,18 @@
 </section>
 
 <!-- Seção Contato / Mapa -->
-<section id="contato" class="py-20 lg:py-28 bg-white relative">
+<section id="contato" class="py-20 lg:py-28 bg-neutral-light/50 relative">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
             
             <!-- Informações de Contato -->
-            <div class="lg:col-span-5 space-y-8 flex flex-col justify-between">
+            <div class="lg:col-span-5 space-y-8 flex flex-col justify-between fade-up">
                 <div class="space-y-4">
                     <span class="text-primary font-sans text-xs font-semibold tracking-widest uppercase">Fale Conosco</span>
                     <h2 class="font-serif text-3xl sm:text-4xl text-neutral-dark font-light">Onde nos Encontrar</h2>
-                    <div class="w-16 h-0.5 bg-primary/30 mt-4"></div>
+                    <div class="fancy-divider justify-start mt-4">
+                        <span>📍</span>
+                    </div>
                     <p class="font-sans text-neutral-mid text-sm sm:text-base leading-relaxed pt-2">
                         Venha nos visitar e vivenciar uma tarde relaxante no coração de nosso studio de beleza.
                     </p>
@@ -321,19 +598,24 @@
                         </div>
                         <div class="font-sans">
                             <h4 class="text-sm font-bold text-neutral-dark">Endereço</h4>
-                            <p class="text-sm text-neutral-mid">Rua das Flores, 123 · Centro, São Paulo - SP</p>
+                            <p class="text-sm text-neutral-mid">Rua Araucária, 356 · Almirante Tamandaré - PR</p>
                         </div>
                     </div>
 
-                    <div class="flex gap-4">
-                        <div class="w-10 h-10 shrink-0 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                            </svg>
-                        </div>
-                        <div class="font-sans">
-                            <h4 class="text-sm font-bold text-neutral-dark">WhatsApp</h4>
-                            <p class="text-sm text-neutral-mid"><a href="https://wa.me/5511999999999" class="hover:text-primary transition-colors">(11) 99999-9999</a></p>
+                    <!-- WhatsApp das profissionais -->
+                    <div class="space-y-3">
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 shrink-0 bg-[#25D366]/10 rounded-xl flex items-center justify-center text-[#25D366]">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.517 2.266 2.27 3.51 5.279 3.51 8.486 0 6.657-5.338 11.997-11.949 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.665.989 3.3 1.488 5.415 1.489 5.33 0 9.67-4.333 9.67-9.67 0-2.584-1.008-5.012-2.839-6.845-1.83-1.832-4.258-2.84-6.845-2.84-5.332 0-9.673 4.333-9.673 9.67 0 2.232.583 4.413 1.69 6.289l-.999 3.647 3.73-.977-.158-.284z"></path></svg>
+                            </div>
+                            <div class="font-sans">
+                                <h4 class="text-sm font-bold text-neutral-dark">WhatsApp Profissionais</h4>
+                                <div class="space-y-1 mt-1">
+                                    <p class="text-sm text-neutral-mid"><a href="https://wa.me/5541988477213" class="hover:text-primary transition-colors font-medium" target="_blank">Alessandra · (41) 98847-7213</a></p>
+                                    <p class="text-sm text-neutral-mid"><a href="https://wa.me/5541985265463" class="hover:text-primary transition-colors font-medium" target="_blank">Larissa · (41) 98526-5463</a></p>
+                                    <p class="text-sm text-neutral-mid"><a href="https://wa.me/5541995236201" class="hover:text-primary transition-colors font-medium" target="_blank">Luana · (41) 99523-6201</a></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -353,16 +635,16 @@
                 <!-- CTA Action Box -->
                 <div class="pt-6 border-t border-neutral-light">
                     <a href="/agendar/" 
-                       class="inline-block bg-primary hover:bg-primary-dark text-white font-sans font-medium px-8 py-3.5 rounded-full transition-all duration-200 shadow-md">
-                        Faça seu Agendamento Agora
+                       class="inline-block shimmer-btn text-white font-sans font-medium px-8 py-3.5 rounded-full transition-all duration-200 shadow-md">
+                        ✨ Faça seu Agendamento Agora
                     </a>
                 </div>
             </div>
 
             <!-- Google Maps Embed -->
-            <div class="lg:col-span-7 rounded-3xl overflow-hidden shadow-sm border border-neutral-light min-h-[350px] relative">
-                <!-- Custom maps embed pointing to Sao Paulo city center -->
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.0658300062483!2d-46.6358826!3d-23.5660824!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59a68fa9622d%3A0xc3fa9a9307d0db83!2sCentro%20Hist%C3%B3rico%20de%20S%C3%A3o%20Paulo%2C%20S%C3%A3o%20Paulo%20-%20SP!5e0!3m2!1spt-BR!2sbr!4v1684346890372!5m2!1spt-BR!2sbr" 
+            <div class="lg:col-span-7 rounded-3xl overflow-hidden shadow-sm border border-neutral-light min-h-[350px] relative fade-up">
+                <!-- Maps embed pointing to Rua Araucária, Almirante Tamandaré -->
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3600.759!2d-49.3036!3d-25.3286!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94dce5a2f39a0d%3A0x0!2sAlmirante%20Tamandar%C3%A9%2C%20PR!5e0!3m2!1spt-BR!2sbr!4v1684346890372!5m2!1spt-BR!2sbr" 
                         class="absolute inset-0 w-full h-full border-0" 
                         allowfullscreen="" 
                         loading="lazy" 
@@ -373,4 +655,28 @@
         </div>
     </div>
 </section>
+
+<!-- Scroll Animation Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Fade-in on scroll (Intersection Observer)
+        const fadeElements = document.querySelectorAll('.fade-up');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    // Stagger the animations
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        fadeElements.forEach(el => observer.observe(el));
+    });
+</script>
 {% endblock %}

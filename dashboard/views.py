@@ -306,6 +306,7 @@ def professional_create_view(request):
         username = request.POST.get('username')
         email = request.POST.get('email')
         name = request.POST.get('name')
+        phone = request.POST.get('phone')
         role = request.POST.get('role')
         bio = request.POST.get('bio')
         photo = request.FILES.get('photo')
@@ -332,6 +333,7 @@ def professional_create_view(request):
                 prof = Professional.objects.create(
                     user=user,
                     name=name,
+                    phone=phone or '',
                     role=role,
                     bio=bio,
                     photo=photo,

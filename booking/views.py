@@ -22,6 +22,14 @@ class BookingStep1View(View):
         pre_service_id = request.GET.get('servico')
         pre_prof_id = request.GET.get('profissional')
         
+        # Resolve professional string name/username to ID
+        if pre_prof_id and not pre_prof_id.isdigit() and pre_prof_id != 'none':
+            prof_obj = Professional.objects.filter(name__icontains=pre_prof_id).first()
+            if not prof_obj:
+                prof_obj = Professional.objects.filter(user__username__icontains=pre_prof_id).first()
+            if prof_obj:
+                pre_prof_id = str(prof_obj.id)
+        
         context = {
             'services': services,
             'professionals': professionals,

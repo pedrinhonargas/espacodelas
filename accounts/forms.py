@@ -38,10 +38,14 @@ class BlockSlotForm(forms.ModelForm):
 class ProfessionalProfileForm(forms.ModelForm):
     class Meta:
         model = Professional
-        fields = ['name', 'bio', 'photo']
+        fields = ['name', 'phone', 'bio', 'photo']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'w-full border border-gray-200 rounded-xl px-4 py-3 text-neutral-dark font-sans text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white transition-all duration-150'
+            }),
+            'phone': forms.TextInput(attrs={
+                'class': 'w-full border border-gray-200 rounded-xl px-4 py-3 text-neutral-dark font-sans text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white transition-all duration-150',
+                'placeholder': 'Ex: 41988477213'
             }),
             'bio': forms.Textarea(attrs={
                 'class': 'w-full border border-gray-200 rounded-xl px-4 py-3 text-neutral-dark font-sans text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white transition-all duration-150',

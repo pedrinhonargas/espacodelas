@@ -35,21 +35,24 @@ def populate():
     professionals_data = [
         {
             'user': prof_users['alessandra'],
-            'name': 'Alessandra Souza',
+            'name': 'Alessandra Santos',
+            'phone': '41988477213',
             'role': 'Manicure & Nail Designer',
             'bio': 'Especialista em alongamento em gel, blindagem e manicure classica com mais de 5 anos de experiencia em cuidados e estetica das unhas.',
             'photo': 'professionals/alessandra.jpg'
         },
         {
             'user': prof_users['luana'],
-            'name': 'Luana Rocha',
+            'name': 'Luana Santos',
+            'phone': '41995236201',
             'role': 'Manicure & Spa de Pes',
             'bio': 'Apaixonada por esmaltacao em gel, decoracao artistica (nail art) e tratamentos relaxantes de spa dos pes para um cuidado completo.',
             'photo': 'professionals/luana.jpg'
         },
         {
             'user': prof_users['larissa'],
-            'name': 'Larissa Mendes',
+            'name': 'Larissa Santos',
+            'phone': '41985265463',
             'role': 'Designer de Sobrancelhas',
             'bio': 'Especialista em visagismo facial, design de sobrancelhas personalizado, aplicacao de henna e lash lifting para valorizar o seu olhar.',
             'photo': 'professionals/larissa.jpg'
@@ -59,20 +62,28 @@ def populate():
     professionals = {}
     for data in professionals_data:
         prof, created = Professional.objects.get_or_create(
-            name=data['name'],
+            user=data['user'],
             defaults={
-                'user': data['user'],
+                'name': data['name'],
+                'phone': data['phone'],
                 'role': data['role'],
                 'bio': data['bio'],
                 'is_active': True
             }
         )
+        if not created:
+            prof.name = data['name']
+            prof.phone = data['phone']
+            prof.role = data['role']
+            prof.bio = data['bio']
+            prof.save()
+            
         # Se for nova ou antiga, salvamos para relacionar
-        professionals[data['name'].split()[0].lower()] = prof
+        professionals[data['user'].username] = prof
         if created:
             print(f"[OK] Profissional {data['name']} cadastrada.")
         else:
-            print(f"[OK] Profissional {data['name']} ja existia.")
+            print(f"[OK] Profissional {data['name']} ja existia e foi atualizada.")
 
     # 4. Criar Servicos
     services_data = [

@@ -13,13 +13,13 @@ class BlockedSlotInline(admin.TabularInline):
 
 @admin.register(Professional)
 class ProfessionalAdmin(admin.ModelAdmin):
-    list_display = ('name', 'role', 'is_active', 'created_at')
+    list_display = ('name', 'role', 'phone', 'is_active', 'created_at')
     list_filter = ('is_active', 'role')
-    search_fields = ('name', 'role', 'bio')
+    search_fields = ('name', 'role', 'bio', 'phone')
     inlines = [WorkingHoursInline, BlockedSlotInline]
     fieldsets = (
         (None, {
-            'fields': ('user', 'name', 'role', 'photo', 'is_active')
+            'fields': ('user', 'name', 'phone', 'role', 'photo', 'is_active')
         }),
         ('Informações Adicionais', {
             'classes': ('collapse',),
