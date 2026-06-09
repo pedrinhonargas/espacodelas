@@ -5,8 +5,18 @@ from booking.models import Service
 def home(request):
     services = Service.objects.filter(is_active=True)
     professionals = Professional.objects.filter(is_active=True)
+
+    # Serviços da Larissa (sobrancelha & cílios)
+    brow_service_names = [
+        'Brow Lamination', 'Design de Sobrancelha', 'Design + Henna', 'Lash Lifting',
+    ]
+    nail_services = services.exclude(name__in=brow_service_names)
+    brow_services = services.filter(name__in=brow_service_names)
+
     return render(request, 'core/home.html', {
         'services': services,
+        'nail_services': nail_services,
+        'brow_services': brow_services,
         'professionals': professionals
     })
 

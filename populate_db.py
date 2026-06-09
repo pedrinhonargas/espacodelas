@@ -6,7 +6,7 @@ django.setup()
 
 from django.contrib.auth.models import User
 from accounts.models import Professional, WorkingHours
-from booking.models import Service, ProfessionalService
+from booking.models import Service, ProfessionalService, Appointment
 import datetime
 
 def populate():
@@ -68,6 +68,7 @@ def populate():
                 'phone': data['phone'],
                 'role': data['role'],
                 'bio': data['bio'],
+                'photo': data['photo'],
                 'is_active': True
             }
         )
@@ -76,6 +77,7 @@ def populate():
             prof.phone = data['phone']
             prof.role = data['role']
             prof.bio = data['bio']
+            prof.photo = data['photo']
             prof.save()
             
         # Se for nova ou antiga, salvamos para relacionar
@@ -87,56 +89,162 @@ def populate():
 
     # 4. Criar Servicos
     services_data = [
+        # Unhas (Mãos e Pés)
         {
-            'name': 'Manicure Classica',
-            'description': 'Corte, lixamento, remocao de cuticulas e esmaltacao tradicional com acabamento perfeito.',
-            'duration_minutes': 45,
-            'price': 40.00,
-            'profs': ['alessandra', 'luana']
-        },
-        {
-            'name': 'Manicure em Gel (Blindagem)',
-            'description': 'Aplicacao de camada de gel para protecao e fortalecimento das unhas naturais, garantindo esmaltacao duradoura (ate 20 dias).',
+            'name': 'Esmaltação em Gel (Mãos)',
+            'description': 'Esmaltação em Gel lisa (uma cor só) nas Mãos.',
             'duration_minutes': 60,
             'price': 80.00,
             'profs': ['alessandra', 'luana']
         },
         {
-            'name': 'Alongamento de Unhas em Gel',
-            'description': 'Alongamento completo das unhas com gel premium e tips ou moldes, proporcionando unhas longas, naturais e resistentes.',
+            'name': 'Esmaltação em Gel (Pés)',
+            'description': 'Esmaltação em Gel lisa (uma cor só) nos pés.',
+            'duration_minutes': 60,
+            'price': 80.00,
+            'profs': ['alessandra', 'luana']
+        },
+        {
+            'name': 'Francesinha / Sorriso',
+            'description': 'Francesinha/Sorriso em todas as unhas.',
+            'duration_minutes': 30,
+            'price': 20.00,
+            'profs': ['alessandra', 'luana']
+        },
+        {
+            'name': 'Decoração Simples',
+            'description': 'Decoração simples em todas as unhas.',
+            'duration_minutes': 30,
+            'price': 25.00,
+            'profs': ['alessandra', 'luana']
+        },
+        {
+            'name': 'Decorações Elaboradas',
+            'description': 'Decorações mais elaboradas.',
+            'duration_minutes': 45,
+            'price': 35.00,
+            'profs': ['alessandra', 'luana']
+        },
+        {
+            'name': 'Aplicação Pó Cromado',
+            'description': 'Aplicação de Pó Cromado.',
+            'duration_minutes': 20,
+            'price': 10.00,
+            'profs': ['alessandra', 'luana']
+        },
+        {
+            'name': 'Banho de Gel',
+            'description': 'Banho de Gel.',
+            'duration_minutes': 90,
+            'price': 130.00,
+            'profs': ['alessandra', 'luana']
+        },
+        {
+            'name': 'Manutenção Banho de Gel',
+            'description': 'Manutenção Banho de Gel.',
+            'duration_minutes': 75,
+            'price': 100.00,
+            'profs': ['alessandra', 'luana']
+        },
+        {
+            'name': 'Alongamento Molde F1',
+            'description': 'Alongamento molde F1.',
             'duration_minutes': 120,
+            'price': 180.00,
+            'profs': ['alessandra', 'luana']
+        },
+        {
+            'name': 'Manutenção de Alongamento',
+            'description': 'Manutenção de Alongamento. Manutenções devem ser feitas até 30 dias no máximo, após isso aplicação nova.',
+            'duration_minutes': 90,
             'price': 150.00,
             'profs': ['alessandra', 'luana']
         },
         {
-            'name': 'Spa dos Pes + Manicure',
-            'description': 'Tratamento completo de esfoliacao, hidratacao profunda, massagem relaxante nos pes e servico de manicure classica inclusa.',
-            'duration_minutes': 75,
-            'price': 90.00,
+            'name': 'Remoção de Alongamento',
+            'description': 'Remoção de Alongamento.',
+            'duration_minutes': 45,
+            'price': 50.00,
             'profs': ['alessandra', 'luana']
         },
         {
-            'name': 'Design de Sobrancelhas Simples',
-            'description': 'Mapeamento facial e remocao de pelos com pinca e linha para um contorno harmonico e limpo das sobrancelhas.',
+            'name': 'Remoção de Esmalte em Gel',
+            'description': 'Remoção de Esmalte em Gel.',
             'duration_minutes': 30,
+            'price': 25.00,
+            'profs': ['alessandra', 'luana']
+        },
+        {
+            'name': 'Reconstrução de Unha Quebrada',
+            'description': 'Reconstrução de unha quebrada.',
+            'duration_minutes': 15,
+            'price': 10.00,
+            'profs': ['alessandra', 'luana']
+        },
+        # Sobrancelha & Cílios
+        {
+            'name': 'Brow Lamination',
+            'description': 'Brow Lamination.',
+            'duration_minutes': 60,
+            'price': 70.00,
+            'profs': ['larissa']
+        },
+        {
+            'name': 'Design de Sobrancelha',
+            'description': 'Design de Sobrancelha.',
+            'duration_minutes': 30,
+            'price': 25.00,
+            'profs': ['larissa']
+        },
+        {
+            'name': 'Design + Henna',
+            'description': 'Design + Henna.',
+            'duration_minutes': 45,
             'price': 35.00,
             'profs': ['larissa']
         },
         {
-            'name': 'Design de Sobrancelhas com Henna',
-            'description': 'Design de sobrancelhas personalizado combinado com preenchimento temporario em henna para realce e cobertura de falhas.',
-            'duration_minutes': 45,
-            'price': 55.00,
-            'profs': ['larissa']
-        },
-        {
-            'name': 'Lash Lifting & Nutricao',
-            'description': 'Curvatura e coloracao natural dos cilios superiores combinada com tratamento nutritivo, destacando o olhar por ate 6 semanas.',
+            'name': 'Lash Lifting',
+            'description': 'Lash lifting.',
             'duration_minutes': 60,
-            'price': 110.00,
+            'price': 70.00,
             'profs': ['larissa']
         }
     ]
+
+    # Mapeamento para migrar agendamentos antigos para os novos nomes de forma limpa
+    migration_map = {
+        'Alongamento de Unhas em Gel': 'Alongamento Molde F1',
+        'Lash Lifting & Nutricao': 'Lash Lifting',
+        'Design de Sobrancelhas Simples': 'Design de Sobrancelha',
+        'Design de Sobrancelhas com Henna': 'Design + Henna',
+        'Manicure em Gel (Blindagem)': 'Esmaltação em Gel (Mãos)',
+    }
+
+    # Criar novos serviços que precisam existir para a migração antes do loop geral
+    for old_name, new_name in migration_map.items():
+        if Service.objects.filter(name=old_name).exists():
+            old_service = Service.objects.get(name=old_name)
+            new_service_data = next((item for item in services_data if item['name'] == new_name), None)
+            if new_service_data:
+                new_service, _ = Service.objects.get_or_create(
+                    name=new_service_data['name'],
+                    defaults={
+                        'description': new_service_data['description'],
+                        'duration_minutes': new_service_data['duration_minutes'],
+                        'price': new_service_data['price'],
+                        'is_active': True
+                    }
+                )
+                # Atualizar os agendamentos antigos para apontar para o novo serviço correspondente
+                Appointment.objects.filter(service=old_service).update(service=new_service)
+                print(f"[OK] Migrados agendamentos de '{old_name}' para '{new_name}'")
+
+    # Agora podemos remover com segurança quaisquer serviços antigos que não fazem parte do novo menu
+    new_names = [s['name'] for s in services_data]
+    deleted_count, _ = Service.objects.exclude(name__in=new_names).delete()
+    if deleted_count > 0:
+        print(f"[OK] Removidos {deleted_count} serviços antigos obsoletos.")
 
     for data in services_data:
         service, created = Service.objects.get_or_create(
@@ -148,12 +256,18 @@ def populate():
                 'is_active': True
             }
         )
-        if created:
-            print(f"[OK] Servico '{data['name']}' cadastrado.")
+        if not created:
+            # Se já existia (ou foi criado na pré-migração), atualizamos os valores e descrição
+            service.description = data['description']
+            service.duration_minutes = data['duration_minutes']
+            service.price = data['price']
+            service.save()
+            print(f"[OK] Servico '{data['name']}' atualizado com novos valores.")
         else:
-            print(f"[OK] Servico '{data['name']}' ja existia.")
+            print(f"[OK] Servico '{data['name']}' cadastrado.")
 
-        # Relacionar profissionais ao servico
+        # Relacionar profissionais ao serviço (e limpar relações antigas deste serviço para garantir exatidão)
+        ProfessionalService.objects.filter(service=service).delete()
         for prof_key in data['profs']:
             prof = professionals[prof_key]
             ProfessionalService.objects.get_or_create(
