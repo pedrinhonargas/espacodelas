@@ -169,6 +169,115 @@
     </div>
 </section>
 
+<!-- Seção Galeria de Fotos do Espaço -->
+<section id="galeria" class="py-20 lg:py-28 bg-rose-gradient relative overflow-hidden">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Cabeçalho Seção -->
+        <div class="text-center max-w-2xl mx-auto mb-16 space-y-3 fade-up">
+            <span class="text-primary font-sans text-xs font-semibold tracking-widest uppercase">Nosso Espaço</span>
+            <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl text-neutral-dark font-light">Conheça o Studio</h2>
+            <div class="fancy-divider mt-4">
+                <span>📸</span>
+            </div>
+            <p class="font-sans text-neutral-mid text-sm sm:text-base leading-relaxed mt-4">
+                Um ambiente pensado para o seu conforto e bem-estar. Veja um pouco do nosso espaço e se encante!
+            </p>
+        </div>
+
+        <!-- Gallery Grid - Placeholder para fotos do espaço -->
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
+            <!-- Foto 1 - Unhas -->
+            <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer aspect-square group">
+                <img src="{% static 'img/nails_hero.png' %}" class="w-full h-full object-cover transition-transform duration-500" alt="Nosso espaço - unhas">
+                <div class="gallery-overlay absolute inset-0 bg-primary/40 flex items-center justify-center opacity-0 transition-opacity duration-300">
+                    <div class="text-center text-white">
+                        <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                        </svg>
+                        <span class="font-sans text-sm">Nail Art</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Foto 2 - Sobrancelha -->
+            <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer aspect-square group">
+                <img src="{% static 'img/eyebrow_design.png' %}" class="w-full h-full object-cover transition-transform duration-500" alt="Nosso espaço - sobrancelhas">
+                <div class="gallery-overlay absolute inset-0 bg-primary/40 flex items-center justify-center opacity-0 transition-opacity duration-300">
+                    <div class="text-center text-white">
+                        <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                        </svg>
+                        <span class="font-sans text-sm">Design de Sobrancelhas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Foto 3 - Materiais -->
+            <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer aspect-square group">
+                <img src="{% static 'img/nail_supplies.png' %}" class="w-full h-full object-cover transition-transform duration-500" alt="Nosso espaço - materiais">
+                <div class="gallery-overlay absolute inset-0 bg-primary/40 flex items-center justify-center opacity-0 transition-opacity duration-300">
+                    <div class="text-center text-white">
+                        <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                        </svg>
+                        <span class="font-sans text-sm">Materiais Premium</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Foto 4 - Espaço Manicure -->
+            <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer aspect-square bg-white border border-neutral-light flex flex-col justify-between p-6 shadow-sm group hover:-translate-y-1 transition-all duration-300">
+                <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary transition-colors group-hover:bg-primary group-hover:text-white mb-4">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.467 5.99 5.99 0 0 0-1.925 3.546 5.974 5.974 0 0 1-2.133-1A3.75 3.75 0 0 0 12 18Z" />
+                    </svg>
+                </div>
+                <div class="space-y-1.5">
+                    <h4 class="font-serif text-lg font-medium text-neutral-dark group-hover:text-primary transition-colors">Espaço Manicure</h4>
+                    <p class="font-sans text-xs text-neutral-mid leading-relaxed">Bancadas modernas, poltronas confortáveis e uma atmosfera relaxante para o cuidado das suas unhas.</p>
+                </div>
+                <span class="text-[10px] text-primary/60 font-medium tracking-wider uppercase">Conforto Supremo</span>
+            </div>
+
+            <!-- Foto 5 - Espaço Sobrancelhas -->
+            <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer aspect-square bg-white border border-neutral-light flex flex-col justify-between p-6 shadow-sm group hover:-translate-y-1 transition-all duration-300">
+                <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary transition-colors group-hover:bg-primary group-hover:text-white mb-4">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.43 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </div>
+                <div class="space-y-1.5">
+                    <h4 class="font-serif text-lg font-medium text-neutral-dark group-hover:text-primary transition-colors">Espaço Sobrancelhas</h4>
+                    <p class="font-sans text-xs text-neutral-mid leading-relaxed">Mapeamento facial refinado, iluminação profissional ajustada e maciez absoluta para valorizar seu olhar.</p>
+                </div>
+                <span class="text-[10px] text-primary/60 font-medium tracking-wider uppercase">Foco no Olhar</span>
+            </div>
+
+            <!-- Foto 6 - Cantinho do Café -->
+            <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer aspect-square bg-white border border-neutral-light flex flex-col justify-between p-6 shadow-sm group hover:-translate-y-1 transition-all duration-300">
+                <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary transition-colors group-hover:bg-primary group-hover:text-white mb-4">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75ZM12 17c-2.446 0-4.5-2.054-4.5-4.5S9.554 8 12 8s4.5 2.054 4.5 4.5S14.446 17 12 17Zm0 0v1.5m0-1.5c-2.446 0-4.5-2.054-4.5-4.5S9.554 8 12 8s4.5 2.054 4.5 4.5S14.446 17 12 17Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.003 9.003 0 0 0 8.354-5.646 9.003 9.003 0 0 0-16.708 0A9.003 9.003 0 0 0 12 21Z" />
+                    </svg>
+                </div>
+                <div class="space-y-1.5">
+                    <h4 class="font-serif text-lg font-medium text-neutral-dark group-hover:text-primary transition-colors">Cantinho do Café</h4>
+                    <p class="font-sans text-xs text-neutral-mid leading-relaxed">Um mimo especial enquanto espera: chás aromáticos, cappuccinos cremosos, biscoitos finos e Wi-Fi de alta velocidade.</p>
+                </div>
+                <span class="text-[10px] text-primary/60 font-medium tracking-wider uppercase">Experiência VIP</span>
+            </div>
+        </div>
+
+        <div class="text-center mt-10 fade-up">
+            <p class="font-sans text-sm text-neutral-mid italic">
+                📍 Visite-nos: <strong>Rua Araucária, 356 · Almirante Tamandaré - PR</strong>
+            </p>
+        </div>
+    </div>
+</section>
+
 
 
 <!-- Seção Imagem Parallax Decorativa -->
@@ -326,114 +435,6 @@
     </div>
 </section>
 
-<!-- Seção Galeria de Fotos do Espaço -->
-<section id="galeria" class="py-20 lg:py-28 bg-rose-gradient relative overflow-hidden">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Cabeçalho Seção -->
-        <div class="text-center max-w-2xl mx-auto mb-16 space-y-3 fade-up">
-            <span class="text-primary font-sans text-xs font-semibold tracking-widest uppercase">Nosso Espaço</span>
-            <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl text-neutral-dark font-light">Conheça o Studio</h2>
-            <div class="fancy-divider mt-4">
-                <span>📸</span>
-            </div>
-            <p class="font-sans text-neutral-mid text-sm sm:text-base leading-relaxed mt-4">
-                Um ambiente pensado para o seu conforto e bem-estar. Veja um pouco do nosso espaço e se encante!
-            </p>
-        </div>
-
-        <!-- Gallery Grid - Placeholder para fotos do espaço -->
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
-            <!-- Foto 1 - Unhas -->
-            <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer aspect-square group">
-                <img src="{% static 'img/nails_hero.png' %}" class="w-full h-full object-cover transition-transform duration-500" alt="Nosso espaço - unhas">
-                <div class="gallery-overlay absolute inset-0 bg-primary/40 flex items-center justify-center opacity-0 transition-opacity duration-300">
-                    <div class="text-center text-white">
-                        <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                        </svg>
-                        <span class="font-sans text-sm">Nail Art</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Foto 2 - Sobrancelha -->
-            <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer aspect-square group">
-                <img src="{% static 'img/eyebrow_design.png' %}" class="w-full h-full object-cover transition-transform duration-500" alt="Nosso espaço - sobrancelhas">
-                <div class="gallery-overlay absolute inset-0 bg-primary/40 flex items-center justify-center opacity-0 transition-opacity duration-300">
-                    <div class="text-center text-white">
-                        <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                        </svg>
-                        <span class="font-sans text-sm">Design de Sobrancelhas</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Foto 3 - Materiais -->
-            <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer aspect-square group">
-                <img src="{% static 'img/nail_supplies.png' %}" class="w-full h-full object-cover transition-transform duration-500" alt="Nosso espaço - materiais">
-                <div class="gallery-overlay absolute inset-0 bg-primary/40 flex items-center justify-center opacity-0 transition-opacity duration-300">
-                    <div class="text-center text-white">
-                        <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                        </svg>
-                        <span class="font-sans text-sm">Materiais Premium</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Foto 4 - Espaço Manicure -->
-            <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer aspect-square bg-white border border-neutral-light flex flex-col justify-between p-6 shadow-sm group hover:-translate-y-1 transition-all duration-300">
-                <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary transition-colors group-hover:bg-primary group-hover:text-white mb-4">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.467 5.99 5.99 0 0 0-1.925 3.546 5.974 5.974 0 0 1-2.133-1A3.75 3.75 0 0 0 12 18Z" />
-                    </svg>
-                </div>
-                <div class="space-y-1.5">
-                    <h4 class="font-serif text-lg font-medium text-neutral-dark group-hover:text-primary transition-colors">Espaço Manicure</h4>
-                    <p class="font-sans text-xs text-neutral-mid leading-relaxed">Bancadas modernas, poltronas confortáveis e uma atmosfera relaxante para o cuidado das suas unhas.</p>
-                </div>
-                <span class="text-[10px] text-primary/60 font-medium tracking-wider uppercase">Conforto Supremo</span>
-            </div>
-
-            <!-- Foto 5 - Espaço Sobrancelhas -->
-            <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer aspect-square bg-white border border-neutral-light flex flex-col justify-between p-6 shadow-sm group hover:-translate-y-1 transition-all duration-300">
-                <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary transition-colors group-hover:bg-primary group-hover:text-white mb-4">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.43 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                </div>
-                <div class="space-y-1.5">
-                    <h4 class="font-serif text-lg font-medium text-neutral-dark group-hover:text-primary transition-colors">Espaço Sobrancelhas</h4>
-                    <p class="font-sans text-xs text-neutral-mid leading-relaxed">Mapeamento facial refinado, iluminação profissional ajustada e maciez absoluta para valorizar seu olhar.</p>
-                </div>
-                <span class="text-[10px] text-primary/60 font-medium tracking-wider uppercase">Foco no Olhar</span>
-            </div>
-
-            <!-- Foto 6 - Cantinho do Café -->
-            <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer aspect-square bg-white border border-neutral-light flex flex-col justify-between p-6 shadow-sm group hover:-translate-y-1 transition-all duration-300">
-                <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary transition-colors group-hover:bg-primary group-hover:text-white mb-4">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75ZM12 17c-2.446 0-4.5-2.054-4.5-4.5S9.554 8 12 8s4.5 2.054 4.5 4.5S14.446 17 12 17Zm0 0v1.5m0-1.5c-2.446 0-4.5-2.054-4.5-4.5S9.554 8 12 8s4.5 2.054 4.5 4.5S14.446 17 12 17Z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.003 9.003 0 0 0 8.354-5.646 9.003 9.003 0 0 0-16.708 0A9.003 9.003 0 0 0 12 21Z" />
-                    </svg>
-                </div>
-                <div class="space-y-1.5">
-                    <h4 class="font-serif text-lg font-medium text-neutral-dark group-hover:text-primary transition-colors">Cantinho do Café</h4>
-                    <p class="font-sans text-xs text-neutral-mid leading-relaxed">Um mimo especial enquanto espera: chás aromáticos, cappuccinos cremosos, biscoitos finos e Wi-Fi de alta velocidade.</p>
-                </div>
-                <span class="text-[10px] text-primary/60 font-medium tracking-wider uppercase">Experiência VIP</span>
-            </div>
-        </div>
-
-        <div class="text-center mt-10 fade-up">
-            <p class="font-sans text-sm text-neutral-mid italic">
-                📍 Visite-nos: <strong>Rua Araucária, 356 · Almirante Tamandaré - PR</strong>
-            </p>
-        </div>
-    </div>
-</section>
 
 <!-- Seção Depoimentos -->
 <section id="depoimentos" class="py-20 lg:py-28 bg-white relative">
