@@ -117,14 +117,13 @@
                     Especialistas em manicure de alto padrão, alongamentos sofisticados e design de sobrancelhas personalizado para realçar o que há de mais belo em você.
                 </p>
                 <div class="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                    <a href="https://wa.me/5541988477213?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20um%20hor%C3%A1rio%20no%20Espa%C3%A7o%20Delas." 
-                       target="_blank" rel="noopener"
+                    <a href="#" onclick="openCalendly('https://calendly.com/espacodelas', event)" 
                        class="w-full sm:w-auto shimmer-btn text-white font-sans font-medium px-8 py-4 rounded-full transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 text-center">
                         ✨ Agendar Horário
                     </a>
-                    <a href="#sobre" 
+                    <a href="{% url 'core:valores' %}"
                        class="w-full sm:w-auto border border-primary/40 text-primary hover:border-primary hover:bg-primary/5 font-sans font-medium px-8 py-4 rounded-full transition-all duration-200 text-center">
-                        Nossa História
+                        💲 Valores
                     </a>
                 </div>
             </div>
@@ -293,7 +292,7 @@
             <p class="font-sans text-white/80 text-sm sm:text-base max-w-lg mx-auto">
                 Cada detalhe é pensado para que você se sinta especial e confiante.
             </p>
-            <a href="https://wa.me/5541988477213?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20um%20hor%C3%A1rio%20no%20Espa%C3%A7o%20Delas." target="_blank" rel="noopener" class="inline-block bg-white text-primary hover:bg-neutral-light font-sans font-medium px-8 py-3.5 rounded-full transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 mt-2">
+            <a href="#" onclick="openCalendly('https://calendly.com/espacodelas', event)" class="inline-block bg-white text-primary hover:bg-neutral-light font-sans font-medium px-8 py-3.5 rounded-full transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 mt-2">
                 Agende seu Momento ✨
             </a>
         </div>
@@ -306,27 +305,11 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <!-- Coluna Imagem / Foto das Três -->
             <div class="relative flex justify-center fade-up">
-                <div class="relative w-80 h-[28rem] rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
-                    <img src="{% static 'img/sobre_nos.png' %}" class="absolute inset-0 w-full h-full object-cover" alt="Alessandra, Larissa e Luana — Mãe e Filhas do Espaço Delas">
+                <div class="relative w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+                    <img src="{% static 'img/sobre_nos.jpg' %}" class="w-full h-auto block" alt="Alessandra, Larissa e Luana — Mãe e Filhas do Espaço Delas">
                     <div class="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent flex flex-col justify-end p-8 text-white">
                         <h4 class="font-serif text-2xl font-light leading-tight">Três mulheres. Um só sonho.</h4>
                         <p class="font-sans text-xs tracking-wider uppercase opacity-85 mt-2">Espaço Delas</p>
-                    </div>
-                </div>
-                <!-- Mini floating element -->
-                <div class="absolute -bottom-6 -right-6 md:right-10 bg-white p-5 rounded-2xl shadow-xl flex items-center gap-3 float-slow">
-                    <div class="w-10 h-10 bg-success/15 text-success rounded-full flex items-center justify-center font-bold text-lg">✓</div>
-                    <div class="font-sans">
-                        <p class="text-xs text-neutral-mid">Agendamento</p>
-                        <p class="text-sm font-bold text-neutral-dark">100% Online</p>
-                    </div>
-                </div>
-                <!-- Extra floating badge -->
-                <div class="absolute -top-4 -left-4 md:left-10 bg-white p-4 rounded-2xl shadow-lg float-reverse hidden sm:flex items-center gap-2">
-                    <div class="w-8 h-8 bg-primary/15 text-primary rounded-full flex items-center justify-center text-sm">♡</div>
-                    <div class="font-sans">
-                        <p class="text-xs font-bold text-neutral-dark">Mãe & Filhas</p>
-                        <p class="text-[10px] text-neutral-mid">unidas pelo sonho</p>
                     </div>
                 </div>
             </div>
@@ -359,8 +342,7 @@
                     Afinal, nada é mais forte do que três mulheres unidas, dispostas a vencer. 💪
                 </p>
                 <div class="pt-4">
-                    <a href="https://wa.me/5541988477213?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20um%20hor%C3%A1rio%20no%20Espa%C3%A7o%20Delas." 
-                       target="_blank" rel="noopener"
+                    <a href="#" onclick="openCalendly('https://calendly.com/espacodelas', event)" 
                        class="inline-block bg-primary hover:bg-primary-dark text-white font-sans font-medium px-8 py-3.5 rounded-full transition-all duration-200 shadow-md">
                         Reserve seu Momento
                     </a>
@@ -420,8 +402,7 @@
                                 <span class="ml-auto text-xs opacity-70">{{ professional.formatted_phone }}</span>
                             </a>
                             {% endif %}
-                            <a href="https://wa.me/55{{ professional.phone }}?text=Ol%C3%A1%20{{ professional.first_name }}!%20Gostaria%20de%20agendar%20um%20hor%C3%A1rio%20com%20voc%C3%AA%20para%20servi%C3%A7os%20de%20est%C3%A9tica." 
-                               target="_blank" rel="noopener"
+                            <a href="#" onclick="openCalendly('https://calendly.com/espacodelas/{{ professional.user.username }}', event)" 
                                class="flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-white px-4 py-3 rounded-xl transition-all duration-200 font-sans text-sm font-medium">
                                 <span>Agendar com {{ professional.first_name }}</span>
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
@@ -552,23 +533,6 @@
                         </div>
                     </div>
 
-                    <!-- WhatsApp das profissionais -->
-                    <div class="space-y-3">
-                        <div class="flex gap-4">
-                            <div class="w-10 h-10 shrink-0 bg-[#25D366]/10 rounded-xl flex items-center justify-center text-[#25D366]">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.517 2.266 2.27 3.51 5.279 3.51 8.486 0 6.657-5.338 11.997-11.949 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.665.989 3.3 1.488 5.415 1.489 5.33 0 9.67-4.333 9.67-9.67 0-2.584-1.008-5.012-2.839-6.845-1.83-1.832-4.258-2.84-6.845-2.84-5.332 0-9.673 4.333-9.673 9.67 0 2.232.583 4.413 1.69 6.289l-.999 3.647 3.73-.977-.158-.284z"></path></svg>
-                            </div>
-                            <div class="font-sans">
-                                <h4 class="text-sm font-bold text-neutral-dark">WhatsApp Profissionais</h4>
-                                <div class="space-y-1 mt-1">
-                                    <p class="text-sm text-neutral-mid"><a href="https://wa.me/5541988477213" class="hover:text-primary transition-colors font-medium" target="_blank">Alessandra · (41) 98847-7213</a></p>
-                                    <p class="text-sm text-neutral-mid"><a href="https://wa.me/5541985265463" class="hover:text-primary transition-colors font-medium" target="_blank">Larissa · (41) 98526-5463</a></p>
-                                    <p class="text-sm text-neutral-mid"><a href="https://wa.me/5541995236201" class="hover:text-primary transition-colors font-medium" target="_blank">Luana · (41) 99523-6201</a></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="flex gap-4">
                         <div class="w-10 h-10 shrink-0 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -584,8 +548,7 @@
 
                 <!-- CTA Action Box -->
                 <div class="pt-6 border-t border-neutral-light">
-                    <a href="https://wa.me/5541988477213?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20um%20hor%C3%A1rio%20no%20Espa%C3%A7o%20Delas." 
-                       target="_blank" rel="noopener"
+                    <a href="#" onclick="openCalendly('https://calendly.com/espacodelas', event)" 
                        class="inline-block shimmer-btn text-white font-sans font-medium px-8 py-3.5 rounded-full transition-all duration-200 shadow-md">
                         ✨ Faça seu Agendamento Agora
                     </a>

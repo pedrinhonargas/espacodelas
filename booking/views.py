@@ -321,6 +321,9 @@ class BookingSuccessView(View):
         gcal_base = "https://calendar.google.com/calendar/render?action=TEMPLATE"
         gcal_url = f"{gcal_base}&text={urllib.parse.quote(title)}&dates={start_str}/{end_str}&details={urllib.parse.quote(details)}&location={urllib.parse.quote(location)}"
         
+        if appointment.professional.google_calendar_email:
+            gcal_url += f"&add={urllib.parse.quote(appointment.professional.google_calendar_email)}"
+        
         context = {
             'appointment': appointment,
             'gcal_url': gcal_url

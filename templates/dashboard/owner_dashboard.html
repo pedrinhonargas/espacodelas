@@ -4,87 +4,146 @@
 {% block breadcrumb %}Visão Geral{% endblock %}
 
 {% block dashboard_content %}
-<div class="space-y-6">
-    
-    <!-- WELCOME / TITLE -->
-    <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center justify-between">
+<div class="space-y-7">
+
+    <!-- Welcome Banner -->
+    <div class="rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4" 
+         style="background:linear-gradient(135deg,#C97B8A 0%,#e8a0b0 100%); color:white;">
         <div>
-            <h2 class="font-serif text-2xl text-neutral-dark">Painel Administrativo</h2>
-            <p class="font-sans text-xs text-neutral-mid mt-0.5">Visão consolidada de agendamentos e faturamento das profissionais.</p>
+            <p class="text-xs font-semibold tracking-widest uppercase opacity-80 mb-1">Bem-vinda!</p>
+            <h1 class="font-serif text-3xl font-light">Painel Administrativo</h1>
+            <p class="text-xs mt-1 opacity-75">Controle completo do Espaço Delas Studio</p>
         </div>
-        <div class="text-xs font-semibold text-neutral-dark bg-primary/5 border border-primary/20 px-4 py-2 rounded-xl mt-4 sm:mt-0">
-            Hoje: {{ today|date:"d \d\e F \d\e Y" }}
-        </div>
-    </div>
-
-    <!-- GLOBAL STATS (MONTHLY) -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Card 1 -->
-        <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex items-center justify-between">
-            <div class="space-y-1">
-                <span class="text-xs font-bold text-neutral-mid uppercase tracking-wider block">Agendamentos Confirmados (Mês)</span>
-                <span class="text-3xl font-semibold text-neutral-dark block">{{ total_month_bookings }}</span>
-            </div>
-            <div class="text-3xl bg-neutral-light p-3 rounded-full">📅</div>
-        </div>
-        <!-- Card 2 -->
-        <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex items-center justify-between">
-            <div class="space-y-1">
-                <span class="text-xs font-bold text-primary uppercase tracking-wider block">Faturamento Estimado (Mês)</span>
-                <span class="text-3xl font-semibold text-primary block">R$ {{ total_month_revenue }}</span>
-            </div>
-            <div class="text-3xl bg-primary/10 p-3 rounded-full">💰</div>
+        <div class="text-right">
+            <p class="text-xs opacity-70">Hoje</p>
+            <p class="text-base font-semibold">{{ today|date:"d/m/Y" }}</p>
+            <p class="text-xs opacity-70">{{ today|date:"l" }}</p>
         </div>
     </div>
 
-    <!-- PROFESSIONALS DAILY STATUS CARD GRID -->
-    <div class="space-y-3">
-        <h3 class="font-serif text-lg text-neutral-dark">Desempenho Diário das Profissionais</h3>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- KPI Row -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+
+        <!-- Agendamentos do mês -->
+        <div class="kpi-card">
+            <div class="kpi-icon" style="background:#fde4e8;">📅</div>
+            <div>
+                <p class="text-xs font-bold uppercase tracking-wider" style="color:#d4b0b8;">Agendamentos — Mês</p>
+                <p class="text-3xl font-bold mt-1" style="color:#2d1f23;">{{ total_month_bookings }}</p>
+                <p class="text-xs mt-0.5" style="color:#b0909a;">confirmados este mês</p>
+            </div>
+        </div>
+
+        <!-- Faturamento do mês -->
+        <div class="kpi-card" style="border-color:#d4e8d4;">
+            <div class="kpi-icon" style="background:#f0fdf4;">💰</div>
+            <div>
+                <p class="text-xs font-bold uppercase tracking-wider" style="color:#4ade80; opacity:0.8;">Faturamento — Mês</p>
+                <p class="text-3xl font-bold mt-1" style="color:#16a34a;">R$ {{ total_month_revenue }}</p>
+                <p class="text-xs mt-0.5" style="color:#b0909a;">estimado — confirmados</p>
+            </div>
+        </div>
+
+        <!-- Profissionais ativas -->
+        <div class="kpi-card" style="border-color:#e0d4f4;">
+            <div class="kpi-icon" style="background:#f5f0ff;">👩‍🎨</div>
+            <div>
+                <p class="text-xs font-bold uppercase tracking-wider" style="color:#a78bfa; opacity:0.9;">Profissionais Ativas</p>
+                <p class="text-3xl font-bold mt-1" style="color:#7c3aed;">{{ prof_summaries|length }}</p>
+                <p class="text-xs mt-0.5" style="color:#b0909a;">no sistema</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Per-Professional Cards -->
+    <div>
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="font-serif text-xl" style="color:#2d1f23;">Desempenho de Hoje por Profissional</h2>
+            <a href="{% url 'dashboard:agenda' %}" class="text-xs font-semibold" style="color:#C97B8A;">Ver Agenda Completa →</a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
             {% for summary in prof_summaries %}
-                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4 hover:shadow-md transition-shadow group">
-                    <div class="flex items-center gap-3">
-                        <div class="w-12 h-12 rounded-full overflow-hidden bg-neutral-light border border-gray-150 flex items-center justify-center font-serif text-lg text-primary">
-                            {% if summary.prof.photo %}
-                                <img src="{{ summary.prof.photo.url }}" class="w-full h-full object-cover" alt="">
-                            {% else %}
-                                {{ summary.prof.name|slice:":2"|upper }}
-                            {% endif %}
-                        </div>
-                        <div>
-                            <h4 class="font-serif text-base text-neutral-dark font-medium group-hover:text-primary transition-colors">{{ summary.prof.name }}</h4>
-                            <span class="text-[10px] text-primary block font-medium">{{ summary.prof.role }}</span>
-                        </div>
+            <div class="dash-card overflow-hidden group hover:shadow-lg transition-shadow duration-300">
+                <!-- Prof Header -->
+                <div class="p-5 flex items-center gap-4" style="background:linear-gradient(135deg,#fff5f7,#fff);">
+                    <div class="w-14 h-14 rounded-2xl overflow-hidden flex-shrink-0 flex items-center justify-center font-serif text-lg" style="background:#fde4e8; color:#C97B8A;">
+                        {% if summary.prof.photo %}
+                            <img src="{{ summary.prof.photo.url }}" class="w-full h-full object-cover" alt="">
+                        {% else %}
+                            {{ summary.prof.name|slice:":2"|upper }}
+                        {% endif %}
                     </div>
-                    
-                    <div class="grid grid-cols-3 gap-2 text-center border-t border-b border-gray-50 py-3 text-xs">
-                        <div>
-                            <span class="text-[9px] text-neutral-mid block font-semibold">CONFIRMADOS</span>
-                            <span class="font-bold text-success block mt-1">{{ summary.confirmed }}</span>
-                        </div>
-                        <div>
-                            <span class="text-[9px] text-neutral-mid block font-semibold">CANCELADOS</span>
-                            <span class="font-bold text-error block mt-1">{{ summary.cancelled }}</span>
-                        </div>
-                        <div>
-                            <span class="text-[9px] text-neutral-mid block font-semibold">FATURAMENTO</span>
-                            <span class="font-semibold text-primary block mt-1">R$ {{ summary.revenue }}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="flex gap-2">
-                        <a href="{% url 'dashboard:agenda' %}?data={{ today|date:'Y-m-d' }}&profissional_id={{ summary.prof.id }}" 
-                           class="w-1/2 text-center bg-neutral-light hover:bg-neutral-light/75 text-neutral-dark font-sans font-medium py-2 rounded-xl transition-all text-xs">
-                            Ver Agenda
-                        </a>
-                        <a href="{% url 'dashboard:block_slot' %}?profissional_id={{ summary.prof.id }}" 
-                           class="w-1/2 text-center border border-gray-200 hover:bg-neutral-light text-neutral-mid font-sans font-medium py-2 rounded-xl transition-all text-xs">
-                            Bloqueios
-                        </a>
+                    <div>
+                        <h3 class="font-serif text-base font-semibold group-hover:text-primary transition-colors" style="color:#2d1f23;">{{ summary.prof.name }}</h3>
+                        <p class="text-xs font-medium" style="color:#C97B8A;">{{ summary.prof.role }}</p>
+                        {% if summary.prof.google_calendar_email %}
+                            <p class="text-[10px] mt-0.5" style="color:#b0909a;">📧 {{ summary.prof.google_calendar_email }}</p>
+                        {% endif %}
                     </div>
                 </div>
+
+                <!-- Stats Row -->
+                <div class="grid grid-cols-3 text-center" style="border-top:1px solid #fef0f3; border-bottom:1px solid #fef0f3;">
+                    <div class="py-4">
+                        <p class="text-[9px] font-bold uppercase tracking-widest" style="color:#d4b0b8;">Confirmados</p>
+                        <p class="text-xl font-bold mt-1" style="color:#16a34a;">{{ summary.confirmed }}</p>
+                    </div>
+                    <div class="py-4" style="border-left:1px solid #fef0f3; border-right:1px solid #fef0f3;">
+                        <p class="text-[9px] font-bold uppercase tracking-widest" style="color:#d4b0b8;">Cancelados</p>
+                        <p class="text-xl font-bold mt-1" style="color:#dc2626;">{{ summary.cancelled }}</p>
+                    </div>
+                    <div class="py-4">
+                        <p class="text-[9px] font-bold uppercase tracking-widest" style="color:#d4b0b8;">Faturamento</p>
+                        <p class="text-base font-bold mt-1" style="color:#C97B8A;">R${{ summary.revenue }}</p>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="p-4 flex gap-2">
+                    <a href="{% url 'dashboard:agenda' %}?data={{ today|date:'Y-m-d' }}&profissional_id={{ summary.prof.id }}"
+                       class="flex-1 text-center py-2 rounded-xl text-xs font-semibold transition-all"
+                       style="background:#fde4e8; color:#C97B8A;">
+                        📅 Ver Agenda
+                    </a>
+                    <a href="{% url 'dashboard:professional_update' summary.prof.id %}"
+                       class="flex-1 text-center py-2 rounded-xl text-xs font-semibold border transition-all hover:bg-rose-50"
+                       style="border-color:#fce4e9; color:#a0858a;">
+                        ✏️ Editar
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-3 text-center py-12" style="color:#b0909a;">
+                <div class="text-4xl mb-3">👩‍🎨</div>
+                <p class="font-serif text-base">Nenhuma profissional cadastrada ainda.</p>
+                <a href="{% url 'dashboard:professional_create' %}" class="btn-primary mt-4 inline-flex">Cadastrar Profissional</a>
+            </div>
             {% endfor %}
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="dash-card">
+        <div class="dash-card-header">
+            <span class="dash-card-title">⚡ Ações Rápidas</span>
+        </div>
+        <div class="p-5 grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <a href="{% url 'dashboard:agenda' %}" class="flex flex-col items-center gap-2 p-4 rounded-2xl text-center transition-all hover:-translate-y-1" style="background:#fff5f7; border:1px solid #fce4e9;">
+                <span class="text-2xl">📅</span>
+                <span class="text-xs font-semibold" style="color:#C97B8A;">Agenda Hoje</span>
+            </a>
+            <a href="{% url 'dashboard:services_list' %}" class="flex flex-col items-center gap-2 p-4 rounded-2xl text-center transition-all hover:-translate-y-1" style="background:#f5f0ff; border:1px solid #e9d4f9;">
+                <span class="text-2xl">✨</span>
+                <span class="text-xs font-semibold" style="color:#7c3aed;">Gerenciar Serviços</span>
+            </a>
+            <a href="{% url 'dashboard:professionals_list' %}" class="flex flex-col items-center gap-2 p-4 rounded-2xl text-center transition-all hover:-translate-y-1" style="background:#f0fdf4; border:1px solid #d4e8d4;">
+                <span class="text-2xl">👩‍🎨</span>
+                <span class="text-xs font-semibold" style="color:#16a34a;">Profissionais</span>
+            </a>
+            <a href="{% url 'dashboard:report' %}" class="flex flex-col items-center gap-2 p-4 rounded-2xl text-center transition-all hover:-translate-y-1" style="background:#fff7ed; border:1px solid #fed7aa;">
+                <span class="text-2xl">📈</span>
+                <span class="text-xs font-semibold" style="color:#ea580c;">Relatórios</span>
+            </a>
         </div>
     </div>
 </div>

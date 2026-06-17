@@ -2,143 +2,155 @@
 
 {% block title %}{{ title }} · Espaço Delas{% endblock %}
 {% block breadcrumb %}
-<a href="{% url 'dashboard:professionals_list' %}" class="hover:text-primary transition-colors">Profissionais</a> / Form
+<a href="{% url 'dashboard:professionals_list' %}" style="color:#d4b0b8; hover:color:#C97B8A;">Profissionais</a>
+<span style="color:#d4b0b8;"> / </span>{{ title }}
 {% endblock %}
 
 {% block dashboard_content %}
-<div class="max-w-xl mx-auto">
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-        
-        <div class="px-6 py-5 border-b border-gray-100">
-            <h3 class="font-serif text-lg text-neutral-dark">{{ title }}</h3>
-            <p class="font-sans text-xs text-neutral-mid mt-0.5">Preencha as informações do perfil da profissional.</p>
+<div class="max-w-2xl mx-auto space-y-6">
+
+    <!-- Back -->
+    <a href="{% url 'dashboard:professionals_list' %}" class="inline-flex items-center gap-2 text-xs font-semibold transition-colors" style="color:#C97B8A;">
+        ← Voltar para Profissionais
+    </a>
+
+    <div class="dash-card overflow-hidden">
+        <!-- Header -->
+        <div class="p-6" style="background:linear-gradient(135deg,#fff5f7,#fff); border-bottom:1px solid #fef0f3;">
+            <h1 class="font-serif text-2xl" style="color:#2d1f23;">{{ title }}</h1>
+            <p class="text-xs mt-1" style="color:#b0909a;">Preencha as informações abaixo. Campos com * são obrigatórios.</p>
         </div>
 
         {% if professional %}
-            <!-- EDIT FORM -->
-            <form method="post" enctype="multipart/form-data" class="p-6 space-y-4">
-                {% csrf_token %}
-                
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-medium text-neutral-dark font-sans" for="{{ form.name.id_for_label }}">Nome da Profissional</label>
-                    {{ form.name }}
-                    {% if form.name.errors %}
-                        {% for error in form.name.errors %}
-                            <span class="text-[10px] text-error font-medium">{{ error }}</span>
-                        {% endfor %}
-                    {% endif %}
-                </div>
+        <!-- ── EDIT FORM ── -->
+        <form method="post" enctype="multipart/form-data" class="p-6 space-y-5">
+            {% csrf_token %}
 
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-medium text-neutral-dark font-sans" for="{{ form.phone.id_for_label }}">WhatsApp / Telefone</label>
-                    {{ form.phone }}
-                    {% if form.phone.errors %}
-                        {% for error in form.phone.errors %}
-                            <span class="text-[10px] text-error font-medium">{{ error }}</span>
-                        {% endfor %}
-                    {% endif %}
-                </div>
+            <div class="flex flex-col gap-1.5">
+                <label class="dash-label">Nome Completo *</label>
+                {{ form.name }}
+                {% if form.name.errors %}{% for e in form.name.errors %}<span class="text-[11px] text-red-500">{{ e }}</span>{% endfor %}{% endif %}
+            </div>
 
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-medium text-neutral-dark font-sans" for="id_role">Especialidade (Cargo)</label>
-                    <input type="text" name="role" id="id_role" value="{{ professional.role }}"
-                           class="w-full border border-gray-200 rounded-xl px-4 py-3 text-neutral-dark font-sans text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white transition-all duration-150">
-                </div>
+            <div class="flex flex-col gap-1.5">
+                <label class="dash-label">Especialidade / Cargo *</label>
+                <input type="text" name="role" value="{{ professional.role }}" class="dash-input" placeholder="Ex: Manicure, Designer de Sobrancelhas">
+            </div>
 
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-medium text-neutral-dark font-sans" for="{{ form.bio.id_for_label }}">Biografia</label>
-                    {{ form.bio }}
-                    {% if form.bio.errors %}
-                        {% for error in form.bio.errors %}
-                            <span class="text-[10px] text-error font-medium">{{ error }}</span>
-                        {% endfor %}
-                    {% endif %}
-                </div>
+            <div class="flex flex-col gap-1.5">
+                <label class="dash-label">WhatsApp / Telefone</label>
+                {{ form.phone }}
+                <p class="text-[11px]" style="color:#b0909a;">Apenas números com DDD. Ex: 41988477213</p>
+            </div>
 
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-medium text-neutral-dark font-sans" for="{{ form.photo.id_for_label }}">Foto</label>
-                    {{ form.photo }}
-                    {% if form.photo.errors %}
-                        {% for error in form.photo.errors %}
-                            <span class="text-[10px] text-error font-medium block">{{ error }}</span>
-                        {% endfor %}
-                    {% endif %}
+            <!-- Gmail Google Calendar Field -->
+            <div class="flex flex-col gap-1.5">
+                <label class="dash-label">📧 Gmail para Google Agenda</label>
+                {{ form.google_calendar_email }}
+                <div class="rounded-xl p-3 text-xs leading-relaxed" style="background:#fff5f7; border:1px solid #fce4e9; color:#8a5f65;">
+                    <strong>Para que serve?</strong> Quando uma cliente agenda um serviço com esta profissional,
+                    o sistema gera um link do Google Calendar que inclui este e-mail Gmail automaticamente,
+                    fazendo com que o compromisso apareça na <strong>agenda pessoal do Google</strong> dela!
                 </div>
+            </div>
 
-                <div class="pt-6 border-t border-gray-150 flex justify-end gap-3">
-                    <a href="{% url 'dashboard:professionals_list' %}" class="border border-gray-200 text-neutral-mid hover:bg-neutral-light font-sans font-medium px-5 py-2 rounded-full transition-colors text-xs bg-white">
-                        Cancelar
-                    </a>
-                    <button type="submit" class="bg-primary hover:bg-primary-dark text-white font-sans font-medium px-6 py-2.5 rounded-full transition-all duration-200 text-xs shadow-sm hover:shadow-md">
-                        Salvar Alterações
-                    </button>
-                </div>
-            </form>
+            <div class="flex flex-col gap-1.5">
+                <label class="dash-label">Biografia</label>
+                {{ form.bio }}
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+                <label class="dash-label">Foto de Perfil</label>
+                {% if professional.photo %}
+                    <div class="flex items-center gap-4 mb-2">
+                        <img src="{{ professional.photo.url }}" class="w-16 h-16 rounded-2xl object-cover" style="border:2px solid #fce4e9;" alt="Foto atual">
+                        <p class="text-xs" style="color:#b0909a;">Foto atual. Envie uma nova para substituir.</p>
+                    </div>
+                {% endif %}
+                {{ form.photo }}
+            </div>
+
+            <div class="flex justify-end gap-3 pt-4" style="border-top:1px solid #fef0f3;">
+                <a href="{% url 'dashboard:professionals_list' %}" class="btn-secondary">Cancelar</a>
+                <button type="submit" class="btn-primary">💾 Salvar Alterações</button>
+            </div>
+        </form>
+
         {% else %}
-            <!-- CREATE FORM (includes User Creation) -->
-            <form method="post" enctype="multipart/form-data" class="p-6 space-y-4">
-                {% csrf_token %}
-                
-                <h4 class="font-serif text-sm font-semibold text-neutral-dark border-b border-gray-50 pb-2">Informações da Profissional</h4>
-                
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-medium text-neutral-dark font-sans" for="id_name">Nome Completo *</label>
-                    <input type="text" name="name" id="id_name" required placeholder="Ex: Ana Silva"
-                           class="w-full border border-gray-200 rounded-xl px-4 py-3 text-neutral-dark font-sans text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white transition-all duration-150">
-                </div>
+        <!-- ── CREATE FORM ── -->
+        <form method="post" enctype="multipart/form-data" class="p-6 space-y-5">
+            {% csrf_token %}
 
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-medium text-neutral-dark font-sans" for="id_phone">WhatsApp / Telefone *</label>
-                    <input type="text" name="phone" id="id_phone" required placeholder="Ex: 41988477213"
-                           class="w-full border border-gray-200 rounded-xl px-4 py-3 text-neutral-dark font-sans text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white transition-all duration-150">
-                </div>
+            <!-- Dados da Profissional -->
+            <div class="flex items-center gap-3 pb-2" style="border-bottom:1px solid #fef0f3;">
+                <div class="w-8 h-8 rounded-xl flex items-center justify-center text-base" style="background:#fde4e8;">👩‍🎨</div>
+                <h2 class="font-serif text-base font-semibold" style="color:#2d1f23;">Dados da Profissional</h2>
+            </div>
 
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-medium text-neutral-dark font-sans" for="id_role">Especialidade (Cargo) *</label>
-                    <input type="text" name="role" id="id_role" required placeholder="Ex: Manicure, Cabeleireira"
-                           class="w-full border border-gray-200 rounded-xl px-4 py-3 text-neutral-dark font-sans text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white transition-all duration-150">
-                </div>
+            <div class="flex flex-col gap-1.5">
+                <label class="dash-label">Nome Completo *</label>
+                <input type="text" name="name" required placeholder="Ex: Ana Silva" class="dash-input">
+            </div>
 
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-medium text-neutral-dark font-sans" for="id_bio">Biografia</label>
-                    <textarea name="bio" id="id_bio" rows="3" placeholder="Conte um pouco sobre as qualificações..."
-                              class="w-full border border-gray-200 rounded-xl px-4 py-3 text-neutral-dark font-sans text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white transition-all duration-150"></textarea>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-1.5">
+                    <label class="dash-label">Especialidade / Cargo *</label>
+                    <input type="text" name="role" required placeholder="Ex: Manicure" class="dash-input">
                 </div>
+                <div class="flex flex-col gap-1.5">
+                    <label class="dash-label">WhatsApp / Telefone</label>
+                    <input type="text" name="phone" placeholder="41988477213" class="dash-input">
+                </div>
+            </div>
 
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-medium text-neutral-dark font-sans" for="id_photo">Foto</label>
-                    <input type="file" name="photo" id="id_photo"
-                           class="w-full text-sm text-neutral-mid file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer">
+            <!-- Gmail Field -->
+            <div class="flex flex-col gap-1.5">
+                <label class="dash-label">📧 Gmail para Google Agenda</label>
+                <input type="email" name="google_calendar_email" placeholder="profissional@gmail.com" class="dash-input">
+                <div class="rounded-xl p-3 text-xs leading-relaxed" style="background:#fff5f7; border:1px solid #fce4e9; color:#8a5f65;">
+                    <strong>Para que serve?</strong> Ao preencher este campo, toda vez que uma cliente confirmar um agendamento
+                    com esta profissional, será gerado um link para adicionar o compromisso na <strong>Agenda do Google</strong>
+                    desta profissional automaticamente. 📅✨
                 </div>
+            </div>
 
-                <h4 class="font-serif text-sm font-semibold text-neutral-dark border-b border-gray-50 pb-2 pt-4">Conta de Acesso ao Painel</h4>
+            <div class="flex flex-col gap-1.5">
+                <label class="dash-label">Biografia</label>
+                <textarea name="bio" rows="3" placeholder="Conte sobre as qualificações e experiência..." class="dash-input"></textarea>
+            </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs font-medium text-neutral-dark font-sans" for="id_username">Nome de Usuário *</label>
-                        <input type="text" name="username" id="id_username" required placeholder="Ex: anasilva"
-                               class="w-full border border-gray-200 rounded-xl px-4 py-3 text-neutral-dark font-sans text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white transition-all duration-150">
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs font-medium text-neutral-dark font-sans" for="id_email">E-mail *</label>
-                        <input type="email" name="email" id="id_email" required placeholder="Ex: ana@exemplo.com"
-                               class="w-full border border-gray-200 rounded-xl px-4 py-3 text-neutral-dark font-sans text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white transition-all duration-150">
-                    </div>
-                </div>
-                
-                <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-[10px] text-amber-800 leading-relaxed">
-                    💡 <strong>Nota de Senha:</strong> Ao criar a profissional, a senha da conta de acesso será definida automaticamente como <strong class="underline">senha123</strong>. Ela poderá alterar a senha depois se desejar.
-                </div>
+            <div class="flex flex-col gap-1.5">
+                <label class="dash-label">Foto de Perfil</label>
+                <input type="file" name="photo" class="text-sm" style="color:#b0909a;">
+            </div>
 
-                <div class="pt-6 border-t border-gray-150 flex justify-end gap-3">
-                    <a href="{% url 'dashboard:professionals_list' %}" class="border border-gray-200 text-neutral-mid hover:bg-neutral-light font-sans font-medium px-5 py-2 rounded-full transition-colors text-xs bg-white">
-                        Cancelar
-                    </a>
-                    <button type="submit" class="bg-primary hover:bg-primary-dark text-white font-sans font-medium px-6 py-2.5 rounded-full transition-all duration-200 text-xs shadow-sm hover:shadow-md">
-                        Cadastrar Profissional
-                    </button>
+            <!-- Conta de Acesso -->
+            <div class="flex items-center gap-3 pb-2 pt-2" style="border-bottom:1px solid #fef0f3; border-top:1px solid #fef0f3;">
+                <div class="w-8 h-8 rounded-xl flex items-center justify-center text-base" style="background:#f0fdf4;">🔐</div>
+                <h2 class="font-serif text-base font-semibold" style="color:#2d1f23;">Conta de Acesso ao Painel</h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-1.5">
+                    <label class="dash-label">Nome de Usuário *</label>
+                    <input type="text" name="username" required placeholder="Ex: anasilva" class="dash-input">
                 </div>
-            </form>
+                <div class="flex flex-col gap-1.5">
+                    <label class="dash-label">E-mail de Login *</label>
+                    <input type="email" name="email" required placeholder="ana@email.com" class="dash-input">
+                </div>
+            </div>
+
+            <div class="rounded-xl p-3 text-xs leading-relaxed flex gap-2" style="background:#fefce8; border:1px solid #fde68a; color:#92400e;">
+                <span class="text-base flex-shrink-0">💡</span>
+                <span><strong>Senha padrão:</strong> A senha inicial será <strong class="underline">senha123</strong>. A profissional poderá alterar no primeiro acesso pelo painel.</span>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-4" style="border-top:1px solid #fef0f3;">
+                <a href="{% url 'dashboard:professionals_list' %}" class="btn-secondary">Cancelar</a>
+                <button type="submit" class="btn-primary">➕ Cadastrar Profissional</button>
+            </div>
+        </form>
         {% endif %}
     </div>
 </div>

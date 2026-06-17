@@ -28,6 +28,9 @@
     <!-- Tailwind CSS (output compiled file) -->
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
     
+    <!-- Calendly link widget CSS -->
+    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+    
     {% block extra_head %}{% endblock %}
 </head>
 <body class="bg-neutral-light text-neutral-dark font-sans min-h-screen flex flex-col antialiased">
@@ -39,6 +42,8 @@
     <main class="flex-grow">
         {% block content %}{% endblock %}
     </main>
+
+    {% include 'partials/valores_modal.html' %}
 
     <!-- Footer -->
     {% include 'partials/footer.html' %}
@@ -70,6 +75,41 @@
 
     <!-- Scripts -->
     <script src="{% static 'js/menu.js' %}"></script>
+    <!-- Calendly link widget JS -->
+    <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+    <script>
+      function openCalendly(url, event) {
+        if (event) event.preventDefault();
+        Calendly.initPopupWidget({ url: url });
+        return false;
+      }
+
+      function openValoresModal() {
+        const modal = document.getElementById('valores-modal');
+        const content = document.getElementById('valores-modal-content');
+        if (modal && content) {
+          modal.classList.remove('hidden');
+          setTimeout(() => {
+            content.classList.remove('scale-95', 'opacity-0');
+            content.classList.add('scale-100', 'opacity-100');
+          }, 10);
+          document.body.style.overflow = 'hidden';
+        }
+      }
+
+      function closeValoresModal() {
+        const modal = document.getElementById('valores-modal');
+        const content = document.getElementById('valores-modal-content');
+        if (modal && content) {
+          content.classList.remove('scale-100', 'opacity-100');
+          content.classList.add('scale-95', 'opacity-0');
+          setTimeout(() => {
+            modal.classList.add('hidden');
+          }, 300);
+          document.body.style.overflow = '';
+        }
+      }
+    </script>
     {% block extra_scripts %}{% endblock %}
 </body>
 </html>

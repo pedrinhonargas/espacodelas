@@ -8,6 +8,7 @@ class Professional(models.Model):
     bio = models.TextField('Biografia', blank=True)
     photo = models.ImageField('Foto', upload_to='professionals/', blank=True, null=True)
     phone = models.CharField('WhatsApp/Telefone', max_length=20, blank=True, help_text="Apenas números com DDD, ex: 41988477213")
+    google_calendar_email = models.EmailField('Gmail (Google Agenda)', blank=True, help_text="E-mail Gmail da profissional para receber convites de agendamento na agenda do Google")
     is_active = models.BooleanField('Ativo', default=True, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
 

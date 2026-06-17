@@ -1,0 +1,181 @@
+{% load static %}
+<!-- Modal Tabela de Valores -->
+<div id="valores-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity duration-300" onclick="closeValoresModal()"></div>
+    
+    <!-- Content Card -->
+    <div class="relative w-full max-w-5xl bg-[#FFF5F6] rounded-3xl p-6 md:p-10 shadow-2xl border border-white/60 max-h-[90vh] overflow-y-auto z-10 transition-all duration-300 transform scale-95 opacity-0" id="valores-modal-content">
+        <!-- Close Button -->
+        <button onclick="closeValoresModal()" class="absolute top-5 right-5 w-10 h-10 flex items-center justify-center rounded-full bg-white hover:bg-primary hover:text-white transition-all duration-200 text-neutral-dark shadow-sm border border-rose-100 cursor-pointer z-20 focus:outline-none">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+        <!-- Header -->
+        <div class="text-center mb-8 space-y-2">
+            <span class="text-primary font-sans text-xs font-semibold tracking-widest uppercase">Serviços & Preços</span>
+            <h2 class="font-serif text-3xl md:text-4xl text-neutral-dark font-light">Tabela de Valores</h2>
+            <div class="fancy-divider mt-3">
+                <span>✿</span>
+            </div>
+        </div>
+
+        <!-- Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+            
+            <!-- Tabela 1: Manicure (Espaço Delas) -->
+            <div class="bg-white/95 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-rose-100 shadow-sm flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-rose-100">
+                        <div class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary font-semibold text-lg">💅</div>
+                        <div>
+                            <h3 class="font-serif text-xl font-medium text-neutral-dark">Unhas & Manicure</h3>
+                            <p class="font-sans text-[10px] text-neutral-mid tracking-wider uppercase font-semibold">Espaço Delas</p>
+                        </div>
+                    </div>
+                    
+                    <ul class="space-y-3.5">
+                        <li class="flex justify-between items-end gap-2">
+                            <span class="font-sans text-sm text-neutral-dark font-medium">Esmaltação em Gel lisa (Mãos)</span>
+                            <span class="border-b border-dotted border-rose-100 grow mb-1"></span>
+                            <span class="font-sans text-sm text-primary font-bold">R$ 80,00</span>
+                        </li>
+                        <li class="flex justify-between items-end gap-2">
+                            <span class="font-sans text-sm text-neutral-dark font-medium">Esmaltação em Gel lisa (Pés)</span>
+                            <span class="border-b border-dotted border-rose-100 grow mb-1"></span>
+                            <span class="font-sans text-sm text-primary font-bold">R$ 80,00</span>
+                        </li>
+                        <li class="flex justify-between items-end gap-2">
+                            <span class="font-sans text-sm text-neutral-dark font-medium">Francesinha/Sorriso (Todas)</span>
+                            <span class="border-b border-dotted border-rose-100 grow mb-1"></span>
+                            <span class="font-sans text-sm text-primary font-bold">R$ 20,00</span>
+                        </li>
+                        <li class="flex justify-between items-end gap-2">
+                            <span class="font-sans text-sm text-neutral-dark font-medium">Decorações Simples (Todas)</span>
+                            <span class="border-b border-dotted border-rose-100 grow mb-1"></span>
+                            <span class="font-sans text-sm text-primary font-bold">R$ 25,00</span>
+                        </li>
+                        <li class="flex justify-between items-end gap-2">
+                            <span class="font-sans text-sm text-neutral-dark font-medium">Decorações mais elaboradas</span>
+                            <span class="border-b border-dotted border-rose-100 grow mb-1"></span>
+                            <span class="font-sans text-sm text-primary font-bold">R$ 35,00</span>
+                        </li>
+                        <li class="flex justify-between items-end gap-2">
+                            <span class="font-sans text-sm text-neutral-dark font-medium">Aplicação Pó Cromado</span>
+                            <span class="border-b border-dotted border-rose-100 grow mb-1"></span>
+                            <span class="font-sans text-sm text-primary font-bold">R$ 10,00</span>
+                        </li>
+                        <li class="text-[11px] text-neutral-mid italic font-sans list-none -mt-1.5 pb-2">
+                            * Decorações em geral, fazer o orçamento antes.
+                        </li>
+                        
+                        <li class="flex justify-between items-end gap-2 pt-2 border-t border-rose-100/50">
+                            <span class="font-sans text-sm text-neutral-dark font-semibold">Banho de Gel</span>
+                            <span class="border-b border-dotted border-rose-100 grow mb-1"></span>
+                            <span class="font-sans text-sm text-primary font-bold">R$ 130,00</span>
+                        </li>
+                        <li class="flex justify-between items-end gap-2">
+                            <span class="font-sans text-sm text-neutral-dark font-medium">Manutenção Banho de Gel</span>
+                            <span class="border-b border-dotted border-rose-100 grow mb-1"></span>
+                            <span class="font-sans text-sm text-primary font-bold">R$ 100,00</span>
+                        </li>
+                        <li class="flex justify-between items-end gap-2">
+                            <span class="font-sans text-sm text-neutral-dark font-semibold">Alongamento molde F1</span>
+                            <span class="border-b border-dotted border-rose-100 grow mb-1"></span>
+                            <span class="font-sans text-sm text-primary font-bold">R$ 180,00</span>
+                        </li>
+                        <li class="flex justify-between items-end gap-2">
+                            <span class="font-sans text-sm text-neutral-dark font-medium">Manutenção Alongamento</span>
+                            <span class="border-b border-dotted border-rose-100 grow mb-1"></span>
+                            <span class="font-sans text-sm text-primary font-bold">R$ 150,00</span>
+                        </li>
+                        <li class="text-[11px] text-neutral-mid italic font-sans list-none -mt-1.5 pb-2">
+                            * Manutenções devem ser feitas até 30 dias no máximo, após isso aplicação nova.
+                        </li>
+                        
+                        <li class="flex justify-between items-end gap-2 pt-2 border-t border-rose-100/50">
+                            <span class="font-sans text-sm text-neutral-dark font-medium">Remoção de Alongamento</span>
+                            <span class="border-b border-dotted border-rose-100 grow mb-1"></span>
+                            <span class="font-sans text-sm text-primary font-bold">R$ 50,00</span>
+                        </li>
+                        <li class="flex justify-between items-end gap-2">
+                            <span class="font-sans text-sm text-neutral-dark font-medium">Remoção de Esmalte em Gel</span>
+                            <span class="border-b border-dotted border-rose-100 grow mb-1"></span>
+                            <span class="font-sans text-sm text-primary font-bold">R$ 25,00</span>
+                        </li>
+                        <li class="flex justify-between items-end gap-2">
+                            <span class="font-sans text-sm text-neutral-dark font-medium">Reconstrução de unha quebrada</span>
+                            <span class="border-b border-dotted border-rose-100 grow mb-1"></span>
+                            <span class="font-sans text-sm text-primary font-bold">R$ 10,00</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="mt-6 pt-4 border-t border-rose-100 flex items-center justify-between text-xs text-neutral-mid">
+                    <span class="font-sans font-medium">Pagamento:</span>
+                    <span class="font-sans font-semibold text-neutral-dark bg-rose-50 px-3 py-1 rounded-full">Pix · Débito · Crédito</span>
+                </div>
+            </div>
+
+            <!-- Tabela 2: Sobrancelha & Cílios (Lari Santos) -->
+            <div class="bg-white/95 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-rose-100 shadow-sm flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-rose-100">
+                        <div class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary font-semibold text-lg">👁️</div>
+                        <div>
+                            <h3 class="font-serif text-xl font-medium text-neutral-dark">Sobrancelha & Cílios</h3>
+                            <p class="font-sans text-[10px] text-neutral-mid tracking-wider uppercase font-semibold">Lari Santos · Designer</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <!-- Sobrancelha -->
+                        <div class="space-y-3.5">
+                            <h4 class="font-sans text-xs font-bold tracking-wider text-primary uppercase">Sobrancelha</h4>
+                            <ul class="space-y-3.5">
+                                <li class="flex justify-between items-end gap-2">
+                                    <span class="font-sans text-sm text-neutral-dark font-medium">Brow Lamination</span>
+                                    <span class="border-b border-dotted border-rose-100 grow mb-1"></span>
+                                    <span class="font-sans text-sm text-primary font-bold">R$ 70,00</span>
+                                </li>
+                                <li class="flex justify-between items-end gap-2">
+                                    <span class="font-sans text-sm text-neutral-dark font-medium">Design de Sobrancelha</span>
+                                    <span class="border-b border-dotted border-rose-100 grow mb-1"></span>
+                                    <span class="font-sans text-sm text-primary font-bold">R$ 25,00</span>
+                                </li>
+                                <li class="flex justify-between items-end gap-2">
+                                    <span class="font-sans text-sm text-neutral-dark font-medium">Design + Henna</span>
+                                    <span class="border-b border-dotted border-rose-100 grow mb-1"></span>
+                                    <span class="font-sans text-sm text-primary font-bold">R$ 35,00</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Cílios -->
+                        <div class="space-y-3.5 pt-4 border-t border-rose-100/50">
+                            <h4 class="font-sans text-xs font-bold tracking-wider text-primary uppercase">Cílios</h4>
+                            <ul class="space-y-3.5">
+                                <li class="flex justify-between items-end gap-2">
+                                    <span class="font-sans text-sm text-neutral-dark font-medium">Lash Lifting</span>
+                                    <span class="border-b border-dotted border-rose-100 grow mb-1"></span>
+                                    <span class="font-sans text-sm text-primary font-bold">R$ 70,00</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 pt-4 border-t border-rose-100 space-y-3">
+                    <a href="https://wa.me/5541985265463?text=Ol%C3%A1%20Larissa!%20Vim%20pela%20tabela%20de%20valores%20do%20site%20e%20gostaria%20de%20agendar%20um%20servi%C3%A7o%20de%20designer." 
+                       target="_blank" rel="noopener"
+                       class="flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white py-3.5 rounded-xl transition-all duration-200 font-sans text-sm font-medium shadow-sm hover:shadow">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.517 2.266 2.27 3.51 5.279 3.51 8.486 0 6.657-5.338 11.997-11.949 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.665.989 3.3 1.488 5.415 1.489 5.33 0 9.67-4.333 9.67-9.67 0-2.584-1.008-5.012-2.839-6.845-1.83-1.832-4.258-2.84-6.845-2.84-5.332 0-9.673 4.333-9.673 9.67 0 2.232.583 4.413 1.69 6.289l-.999 3.647 3.73-.977-.158-.284z"></path></svg>
+                        <span>Falar com Larissa: (41) 98526-5463</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -7,74 +7,99 @@
 <div class="space-y-6">
     
     <!-- HEADER BAR -->
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-            <h2 class="font-serif text-xl text-neutral-dark">Equipe de Profissionais</h2>
-            <p class="font-sans text-xs text-neutral-mid mt-0.5">Gerencie os perfis e grades de horários das profissionais do studio.</p>
+            <h1 class="font-serif text-2xl text-neutral-dark font-medium" style="color: #2d1f23;">Equipe de Profissionais</h1>
+            <p class="font-sans text-xs text-neutral-mid mt-0.5" style="color: #7a6b6e;">Cadastre, edite e gerencie as profissionais do studio, suas grades de horários e integrações com o Google Agenda.</p>
         </div>
-        <a href="{% url 'dashboard:professional_create' %}" class="bg-primary hover:bg-primary-dark text-white font-sans font-medium px-5 py-2.5 rounded-full transition-all duration-200 text-xs shadow-sm hover:shadow-md flex items-center gap-1.5">
-            ➕ Nova Profissional
-        </a>
+        <div>
+            <a href="{% url 'dashboard:professional_create' %}" class="btn-primary">
+                <span>➕</span> Nova Profissional
+            </a>
+        </div>
     </div>
 
-    <!-- LIST TABLE -->
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-100">
-            <h3 class="font-serif text-base font-semibold text-neutral-dark">Todas as Profissionais</h3>
+    <!-- LIST CARD -->
+    <div class="dash-card">
+        <div class="dash-card-header">
+            <h3 class="dash-card-title">Todas as Profissionais</h3>
+            <span class="text-[10px] bg-rose-100 text-[#C97B8A] font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider">
+                {{ professionals|length }} Cadastrada{{ professionals|length|pluralize:"s" }}
+            </span>
         </div>
 
         {% if professionals %}
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+                <table class="w-full text-left border-collapse dash-table">
                     <thead>
-                        <tr class="bg-neutral-light/50 border-b border-gray-100 text-[10px] font-bold text-neutral-mid uppercase tracking-wider">
-                            <th class="py-3 px-6">Profissional</th>
-                            <th class="py-3 px-6">Usuário Associado</th>
-                            <th class="py-3 px-6">Especialidade (Role)</th>
-                            <th class="py-3 px-6">Status</th>
-                            <th class="py-3 px-6 text-right">Ações</th>
+                        <tr>
+                            <th>Profissional</th>
+                            <th>Usuário Associado</th>
+                            <th>Especialidade</th>
+                            <th>Agenda do Google</th>
+                            <th>Status</th>
+                            <th class="text-right">Ações</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100 text-xs">
+                    <tbody>
                         {% for prof in professionals %}
-                            <tr class="hover:bg-neutral-light/30 transition-colors">
-                                <td class="py-4 px-6">
+                            <tr>
+                                <td>
                                     <div class="flex items-center gap-3">
-                                        <div class="w-9 h-9 rounded-full overflow-hidden bg-neutral-light border border-gray-100 flex items-center justify-center font-semibold text-primary font-serif">
+                                        <div class="w-10 h-10 rounded-full overflow-hidden bg-rose-50 border border-rose-100 flex items-center justify-center font-semibold text-[#C97B8A] font-serif flex-shrink-0">
                                             {% if prof.photo %}
-                                                <img src="{{ prof.photo.url }}" class="w-full h-full object-cover" alt="">
+                                                <img src="{{ prof.photo.url }}" class="w-full h-full object-cover" alt="{{ prof.name }}">
                                             {% else %}
                                                 {{ prof.name|slice:":2"|upper }}
                                             {% endif %}
                                         </div>
-                                        <span class="font-semibold text-neutral-dark">{{ prof.name }}</span>
+                                        <div>
+                                            <span class="font-semibold text-neutral-dark block" style="font-size: 0.85rem; color: #2d1f23;">{{ prof.name }}</span>
+                                            {% if prof.phone %}
+                                                <span class="text-[10px] text-neutral-mid block" style="color: #8a6870;">{{ prof.phone }}</span>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </td>
-                                <td class="py-4 px-6 text-neutral-mid font-mono">
+                                <td>
                                     {% if prof.user %}
-                                        @{{ prof.user.username }}
+                                        <span class="font-mono text-xs text-rose-800 bg-rose-50 px-2 py-0.5 rounded border border-rose-100">@{{ prof.user.username }}</span>
                                     {% else %}
-                                        <span class="text-error font-sans italic">Nenhum usuário</span>
+                                        <span class="text-xs text-red-500 font-sans italic">Nenhum usuário</span>
                                     {% endif %}
                                 </td>
-                                <td class="py-4 px-6 font-medium text-neutral-dark">{{ prof.role }}</td>
-                                <td class="py-4 px-6">
+                                <td class="font-medium text-neutral-dark">{{ prof.role }}</td>
+                                <td>
+                                    {% if prof.google_calendar_email %}
+                                        <span class="flex items-center gap-1.5 text-xs text-neutral-dark" title="Gmail configurado">
+                                            <span class="text-green-500">📅</span> 
+                                            <span class="font-mono">{{ prof.google_calendar_email }}</span>
+                                        </span>
+                                    {% else %}
+                                        <span class="flex items-center gap-1.5 text-xs text-[#8a6870] italic" title="Sem sincronização de agenda">
+                                            <span class="text-gray-400">⚠️</span> Sem Gmail cadastrado
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td>
                                     {% if prof.is_active %}
-                                        <span class="inline-block bg-green-50 text-success border border-green-200 px-2.5 py-0.5 rounded-full font-medium">Ativa</span>
+                                        <span class="badge-confirmed">Ativa</span>
                                     {% else %}
-                                        <span class="inline-block bg-gray-50 text-neutral-mid border border-gray-200 px-2.5 py-0.5 rounded-full font-medium">Inativa</span>
+                                        <span class="badge-cancelled">Inativa</span>
                                     {% endif %}
                                 </td>
-                                <td class="py-4 px-6 text-right space-x-2">
-                                    <a href="{% url 'dashboard:professional_update' prof.id %}" class="text-primary hover:text-primary-dark font-medium underline">
-                                        Editar Perfil
-                                    </a>
-                                    <a href="{% url 'dashboard:working_hours' prof.id %}" class="text-neutral-dark hover:text-primary font-medium underline">
-                                        Grade Horária
-                                    </a>
-                                    <a href="{% url 'dashboard:block_slot' %}?profissional_id={{ prof.id }}" class="text-neutral-mid hover:text-primary font-medium underline">
-                                        Bloqueios
-                                    </a>
+                                <td class="text-right">
+                                    <div class="flex items-center justify-end gap-2">
+                                        <a href="{% url 'dashboard:professional_update' prof.id %}" class="btn-secondary" style="padding: 6px 14px; font-size: 0.72rem;" title="Editar Perfil">
+                                            ✏️ Editar
+                                        </a>
+                                        <a href="{% url 'dashboard:working_hours' prof.id %}" class="btn-secondary" style="padding: 6px 14px; font-size: 0.72rem; color: #5a4b4e;" title="Configurar Grade de Horários">
+                                            ⏰ Grade
+                                        </a>
+                                        <a href="{% url 'dashboard:block_slot' %}?profissional_id={{ prof.id }}" class="btn-secondary" style="padding: 6px 14px; font-size: 0.72rem; color: #5a4b4e;" title="Bloquear Horários">
+                                            🚫 Bloquear
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -83,12 +108,17 @@
             </div>
         {% else %}
             <!-- Empty state -->
-            <div class="text-center py-16 space-y-2">
-                <div class="text-3xl text-neutral-mid">👩‍🎨</div>
-                <h4 class="font-serif text-sm font-medium text-neutral-dark">Nenhuma profissional cadastrada</h4>
-                <p class="font-sans text-[10px] text-neutral-mid max-w-xs mx-auto leading-relaxed">
-                    Você ainda não cadastrou nenhuma profissional na equipe do studio.
+            <div class="text-center py-16 space-y-3">
+                <div class="text-4xl">👩‍🎨</div>
+                <h4 class="font-serif text-base font-semibold text-neutral-dark" style="color: #2d1f23;">Nenhuma profissional cadastrada</h4>
+                <p class="font-sans text-xs text-neutral-mid max-w-xs mx-auto leading-relaxed" style="color: #7a6b6e;">
+                    Você ainda não cadastrou nenhuma profissional na equipe do studio. Adicione uma profissional para começar a gerenciar sua agenda.
                 </p>
+                <div class="pt-2">
+                    <a href="{% url 'dashboard:professional_create' %}" class="btn-primary">
+                        Adicionar Profissional
+                    </a>
+                </div>
             </div>
         {% endif %}
     </div>

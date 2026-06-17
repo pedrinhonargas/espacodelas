@@ -1,138 +1,177 @@
 {% extends 'dashboard/base_dashboard.html' %}
 
 {% block title %}Agenda · Espaço Delas{% endblock %}
-{% block breadcrumb %}Agenda{% endblock %}
+{% block breadcrumb %}📅 Agenda do Dia{% endblock %}
 
 {% block dashboard_content %}
 <div class="space-y-6">
-    
-    <!-- TOP ACTION/NAV BAR -->
-    <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
-        
-        <!-- Date Navigation Picker -->
-        <div class="flex items-center gap-2">
-            <a href="?data={{ prev_date }}&profissional_id={{ selected_prof_id }}" class="p-2 hover:bg-neutral-light rounded-full text-neutral-mid transition-all hover:text-primary">
-                ⬅️
-            </a>
-            <form method="get" class="flex items-center gap-2" id="date-form">
-                <input type="hidden" name="profissional_id" value="{{ selected_prof_id }}">
-                <input type="date" name="data" value="{{ filter_date|date:'Y-m-d' }}" onchange="document.getElementById('date-form').submit();"
-                       class="border border-gray-200 rounded-xl px-3 py-2 text-neutral-dark font-sans text-xs focus:outline-none focus:ring-1 focus:ring-primary bg-white cursor-pointer">
-            </form>
-            <a href="?data={{ next_date }}&profissional_id={{ selected_prof_id }}" class="p-2 hover:bg-neutral-light rounded-full text-neutral-mid transition-all hover:text-primary">
-                ➡️
-            </a>
-            <span class="text-xs font-semibold text-neutral-dark ml-2">
-                {{ filter_date|date:"l, d \d\e F \d\e Y" }}
-            </span>
-        </div>
 
-        <!-- Professional Filter (Owner Only) -->
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+            <h1 class="font-serif text-2xl" style="color:#2d1f23;">Agenda</h1>
+            <p class="text-xs mt-0.5" style="color:#b0909a;">Gerenciar atendimentos do dia</p>
+        </div>
+        <!-- Date Navigation -->
+        <div class="flex items-center gap-2">
+            <a href="?data={{ prev_date }}&profissional_id={{ selected_prof_id }}"
+               class="w-9 h-9 flex items-center justify-center rounded-xl transition-all hover:-translate-x-0.5"
+               style="background:white; border:1px solid #fce4e9; color:#C97B8A;">←</a>
+            <form method="get" class="flex items-center" id="date-form">
+                <input type="hidden" name="profissional_id" value="{{ selected_prof_id }}">
+                <input type="date" name="data" value="{{ filter_date|date:'Y-m-d' }}"
+                       onchange="document.getElementById('date-form').submit();"
+                       class="dash-input" style="width:auto; padding:8px 12px; border-radius:12px; font-size:0.8rem; cursor:pointer;">
+            </form>
+            <a href="?data={{ next_date }}&profissional_id={{ selected_prof_id }}"
+               class="w-9 h-9 flex items-center justify-center rounded-xl transition-all hover:translate-x-0.5"
+               style="background:white; border:1px solid #fce4e9; color:#C97B8A;">→</a>
+        </div>
+    </div>
+
+    <!-- Prof filter + date label row -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <p class="text-sm font-semibold capitalize" style="color:#C97B8A;">
+            🗓️ {{ filter_date|date:"l, d \d\e F \d\e Y" }}
+        </p>
         {% if is_owner %}
-            <div class="flex items-center gap-2">
-                <span class="text-xs text-neutral-mid">Profissional:</span>
-                <form method="get" id="prof-filter-form">
-                    <input type="hidden" name="data" value="{{ filter_date|date:'Y-m-d' }}">
-                    <select name="profissional_id" onchange="document.getElementById('prof-filter-form').submit();"
-                            class="border border-gray-200 rounded-xl px-3 py-2 text-neutral-dark font-sans text-xs focus:outline-none focus:ring-1 focus:ring-primary bg-white cursor-pointer">
-                        <option value="all" {% if selected_prof_id == 'all' %}selected{% endif %}>Todos os Profissionais</option>
-                        {% for prof in professionals %}
-                            <option value="{{ prof.id }}" {% if selected_prof_id|add:"0" == prof.id %}selected{% endif %}>{{ prof.name }}</option>
-                        {% endfor %}
-                    </select>
-                </form>
-            </div>
+        <form method="get" id="prof-filter-form" class="flex items-center gap-2">
+            <input type="hidden" name="data" value="{{ filter_date|date:'Y-m-d' }}">
+            <label class="text-xs font-semibold" style="color:#b0909a;">Profissional:</label>
+            <select name="profissional_id" onchange="document.getElementById('prof-filter-form').submit();"
+                    class="dash-input" style="width:auto; padding:8px 14px; font-size:0.8rem; border-radius:12px;">
+                <option value="all" {% if selected_prof_id == 'all' %}selected{% endif %}>Todas</option>
+                {% for prof in professionals %}
+                    <option value="{{ prof.id }}" {% if selected_prof_id|add:"0" == prof.id %}selected{% endif %}>{{ prof.name }}</option>
+                {% endfor %}
+            </select>
+        </form>
         {% endif %}
     </div>
 
-    <!-- METRIC CARDS -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <!-- Card 1 -->
-        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-            <span class="text-[10px] font-bold text-neutral-mid uppercase tracking-wider block">Agendamentos</span>
-            <span class="text-2xl font-semibold text-neutral-dark block mt-1">{{ total_appts }}</span>
+    <!-- KPI Cards -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="kpi-card" style="border-color:#fce4e9;">
+            <div class="kpi-icon" style="background:#fde4e8; font-size:1.1rem;">📋</div>
+            <div>
+                <p class="text-[10px] font-bold uppercase tracking-wider" style="color:#d4b0b8;">Total</p>
+                <p class="text-2xl font-bold" style="color:#2d1f23;">{{ total_appts }}</p>
+            </div>
         </div>
-        <!-- Card 2 -->
-        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-            <span class="text-[10px] font-bold text-success uppercase tracking-wider block">Confirmados</span>
-            <span class="text-2xl font-semibold text-success block mt-1">{{ confirmed_appts }}</span>
+        <div class="kpi-card" style="border-color:#d4e8d4;">
+            <div class="kpi-icon" style="background:#f0fdf4; font-size:1.1rem;">✅</div>
+            <div>
+                <p class="text-[10px] font-bold uppercase tracking-wider" style="color:#86efac;">Confirmados</p>
+                <p class="text-2xl font-bold" style="color:#16a34a;">{{ confirmed_appts }}</p>
+            </div>
         </div>
-        <!-- Card 3 -->
-        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-            <span class="text-[10px] font-bold text-error uppercase tracking-wider block">Cancelados</span>
-            <span class="text-2xl font-semibold text-error block mt-1">{{ cancelled_appts }}</span>
+        <div class="kpi-card" style="border-color:#fecaca;">
+            <div class="kpi-icon" style="background:#fef2f2; font-size:1.1rem;">❌</div>
+            <div>
+                <p class="text-[10px] font-bold uppercase tracking-wider" style="color:#fca5a5;">Cancelados</p>
+                <p class="text-2xl font-bold" style="color:#dc2626;">{{ cancelled_appts }}</p>
+            </div>
         </div>
-        <!-- Card 4 -->
-        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-            <span class="text-[10px] font-bold text-primary uppercase tracking-wider block">Faturamento Diário</span>
-            <span class="text-2xl font-semibold text-primary block mt-1">R$ {{ revenue }}</span>
+        <div class="kpi-card" style="border-color:#fce4e9;">
+            <div class="kpi-icon" style="background:#fde4e8; font-size:1.1rem;">💰</div>
+            <div>
+                <p class="text-[10px] font-bold uppercase tracking-wider" style="color:#d4b0b8;">Faturamento</p>
+                <p class="text-xl font-bold" style="color:#C97B8A;">R${{ revenue }}</p>
+            </div>
         </div>
     </div>
 
-    <!-- APPOINTMENTS LIST -->
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-        
-        <div class="px-6 py-4 border-b border-gray-100">
-            <h3 class="font-serif text-base font-semibold text-neutral-dark">Lista de Atendimentos</h3>
+    <!-- Appointments List -->
+    <div class="dash-card overflow-hidden">
+        <div class="dash-card-header">
+            <span class="dash-card-title">Lista de Atendimentos</span>
+            <span class="text-xs px-3 py-1 rounded-full font-semibold" style="background:#fde4e8; color:#C97B8A;">
+                {{ total_appts }} agendamento{{ total_appts|pluralize:"s" }}
+            </span>
         </div>
 
         {% if appointments %}
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-neutral-light/50 border-b border-gray-100 text-[10px] font-bold text-neutral-mid uppercase tracking-wider">
-                            <th class="py-3 px-6">Horário</th>
-                            <th class="py-3 px-6">Cliente</th>
-                            <th class="py-3 px-6">Serviço</th>
-                            {% if is_owner and selected_prof_id == 'all' %}
-                                <th class="py-3 px-6">Profissional</th>
-                            {% endif %}
-                            <th class="py-3 px-6">Status</th>
-                            <th class="py-3 px-6 text-right">Valor</th>
-                            <th class="py-3 px-6">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100 text-xs">
-                        {% for app in appointments %}
-                            <tr class="hover:bg-neutral-light/30 transition-colors {% if app.status == 'cancelled' %}opacity-60 bg-gray-50/50{% endif %}">
-                                <td class="py-4 px-6 font-semibold text-neutral-dark">{{ app.appointment_time|time:"H:i" }}</td>
-                                <td class="py-4 px-6">
-                                    <div class="font-semibold text-neutral-dark">{{ app.client_name }}</div>
-                                    <div class="text-[10px] text-neutral-mid mt-0.5">{{ app.client_phone }}</div>
-                                </td>
-                                <td class="py-4 px-6 font-medium text-neutral-dark">{{ app.service.name }}</td>
-                                {% if is_owner and selected_prof_id == 'all' %}
-                                    <td class="py-4 px-6 text-neutral-mid font-medium">{{ app.professional.name }}</td>
-                                {% endif %}
-                                <td class="py-4 px-6">
-                                    {% if app.status == 'confirmed' %}
-                                        <span class="inline-block bg-green-50 text-success border border-green-200 px-2.5 py-0.5 rounded-full font-medium">Confirmado</span>
-                                    {% elif app.status == 'cancelled' %}
-                                        <span class="inline-block bg-red-50 text-error border border-red-200 px-2.5 py-0.5 rounded-full font-medium">Cancelado</span>
-                                    {% else %}
-                                        <span class="inline-block bg-yellow-50 text-yellow-700 border border-yellow-200 px-2.5 py-0.5 rounded-full font-medium">Pendente</span>
-                                    {% endif %}
-                                </td>
-                                <td class="py-4 px-6 text-right font-semibold text-primary">R$ {{ app.service.price }}</td>
-                                <td class="py-4 px-6">
-                                    <a href="{% url 'dashboard:appointment_detail' app.id %}" class="text-primary hover:text-primary-dark font-medium underline">
-                                        Detalhes
-                                    </a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+        <!-- Mobile cards view -->
+        <div class="sm:hidden divide-y" style="border-color:#fef0f3;">
+            {% for app in appointments %}
+            <div class="p-4 {% if app.status == 'cancelled' %}opacity-60{% endif %}">
+                <div class="flex items-start justify-between gap-2 mb-2">
+                    <div>
+                        <p class="font-semibold text-sm" style="color:#2d1f23;">{{ app.client_name }}</p>
+                        <p class="text-xs" style="color:#b0909a;">{{ app.client_phone }}</p>
+                    </div>
+                    <span class="text-sm font-bold" style="color:#C97B8A;">{{ app.appointment_time|time:"H:i" }}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <p class="text-xs font-medium" style="color:#6b4f55;">{{ app.service.name }}</p>
+                    <div class="flex items-center gap-2">
+                        {% if app.status == 'confirmed' %}<span class="badge-confirmed">Confirmado</span>
+                        {% elif app.status == 'cancelled' %}<span class="badge-cancelled">Cancelado</span>
+                        {% else %}<span class="badge-pending">Pendente</span>{% endif %}
+                        <a href="{% url 'dashboard:appointment_detail' app.id %}" class="text-xs font-semibold" style="color:#C97B8A;">Ver →</a>
+                    </div>
+                </div>
             </div>
+            {% endfor %}
+        </div>
+
+        <!-- Desktop table view -->
+        <div class="hidden sm:block overflow-x-auto">
+            <table class="w-full dash-table">
+                <thead>
+                    <tr>
+                        <th>Horário</th>
+                        <th>Cliente</th>
+                        <th>Serviço</th>
+                        {% if is_owner and selected_prof_id == 'all' %}<th>Profissional</th>{% endif %}
+                        <th>Status</th>
+                        <th class="text-right">Valor</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for app in appointments %}
+                    <tr class="{% if app.status == 'cancelled' %}opacity-60{% endif %}">
+                        <td>
+                            <span class="font-bold text-base" style="color:#C97B8A;">{{ app.appointment_time|time:"H:i" }}</span>
+                        </td>
+                        <td>
+                            <p class="font-semibold" style="color:#2d1f23;">{{ app.client_name }}</p>
+                            <p class="text-[11px]" style="color:#b0909a;">{{ app.client_phone }}</p>
+                        </td>
+                        <td>
+                            <p class="font-medium" style="color:#4a3d40;">{{ app.service.name }}</p>
+                            <p class="text-[11px]" style="color:#b0909a;">{{ app.service.duration_minutes }} min</p>
+                        </td>
+                        {% if is_owner and selected_prof_id == 'all' %}
+                        <td style="color:#6b4f55;">{{ app.professional.name }}</td>
+                        {% endif %}
+                        <td>
+                            {% if app.status == 'confirmed' %}<span class="badge-confirmed">✓ Confirmado</span>
+                            {% elif app.status == 'cancelled' %}<span class="badge-cancelled">✗ Cancelado</span>
+                            {% else %}<span class="badge-pending">⏳ Pendente</span>{% endif %}
+                        </td>
+                        <td class="text-right font-bold" style="color:#C97B8A;">R$ {{ app.service.price }}</td>
+                        <td>
+                            <a href="{% url 'dashboard:appointment_detail' app.id %}"
+                               class="text-xs font-semibold px-3 py-1.5 rounded-xl transition-all"
+                               style="background:#fde4e8; color:#C97B8A;">
+                                Ver Detalhes
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         {% else %}
-            <!-- Empty state -->
-            <div class="text-center py-16 space-y-3">
-                <div class="text-3xl text-neutral-mid">📅</div>
-                <h4 class="font-serif text-base text-neutral-dark font-medium">Nenhum agendamento para este dia</h4>
-                <p class="font-sans text-xs text-neutral-mid max-w-xs mx-auto leading-relaxed">
-                    Não existem registros de agendamento cadastrados na data selecionada.
-                </p>
-            </div>
+        <div class="text-center py-16 space-y-3">
+            <div class="text-5xl">🌸</div>
+            <h4 class="font-serif text-lg" style="color:#2d1f23;">Nenhum agendamento neste dia</h4>
+            <p class="text-xs max-w-xs mx-auto leading-relaxed" style="color:#b0909a;">
+                Não há atendimentos registrados para a data selecionada. Use as setas para navegar entre os dias.
+            </p>
+        </div>
         {% endif %}
     </div>
 </div>

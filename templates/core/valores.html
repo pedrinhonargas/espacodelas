@@ -1,0 +1,284 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Tabela de Valores · Espaço Delas{% endblock %}
+{% block description %}Confira a tabela completa de preços do Espaço Delas: manicure, esmalte gel, alongamento, design de sobrancelhas e muito mais.{% endblock %}
+
+{% block extra_head %}
+<style>
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(24px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    .anim-in { animation: fadeInUp 0.6s cubic-bezier(0.4,0,0.2,1) both; }
+    .anim-delay-1 { animation-delay: 0.1s; }
+    .anim-delay-2 { animation-delay: 0.22s; }
+    .anim-delay-3 { animation-delay: 0.34s; }
+
+    .price-row {
+        display: flex;
+        align-items: flex-end;
+        gap: 8px;
+        padding: 10px 0;
+        border-bottom: 1px solid #fce4e9;
+    }
+    .price-row:last-child { border-bottom: none; }
+    .price-row .dots {
+        flex: 1;
+        border-bottom: 2px dotted #f9d0d8;
+        margin-bottom: 4px;
+    }
+    .price-tag {
+        font-weight: 700;
+        color: #C97B8A;
+        white-space: nowrap;
+        font-size: 0.95rem;
+    }
+    .section-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: #C97B8A;
+        margin-bottom: 12px;
+        margin-top: 8px;
+    }
+    .card-table {
+        background: rgba(255,255,255,0.97);
+        border-radius: 1.5rem;
+        border: 1px solid #fce4e9;
+        box-shadow: 0 4px 32px 0 rgba(201,123,138,0.08);
+        padding: 2rem 2.2rem;
+    }
+    .divider-rule {
+        border: none;
+        border-top: 1px solid #fce4e9;
+        margin: 1.2rem 0;
+    }
+    .note-text {
+        font-size: 0.72rem;
+        color: #9e8b8e;
+        font-style: italic;
+        margin-top: 4px;
+    }
+    .badge-payment {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #fff0f3;
+        border: 1px solid #fce4e9;
+        border-radius: 999px;
+        padding: 6px 16px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #C97B8A;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Topo -->
+<section class="bg-rose-gradient pt-12 pb-6 relative overflow-hidden">
+    <div class="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-primary/8 blur-3xl pointer-events-none"></div>
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+        <!-- Botão Voltar -->
+        <a href="{% url 'core:home' %}" 
+           class="inline-flex items-center gap-2 text-primary hover:text-primary-dark font-sans text-sm font-medium mb-8 group transition-colors duration-200">
+            <svg class="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/>
+            </svg>
+            Voltar ao início
+        </a>
+
+        <!-- Cabeçalho -->
+        <div class="text-center space-y-3 mb-12 anim-in">
+            <span class="text-primary font-sans text-xs font-semibold tracking-widest uppercase">Serviços & Preços</span>
+            <h1 class="font-serif text-4xl sm:text-5xl text-neutral-dark font-light">Tabela de Valores</h1>
+            <div class="flex items-center gap-3 justify-center mt-4">
+                <span class="h-px w-10 bg-gradient-to-r from-transparent to-primary/50"></span>
+                <span class="text-primary text-base">✿</span>
+                <span class="h-px w-10 bg-gradient-to-l from-transparent to-primary/50"></span>
+            </div>
+            <p class="font-sans text-neutral-mid text-sm sm:text-base max-w-xl mx-auto pt-1 leading-relaxed">
+                Conheça todos os nossos serviços e preços. Agende diretamente com sua profissional preferida!
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Tabelas -->
+<section class="py-12 lg:py-16 bg-rose-gradient">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+
+            <!-- ── Tabela 1: Unhas & Manicure ── -->
+            <div class="card-table anim-in anim-delay-1">
+                <div class="flex items-center gap-3 mb-6 pb-4" style="border-bottom:1px solid #fce4e9;">
+                    <div class="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-xl">💅</div>
+                    <div>
+                        <h2 class="font-serif text-xl font-medium text-neutral-dark">Unhas & Manicure</h2>
+                        <p class="font-sans text-[10px] text-neutral-mid tracking-wider uppercase font-semibold">Espaço Delas</p>
+                    </div>
+                </div>
+
+                <!-- Esmalte Gel -->
+                <p class="section-label">Esmalte em Gel</p>
+                <div class="price-row">
+                    <span class="font-sans text-sm text-neutral-dark">Esmaltação em Gel lisa (Mãos)</span>
+                    <span class="dots"></span>
+                    <span class="price-tag">R$ 80,00</span>
+                </div>
+                <div class="price-row">
+                    <span class="font-sans text-sm text-neutral-dark">Esmaltação em Gel lisa (Pés)</span>
+                    <span class="dots"></span>
+                    <span class="price-tag">R$ 80,00</span>
+                </div>
+                <div class="price-row">
+                    <span class="font-sans text-sm text-neutral-dark">Francesinha / Sorriso (Todas)</span>
+                    <span class="dots"></span>
+                    <span class="price-tag">R$ 20,00</span>
+                </div>
+                <div class="price-row">
+                    <span class="font-sans text-sm text-neutral-dark">Decorações Simples (Todas)</span>
+                    <span class="dots"></span>
+                    <span class="price-tag">R$ 25,00</span>
+                </div>
+                <div class="price-row">
+                    <span class="font-sans text-sm text-neutral-dark">Decorações mais elaboradas</span>
+                    <span class="dots"></span>
+                    <span class="price-tag">R$ 35,00</span>
+                </div>
+                <div class="price-row" style="border-bottom:none;">
+                    <span class="font-sans text-sm text-neutral-dark">Aplicação Pó Cromado</span>
+                    <span class="dots"></span>
+                    <span class="price-tag">R$ 10,00</span>
+                </div>
+                <p class="note-text">* Decorações em geral, fazer o orçamento antes.</p>
+
+                <hr class="divider-rule">
+
+                <!-- Alongamento -->
+                <p class="section-label">Gel & Alongamento</p>
+                <div class="price-row">
+                    <span class="font-sans text-sm text-neutral-dark font-semibold">Banho de Gel</span>
+                    <span class="dots"></span>
+                    <span class="price-tag">R$ 130,00</span>
+                </div>
+                <div class="price-row">
+                    <span class="font-sans text-sm text-neutral-dark">Manutenção Banho de Gel</span>
+                    <span class="dots"></span>
+                    <span class="price-tag">R$ 100,00</span>
+                </div>
+                <div class="price-row">
+                    <span class="font-sans text-sm text-neutral-dark font-semibold">Alongamento Molde F1</span>
+                    <span class="dots"></span>
+                    <span class="price-tag">R$ 180,00</span>
+                </div>
+                <div class="price-row" style="border-bottom:none;">
+                    <span class="font-sans text-sm text-neutral-dark">Manutenção Alongamento</span>
+                    <span class="dots"></span>
+                    <span class="price-tag">R$ 150,00</span>
+                </div>
+                <p class="note-text">* Manutenções devem ser feitas até 30 dias no máximo, após isso aplicação nova.</p>
+
+                <hr class="divider-rule">
+
+                <!-- Remoções -->
+                <p class="section-label">Remoções</p>
+                <div class="price-row">
+                    <span class="font-sans text-sm text-neutral-dark">Remoção de Alongamento</span>
+                    <span class="dots"></span>
+                    <span class="price-tag">R$ 50,00</span>
+                </div>
+                <div class="price-row">
+                    <span class="font-sans text-sm text-neutral-dark">Remoção de Esmalte em Gel</span>
+                    <span class="dots"></span>
+                    <span class="price-tag">R$ 25,00</span>
+                </div>
+                <div class="price-row" style="border-bottom:none;">
+                    <span class="font-sans text-sm text-neutral-dark">Reconstrução de unha quebrada</span>
+                    <span class="dots"></span>
+                    <span class="price-tag">R$ 10,00</span>
+                </div>
+
+                <!-- Pagamento -->
+                <div class="mt-6 pt-5" style="border-top:1px solid #fce4e9;">
+                    <p class="font-sans text-xs text-neutral-mid mb-3 font-medium">Formas de Pagamento:</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="badge-payment">💳 Pix</span>
+                        <span class="badge-payment">💳 Débito</span>
+                        <span class="badge-payment">💳 Crédito</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Tabela 2: Sobrancelha & Cílios ── -->
+            <div class="space-y-6">
+                <div class="card-table anim-in anim-delay-2">
+                    <div class="flex items-center gap-3 mb-6 pb-4" style="border-bottom:1px solid #fce4e9;">
+                        <div class="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-xl">👁️</div>
+                        <div>
+                            <h2 class="font-serif text-xl font-medium text-neutral-dark">Sobrancelha & Cílios</h2>
+                            <p class="font-sans text-[10px] text-neutral-mid tracking-wider uppercase font-semibold">Lari Santos · Designer</p>
+                        </div>
+                    </div>
+
+                    <!-- Sobrancelha -->
+                    <p class="section-label">Sobrancelha</p>
+                    <div class="price-row">
+                        <span class="font-sans text-sm text-neutral-dark">Brow Lamination</span>
+                        <span class="dots"></span>
+                        <span class="price-tag">R$ 70,00</span>
+                    </div>
+                    <div class="price-row">
+                        <span class="font-sans text-sm text-neutral-dark">Design de Sobrancelha</span>
+                        <span class="dots"></span>
+                        <span class="price-tag">R$ 25,00</span>
+                    </div>
+                    <div class="price-row" style="border-bottom:none;">
+                        <span class="font-sans text-sm text-neutral-dark">Design + Henna</span>
+                        <span class="dots"></span>
+                        <span class="price-tag">R$ 35,00</span>
+                    </div>
+
+                    <hr class="divider-rule">
+
+                    <!-- Cílios -->
+                    <p class="section-label">Cílios</p>
+                    <div class="price-row" style="border-bottom:none;">
+                        <span class="font-sans text-sm text-neutral-dark">Lash Lifting</span>
+                        <span class="dots"></span>
+                        <span class="price-tag">R$ 70,00</span>
+                    </div>
+
+                    <!-- CTA Larissa -->
+                    <div class="mt-6 pt-5" style="border-top:1px solid #fce4e9;">
+                        <a href="https://wa.me/5541985265463?text=Ol%C3%A1%20Larissa!%20Vim%20pela%20tabela%20de%20valores%20e%20gostaria%20de%20agendar%20um%20servi%C3%A7o." 
+                           target="_blank" rel="noopener"
+                           class="flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1fba5a] text-white py-3 rounded-xl transition-all duration-200 font-sans text-sm font-medium shadow-sm hover:shadow">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.517 2.266 2.27 3.51 5.279 3.51 8.486 0 6.657-5.338 11.997-11.949 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.665.989 3.3 1.488 5.415 1.489 5.33 0 9.67-4.333 9.67-9.67 0-2.584-1.008-5.012-2.839-6.845-1.83-1.832-4.258-2.84-6.845-2.84-5.332 0-9.673 4.333-9.673 9.67 0 2.232.583 4.413 1.69 6.289l-.999 3.647 3.73-.977-.158-.284z"></path></svg>
+                            Falar com Larissa: (41) 98526-5463
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card CTA Agendamento Geral -->
+                <div class="card-table anim-in anim-delay-3 text-center">
+                    <p class="font-serif text-lg text-neutral-dark font-light mb-1">Pronta para se cuidar? ✨</p>
+                    <p class="font-sans text-xs text-neutral-mid mb-5">Agende seu horário de forma rápida e 100% online.</p>
+                    <a href="#" onclick="openCalendly('https://calendly.com/espacodelas', event)"
+                       class="inline-block w-full bg-primary hover:bg-primary-dark text-white font-sans font-medium px-8 py-3.5 rounded-full transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 text-center text-sm">
+                        ✨ Agendar Horário
+                    </a>
+                    <a href="{% url 'core:home' %}" 
+                       class="inline-block w-full mt-3 border border-primary/40 text-primary hover:border-primary hover:bg-primary/5 font-sans font-medium px-8 py-3.5 rounded-full transition-all duration-200 text-center text-sm">
+                        ← Voltar ao início
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}

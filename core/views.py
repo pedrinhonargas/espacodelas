@@ -21,6 +21,10 @@ def home(request):
     })
 
 
+def valores(request):
+    return render(request, 'core/valores.html')
+
+
 def sitemap_view(request):
     from django.http import HttpResponse
     from django.urls import reverse

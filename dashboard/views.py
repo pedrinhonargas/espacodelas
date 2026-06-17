@@ -310,6 +310,7 @@ def professional_create_view(request):
         role = request.POST.get('role')
         bio = request.POST.get('bio')
         photo = request.FILES.get('photo')
+        google_calendar_email = request.POST.get('google_calendar_email', '')
         
         if not username or not email or not name:
             messages.error(request, "Por favor, preencha os campos obrigatórios.")
@@ -337,6 +338,7 @@ def professional_create_view(request):
                     role=role,
                     bio=bio,
                     photo=photo,
+                    google_calendar_email=google_calendar_email,
                     is_active=True
                 )
                 
